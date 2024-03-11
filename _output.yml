@@ -8,11 +8,11 @@ bookdown::gitbook:
     toc:
       collapse: section
       before: |
-        <li><a href="./">Análisis de encuestas con R</a></li>
+        <li><a href="./">Análisis de encuestas de hogares con R</a></li>
       after: |
-        <li><a Análisis de encuestas con R </a></li>
+        <li><a Análisis de encuestas de hogares con R </a></li>
     download: [pdf, epub, mobi]
-    edit: https://github.com/psirusteam/2021ASDA/%s
+    edit: https://github.com/psirusteam/LibroAEHR/%s
     sharing:
       github: yes
       facebook: no
