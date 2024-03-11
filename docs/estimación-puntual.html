@@ -12,7 +12,7 @@
   <meta property="og:type" content="book" />
   
   <meta property="og:description" content="Este es el repositorio del libro Análisis de encuestas de hogares con R." />
-  <meta name="github-repo" content="psirusteam/HHS-Handbook" />
+  <meta name="github-repo" content="psirusteam/LibroAEHR" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="4.2 Estimación puntual | Análisis de encuestas de hogares con R" />
@@ -450,7 +450,7 @@ s_{\omega}\left(y\right) &amp; = &amp; \frac{\sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h
 <p>Por otro lado, la estimación de los percentiles de los ingresos en un país determinado puede definir el inicio de una política pública. por ejemplo, al establecer un impuesto a aquellas personas naturales que etán ubicadas en el 10% más alto de la distribución de los ingresos o por el contrario, generar subsidios de transporte a aquellas personas que están en el 15% inferior de la distribución de los ingresos.</p>
 <p>La estimación de cuantiles se basa en los resultados relacionados con el estimador ponderado para totales, empleando una estimación de la función de distribución (CDF, por sus siglas en inglés) acumulada de la población. Específicamente, la CDF para una variable y en una población finita dada de tamaño <span class="math inline">\(N\)</span> se define de la siguiente manera:</p>
 <p><span class="math display">\[\begin{eqnarray*}
-F\left(x\right) &amp; = &amp; \frac{{ \sum_{i=1}^{N}}I\left(y_{i}\leq x\right)}{N}
+F\left(x\right) &amp; = &amp; \frac{{\sum_{i=1}^{N}}I\left(y_{i}\leq x\right)}{N}
 \end{eqnarray*}\]</span></p>
 <p>En donde, <span class="math inline">\(I\left(y_{i}\leq x\right)\)</span> es una variable indicadora que toma el valor de 1 si <span class="math inline">\(y_{i}\)</span> es menor o igual a un valor específico
 <span class="math inline">\(x\)</span>, y cero en cualquier otro caso. Un estimador de la CDF en un diseño de muestreo complejo está dado por:</p>
