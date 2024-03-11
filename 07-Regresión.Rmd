@@ -84,7 +84,7 @@ $$
 Una vez se establecen los supuestos del modelo y las características distribucionales de los errores, el paso siguientes es el proceso de estimación de los parámetros. A modo ilustrativo e introductorio, si en lugar de observar una muestra de tamaño $n$ de los $N$ elementos de población se hubiera realizado un censo completo, el parámetro de regresión de población finita $\beta_{1}$ podría calcularse como sigue:
 
 $$
-\beta_{1}  =  \frac{{ \sum_{i=1}^{N}\left(X_{i}-\bar{X}\right)\left(Y_{i}-\bar{Y}\right)}}{\sum_{i=1}^{N}\left(X_{i}-\bar{X}\right)^{2}}
+\beta_{1} =\frac{\sum_{i=1}^{N}(X_{i}-\bar{X})(Y_{i}-\bar{Y})}{\sum_{i=1}^{N}(X_{i}-\bar{X})^{2}}
 $$
 
 Ahora bien, cuando se desea estimar los parámetros de un modelo de regresión lineal, pero considerando que la información observada proviene de encuestas con muestras complejas, se altera el enfoque estándar que se le da a la estimación de coeficientes de regresión y sus errores estándar. La principal razón por la que los métodos de estimación de parámetros de los coeficientes de regresión cambian es que la información recolectada por medio de una encuesta compleja generalmente no tiene una idéntica distribución, y tampoco se puede sostener el supuesto de independencia, dado que el diseño muestral así es planeado (dado que los diseños complejos en su mayoría contienen estratificación, conglomerados, probabilidades de selección desiguales, etc.). 
