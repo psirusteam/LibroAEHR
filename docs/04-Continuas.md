@@ -362,9 +362,9 @@ Por otro lado, la estimación de los percentiles de los ingresos en un país det
 
 La estimación de cuantiles se basa en los resultados relacionados con el estimador ponderado para totales, empleando una estimación de la función de distribución (CDF, por sus siglas en inglés) acumulada de la población. Específicamente, la CDF para una variable y en una población finita dada de tamaño $N$ se define de la siguiente manera:
 
-\begin{eqnarray*}
-F\left(x\right) & = & \frac{{\sum_{i=1}^{N}}I\left(y_{i}\leq x\right)}{N}
-\end{eqnarray*}
+$$
+F (x)  =  \sum_{i=1}^{N} I(y_{i}\leq x)/N
+$$
 
 En donde, $I\left(y_{i}\leq x\right)$ es una variable indicadora que toma  el valor de 1 si $y_{i}$ es menor o igual a un valor específico
 $x$, y cero en cualquier otro caso. Un estimador de la CDF en un diseño de muestreo complejo está dado por:
