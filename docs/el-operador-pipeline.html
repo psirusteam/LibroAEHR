@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2.4 El operador pipeline (%&gt;%) | Análisis de encuestas de hogares con R</title>
+  <meta name="description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2.4 El operador pipeline (%&gt;%) | Análisis de encuestas de hogares con R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  <meta name="github-repo" content="psirusteam/HHS-Handbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2.4 El operador pipeline (%&gt;%) | Análisis de encuestas de hogares con R" />
+  
+  <meta name="twitter:description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  
+
+<meta name="author" content="Andrés Gutiérrez, Cristian Téllez, Stalyn Guerrero" />
+
+
+<meta name="date" content="2024-03-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html"/>
+<link rel="next" href="creación-de-variables-y-resumen-de-conteos.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Análisis de encuestas con R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="introducción.html"><a href="introducción.html"><i class="fa fa-check"></i><b>1</b> Introducción</a></li>
+<li class="chapter" data-level="2" data-path="manejando-una-base-de-encuestas-de-hogares-con-r.html"><a href="manejando-una-base-de-encuestas-de-hogares-con-r.html"><i class="fa fa-check"></i><b>2</b> Manejando una base de encuestas de hogares con <code>R</code></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentos-básicos-de-r-y-rstudio.html"><a href="fundamentos-básicos-de-r-y-rstudio.html"><i class="fa fa-check"></i><b>2.1</b> Fundamentos básicos de <code>R</code> y <code>Rstudio</code></a></li>
+<li class="chapter" data-level="2.2" data-path="creación-de-proyectos-en-r.html"><a href="creación-de-proyectos-en-r.html"><i class="fa fa-check"></i><b>2.2</b> Creación de proyectos en <code>R</code></a></li>
+<li class="chapter" data-level="2.3" data-path="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html"><a href="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html"><i class="fa fa-check"></i><b>2.3</b> Lectura de las bases de datos y procesamientos básicos</a></li>
+<li class="chapter" data-level="2.4" data-path="el-operador-pipeline.html"><a href="el-operador-pipeline.html"><i class="fa fa-check"></i><b>2.4</b> El operador <code>pipeline</code> (%&gt;%)</a></li>
+<li class="chapter" data-level="2.5" data-path="creación-de-variables-y-resumen-de-conteos.html"><a href="creación-de-variables-y-resumen-de-conteos.html"><i class="fa fa-check"></i><b>2.5</b> Creación de variables y resumen de conteos</a></li>
+<li class="chapter" data-level="2.6" data-path="algunas-estadísticas-descriptivas-sobre-la-base-de-datos.html"><a href="algunas-estadísticas-descriptivas-sobre-la-base-de-datos.html"><i class="fa fa-check"></i><b>2.6</b> Algunas estadísticas descriptivas sobre la base de datos</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="conceptos-básicos-en-encuestas-de-hogares.html"><a href="conceptos-básicos-en-encuestas-de-hogares.html"><i class="fa fa-check"></i><b>3</b> Conceptos básicos en encuestas de hogares</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="unidades-y-marcos-de-muestreo.html"><a href="unidades-y-marcos-de-muestreo.html"><i class="fa fa-check"></i><b>3.1</b> Unidades y marcos de muestreo</a></li>
+<li class="chapter" data-level="3.2" data-path="la-base-de-datos-bigcity.html"><a href="la-base-de-datos-bigcity.html"><i class="fa fa-check"></i><b>3.2</b> La base de datos BigCity</a></li>
+<li class="chapter" data-level="3.3" data-path="un-esquema-de-muestreo-para-bigcity.html"><a href="un-esquema-de-muestreo-para-bigcity.html"><i class="fa fa-check"></i><b>3.3</b> Un esquema de muestreo para BigCity</a></li>
+<li class="chapter" data-level="3.4" data-path="calibración-de-los-factores-de-expansión.html"><a href="calibración-de-los-factores-de-expansión.html"><i class="fa fa-check"></i><b>3.4</b> Calibración de los factores de expansión</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="análisis-de-variables-continuas.html"><a href="análisis-de-variables-continuas.html"><i class="fa fa-check"></i><b>4</b> Análisis de variables continuas</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="definición-del-diseño-de-muestreo.html"><a href="definición-del-diseño-de-muestreo.html"><i class="fa fa-check"></i><b>4.1</b> Definición del diseño de muestreo</a></li>
+<li class="chapter" data-level="4.2" data-path="estimación-puntual.html"><a href="estimación-puntual.html"><i class="fa fa-check"></i><b>4.2</b> Estimación puntual</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-totales"><i class="fa fa-check"></i><b>4.2.1</b> Estimación de totales</a></li>
+<li class="chapter" data-level="4.2.2" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-promedios"><i class="fa fa-check"></i><b>4.2.2</b> Estimación de promedios</a></li>
+<li class="chapter" data-level="4.2.3" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-medidas-de-dispersión-y-localización"><i class="fa fa-check"></i><b>4.2.3</b> Estimación de medidas de dispersión y localización</a></li>
+<li class="chapter" data-level="4.2.4" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-del-coeficiente-de-gini"><i class="fa fa-check"></i><b>4.2.4</b> Estimación del coeficiente de Gini</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html"><i class="fa fa-check"></i><b>4.3</b> Relación entre varias variables</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#estimación-de-razones"><i class="fa fa-check"></i><b>4.3.1</b> Estimación de razones</a></li>
+<li class="chapter" data-level="4.3.2" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#prueba-de-hipótesis-para-la-diferencia-de-medias"><i class="fa fa-check"></i><b>4.3.2</b> Prueba de hipótesis para la diferencia de medias</a></li>
+<li class="chapter" data-level="4.3.3" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#contrastes"><i class="fa fa-check"></i><b>4.3.3</b> Contrastes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="análisis-de-variables-categóricas.html"><a href="análisis-de-variables-categóricas.html"><i class="fa fa-check"></i><b>5</b> Análisis de variables categóricas</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="definición-del-diseño-de-muestreo-1.html"><a href="definición-del-diseño-de-muestreo-1.html"><i class="fa fa-check"></i><b>5.1</b> Definición del diseño de muestreo</a></li>
+<li class="chapter" data-level="5.2" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html"><i class="fa fa-check"></i><b>5.2</b> Estimación puntual</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html#estimaciones-de-tamaños"><i class="fa fa-check"></i><b>5.2.1</b> Estimaciones de tamaños</a></li>
+<li class="chapter" data-level="5.2.2" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html#estimación-de-proporciones"><i class="fa fa-check"></i><b>5.2.2</b> Estimación de proporciones</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html"><i class="fa fa-check"></i><b>5.3</b> Relación entre varias variables</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#tablas"><i class="fa fa-check"></i><b>5.3.1</b> Tablas</a></li>
+<li class="chapter" data-level="5.3.2" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#pruebas-de-independencia"><i class="fa fa-check"></i><b>5.3.2</b> Pruebas de independencia</a></li>
+<li class="chapter" data-level="5.3.3" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#diferencia-de-proporciones-y-contrastes"><i class="fa fa-check"></i><b>5.3.3</b> Diferencia de proporciones y contrastes</a></li>
+<li class="chapter" data-level="5.3.4" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#razones-de-odds"><i class="fa fa-check"></i><b>5.3.4</b> Razones de odds</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="análisis-gráfico.html"><a href="análisis-gráfico.html"><i class="fa fa-check"></i><b>6</b> Análisis gráfico</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="análisis-gráfico-con-la-librería-survey.html"><a href="análisis-gráfico-con-la-librería-survey.html"><i class="fa fa-check"></i><b>6.1</b> Análisis gráfico con la librería <code>survey</code></a></li>
+<li class="chapter" data-level="6.2" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html"><i class="fa fa-check"></i><b>6.2</b> Análisis gráfico con la librería <code>ggplot2</code></a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#definición-del-tema"><i class="fa fa-check"></i><b>6.2.1</b> Definición del tema</a></li>
+<li class="chapter" data-level="6.2.2" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#histogramas"><i class="fa fa-check"></i><b>6.2.2</b> Histogramas</a></li>
+<li class="chapter" data-level="6.2.3" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#densidades"><i class="fa fa-check"></i><b>6.2.3</b> Densidades</a></li>
+<li class="chapter" data-level="6.2.4" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-caja"><i class="fa fa-check"></i><b>6.2.4</b> Diagramas de caja</a></li>
+<li class="chapter" data-level="6.2.5" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-dispersión"><i class="fa fa-check"></i><b>6.2.5</b> Diagramas de dispersión</a></li>
+<li class="chapter" data-level="6.2.6" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagrama-de-barras"><i class="fa fa-check"></i><b>6.2.6</b> Diagrama de barras</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="mapas.html"><a href="mapas.html"><i class="fa fa-check"></i><b>6.3</b> Mapas</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="modelos-de-regresión.html"><a href="modelos-de-regresión.html"><i class="fa fa-check"></i><b>7</b> Modelos de regresión</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="definiciones-básicas.html"><a href="definiciones-básicas.html"><i class="fa fa-check"></i><b>7.1</b> Definiciones básicas</a></li>
+<li class="chapter" data-level="7.2" data-path="estimación-de-los-parámetros-en-un-modelo-de-regresión-con-muestras-complejas..html"><a href="estimación-de-los-parámetros-en-un-modelo-de-regresión-con-muestras-complejas..html"><i class="fa fa-check"></i><b>7.2</b> Estimación de los parámetros en un modelo de regresión con muestras complejas.</a></li>
+<li class="chapter" data-level="7.3" data-path="la-ponderación-de-pfeffermann.html"><a href="la-ponderación-de-pfeffermann.html"><i class="fa fa-check"></i><b>7.3</b> La ponderación de Pfeffermann</a></li>
+<li class="chapter" data-level="7.4" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html"><i class="fa fa-check"></i><b>7.4</b> Diagnóstico del modelo</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#coeficientes-de-determinación"><i class="fa fa-check"></i><b>7.4.1</b> Coeficientes de determinación</a></li>
+<li class="chapter" data-level="7.4.2" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#residuales-estandarizados"><i class="fa fa-check"></i><b>7.4.2</b> Residuales estandarizados</a></li>
+<li class="chapter" data-level="7.4.3" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#observaciones-influyentes"><i class="fa fa-check"></i><b>7.4.3</b> Observaciones influyentes</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="inferencia-sobre-los-parámetros-del-modelo.html"><a href="inferencia-sobre-los-parámetros-del-modelo.html"><i class="fa fa-check"></i><b>7.5</b> Inferencia sobre los parámetros del Modelo</a></li>
+<li class="chapter" data-level="7.6" data-path="estimación-y-predicción.html"><a href="estimación-y-predicción.html"><i class="fa fa-check"></i><b>7.6</b> Estimación y predicción</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="modelos-lineales-generalizados.html"><a href="modelos-lineales-generalizados.html"><i class="fa fa-check"></i><b>8</b> Modelos lineales generalizados</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="modelo-de-regresión-logistica-para-proporciones.html"><a href="modelo-de-regresión-logistica-para-proporciones.html"><i class="fa fa-check"></i><b>8.1</b> Modelo de regresión logistica para proporciones</a></li>
+<li class="chapter" data-level="8.2" data-path="modelo-log-lineal-para-tablas-de-contingencia.html"><a href="modelo-log-lineal-para-tablas-de-contingencia.html"><i class="fa fa-check"></i><b>8.2</b> Modelo log-lineal para tablas de contingencia</a></li>
+<li class="chapter" data-level="8.3" data-path="modelo-multinomial-para-variables-con-múltiples-categorías.html"><a href="modelo-multinomial-para-variables-con-múltiples-categorías.html"><i class="fa fa-check"></i><b>8.3</b> Modelo multinomial para variables con múltiples categorías</a></li>
+<li class="chapter" data-level="8.4" data-path="modelo-gamma-para-variables-continuas-positivas.html"><a href="modelo-gamma-para-variables-continuas-positivas.html"><i class="fa fa-check"></i><b>8.4</b> Modelo Gamma para variables continuas positivas</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="modelos-multinivel.html"><a href="modelos-multinivel.html"><i class="fa fa-check"></i><b>9</b> Modelos multinivel</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="modelo-con-intercepto-aleatorio.html"><a href="modelo-con-intercepto-aleatorio.html"><i class="fa fa-check"></i><b>9.1</b> Modelo con intercepto aleatorio</a></li>
+<li class="chapter" data-level="9.2" data-path="modelo-con-pendiente-aleatoria.html"><a href="modelo-con-pendiente-aleatoria.html"><i class="fa fa-check"></i><b>9.2</b> Modelo con pendiente aleatoria</a></li>
+<li class="chapter" data-level="9.3" data-path="modelo-con-intercepto-y-pendiente-aleatoria.html"><a href="modelo-con-intercepto-y-pendiente-aleatoria.html"><i class="fa fa-check"></i><b>9.3</b> Modelo con intercepto y pendiente aleatoria</a></li>
+<li class="chapter" data-level="9.4" data-path="modelo-logístico-multinivel..html"><a href="modelo-logístico-multinivel..html"><i class="fa fa-check"></i><b>9.4</b> Modelo logístico multinivel.</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="imputación-múltiple-en-encuestas-de-hogares.html"><a href="imputación-múltiple-en-encuestas-de-hogares.html"><i class="fa fa-check"></i><b>10</b> Imputación múltiple en encuestas de hogares</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tres-patrones-para-la-ausencia-de-respuesta.html"><a href="tres-patrones-para-la-ausencia-de-respuesta.html"><i class="fa fa-check"></i><b>10.1</b> Tres patrones para la ausencia de respuesta</a></li>
+<li class="chapter" data-level="10.2" data-path="imputación-por-la-media-no-condicional..html"><a href="imputación-por-la-media-no-condicional..html"><i class="fa fa-check"></i><b>10.2</b> Imputación por la media no condicional.</a></li>
+<li class="chapter" data-level="10.3" data-path="imputación-por-la-media-condicional.html"><a href="imputación-por-la-media-condicional.html"><i class="fa fa-check"></i><b>10.3</b> Imputación por la media condicional</a></li>
+<li class="chapter" data-level="10.4" data-path="imputación-por-hot-deck.html"><a href="imputación-por-hot-deck.html"><i class="fa fa-check"></i><b>10.4</b> Imputación por <em>Hot-Deck</em></a></li>
+<li class="chapter" data-level="10.5" data-path="imputación-por-regresión.html"><a href="imputación-por-regresión.html"><i class="fa fa-check"></i><b>10.5</b> Imputación por regresión</a></li>
+<li class="chapter" data-level="10.6" data-path="imputación-por-el-vecino-más-cercano.html"><a href="imputación-por-el-vecino-más-cercano.html"><i class="fa fa-check"></i><b>10.6</b> Imputación por el vecino más cercano</a></li>
+<li class="chapter" data-level="10.7" data-path="imputación-por-el-vecino-más-cercano-con-regresión.html"><a href="imputación-por-el-vecino-más-cercano-con-regresión.html"><i class="fa fa-check"></i><b>10.7</b> Imputación por el vecino más cercano con regresión</a></li>
+<li class="chapter" data-level="10.8" data-path="imputación-múltiple..html"><a href="imputación-múltiple..html"><i class="fa fa-check"></i><b>10.8</b> Imputación múltiple.</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="estimación-de-parámetros-para-modelos-en-encuestas-complejas.html"><a href="estimación-de-parámetros-para-modelos-en-encuestas-complejas.html"><i class="fa fa-check"></i><b>11</b> Estimación de parámetros para modelos en encuestas complejas</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="acerca-de-las-muestras-aleatorias-y-su-análisis.html"><a href="acerca-de-las-muestras-aleatorias-y-su-análisis.html"><i class="fa fa-check"></i><b>11.1</b> Acerca de las muestras aleatorias y su análisis</a></li>
+<li class="chapter" data-level="11.2" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html"><i class="fa fa-check"></i><b>11.2</b> Modelos de superpoblación</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#primer-proceso-inferencial-el-modelo"><i class="fa fa-check"></i><b>11.2.1</b> Primer proceso inferencial: el modelo</a></li>
+<li class="chapter" data-level="11.2.2" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#segundo-proceso-inferencial-el-muestreo"><i class="fa fa-check"></i><b>11.2.2</b> Segundo proceso inferencial: el muestreo</a></li>
+<li class="chapter" data-level="11.2.3" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#inferencia-doble-los-modelos-y-el-muestreo"><i class="fa fa-check"></i><b>11.2.3</b> Inferencia doble: los modelos y el muestreo</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html"><i class="fa fa-check"></i><b>11.3</b> Método de Máxima Verosimilitud</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-distribución-bernoulli"><i class="fa fa-check"></i><b>11.3.1</b> MV para una distribución Bernoulli</a></li>
+<li class="chapter" data-level="11.3.2" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-distribución-normal"><i class="fa fa-check"></i><b>11.3.2</b> MV para una distribución normal</a></li>
+<li class="chapter" data-level="11.3.3" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-regresión-lineal-múltiple"><i class="fa fa-check"></i><b>11.3.3</b> MV para una regresión lineal múltiple</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html"><i class="fa fa-check"></i><b>11.4</b> Método de Máxima Pseudo-Verosimilitud</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-distribución-bernoulli"><i class="fa fa-check"></i><b>11.4.1</b> MPV para una distribución Bernoulli</a></li>
+<li class="chapter" data-level="11.4.2" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-distribución-normal"><i class="fa fa-check"></i><b>11.4.2</b> MPV para una distribución normal</a></li>
+<li class="chapter" data-level="11.4.3" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-regresión-múltiple"><i class="fa fa-check"></i><b>11.4.3</b> MPV para una regresión múltiple</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a Análisis de encuestas con R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis de encuestas de hogares con R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="el-operador-pipeline" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> El operador <code>pipeline</code> (%&gt;%)<a href="el-operador-pipeline.html#el-operador-pipeline" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>El software estadístico <code>R</code> es un lenguaje de programación creado por estadísticos y para estadísticos. Una de las contribuciones recientes a este software es el desarrollo de los <code>pipelines</code> (tuberías) que permiten de una forma intuitiva generar consultas y objetos desde una base de datos. El operador <code>pipeline</code>, <code>%&gt;%</code>, es nativo del paquete <span class="citation">Bache y Wickham (<a href="#ref-magrittr2022">2022</a>)</span> y está cargado automáticamente en los paquetes del <code>tidyverse</code>.</p>
+<p>El objetivo del operador es ayudar a escribir el código de una manera que sea más fácil de leer y entender. En este sentido, el operador <code>%&gt;%</code> permite encadenar operaciones para que el resultado de una operación anterior se convierta en el argumento de la siguiente operación. A continuación, se presenta un ejemplo sencillo del uso del operador <code>%&gt;%</code> con la base de datos BigLucy haciendo el conteo del total de elementos que contiene la base de datos utilizando la función <code>count</code>.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="el-operador-pipeline.html#cb16-1" tabindex="-1"></a>data1 <span class="sc">%&gt;%</span> <span class="fu">count</span>()</span></code></pre></div>
+<pre><code>##        n
+## 1 150266</code></pre>
+<p>La anterior línea de código se entiende así: con la base de datos realice un conteo. Por otro lado, existe una gama amplia de funciones que se pueden utilizar con el operador <code>%&gt;%</code>. A continuación, se enlistan una serie de funciones muy útiles al momento de hacer análisis con bases de datos provenientes de encuestas de hogares:</p>
+<ul>
+<li><strong>filter</strong>: mantiene un criterio de filtro sobre alguna variable o mezcla de variables.</li>
+<li><strong>select</strong>: selecciona columnas por nombres.</li>
+<li><strong>arrange</strong>: ordena las filas de la base de datos.</li>
+<li><strong>mutate</strong>: añade nuevas variables a la base de datos.</li>
+<li><strong>summarise</strong>: reduce variables a valores agrupados y los presenta en una tabla.</li>
+<li><strong>group_by</strong>: ejecuta funciones y agrupa el resultado por las variables de interés.</li>
+</ul>
+<p>Una de las primeras consultas que se pueden realizar en las encuestas de hogares es saber el número de entrevistas efectivamente realizadas. Usando <code>%&gt;%</code> se realiza de la siguiente manera:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="el-operador-pipeline.html#cb18-1" tabindex="-1"></a>data1 <span class="sc">%&gt;%</span> <span class="fu">nrow</span>()</span></code></pre></div>
+<pre><code>## [1] 150266</code></pre>
+<p>Otro de los ejercicios que se hacen usualmente con las encuestas de hogares está relacionado con hacer descriptivos de la base por sexo. Una de las formas más sencillas de hacer esta revisión es usar la función <code>filter</code>, para generar dos bases de datos.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="el-operador-pipeline.html#cb20-1" tabindex="-1"></a>datasexH <span class="ot">&lt;-</span> data1 <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="el-operador-pipeline.html#cb20-2" tabindex="-1"></a>  <span class="fu">filter</span>(Sex <span class="sc">==</span> <span class="st">&quot;Male&quot;</span>)</span>
+<span id="cb20-3"><a href="el-operador-pipeline.html#cb20-3" tabindex="-1"></a>datasexM <span class="ot">&lt;-</span> data1 <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="el-operador-pipeline.html#cb20-4" tabindex="-1"></a>  <span class="fu">filter</span>(Sex <span class="sc">==</span> <span class="st">&quot;Female&quot;</span>)</span></code></pre></div>
+<p>Por otro lado, si el interés ahora es filtrar la base de datos por aquellas personas que no son pobres, se realiza de la siguiente manera:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="el-operador-pipeline.html#cb21-1" tabindex="-1"></a>datanopobre <span class="ot">&lt;-</span> data1 <span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="el-operador-pipeline.html#cb21-2" tabindex="-1"></a>  <span class="fu">filter</span>(Poverty <span class="sc">==</span> <span class="st">&quot;NotPoor&quot;</span>)</span></code></pre></div>
+<p>En este mismo sentido, es posible también crear nuevas bases de datos filtradas por algunos ingresos particulares mensuales, es posible realizarlo de la siguiente manera:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="el-operador-pipeline.html#cb22-1" tabindex="-1"></a>dataingreso1 <span class="ot">&lt;-</span> data1 <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="el-operador-pipeline.html#cb22-2" tabindex="-1"></a>  <span class="fu">filter</span>(Income <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">265</span>, <span class="dv">600</span>))</span>
+<span id="cb22-3"><a href="el-operador-pipeline.html#cb22-3" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="el-operador-pipeline.html#cb22-4" tabindex="-1"></a>dataingreso2 <span class="ot">&lt;-</span> data1 <span class="sc">%&gt;%</span></span>
+<span id="cb22-5"><a href="el-operador-pipeline.html#cb22-5" tabindex="-1"></a>  <span class="fu">filter</span>(Income <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1000</span>, <span class="dv">2000</span>))</span></code></pre></div>
+<p>Dado que la base del ejemplo no cuenta con regiones geográficas definidas, se pueden construir agrupando algunos estratos, para ello se usa el siguiente código:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="el-operador-pipeline.html#cb23-1" tabindex="-1"></a>Region <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">gsub</span>(</span>
+<span id="cb23-2"><a href="el-operador-pipeline.html#cb23-2" tabindex="-1"></a>  <span class="at">pattern =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">D&quot;</span>,</span>
+<span id="cb23-3"><a href="el-operador-pipeline.html#cb23-3" tabindex="-1"></a>  <span class="at">replacement =</span>  <span class="st">&quot;&quot;</span>,</span>
+<span id="cb23-4"><a href="el-operador-pipeline.html#cb23-4" tabindex="-1"></a>  <span class="at">x =</span> data1<span class="sc">$</span>Stratum</span>
+<span id="cb23-5"><a href="el-operador-pipeline.html#cb23-5" tabindex="-1"></a>))</span>
+<span id="cb23-6"><a href="el-operador-pipeline.html#cb23-6" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="el-operador-pipeline.html#cb23-7" tabindex="-1"></a>data1<span class="sc">$</span>Region <span class="ot">&lt;-</span></span>
+<span id="cb23-8"><a href="el-operador-pipeline.html#cb23-8" tabindex="-1"></a>  <span class="fu">cut</span>(</span>
+<span id="cb23-9"><a href="el-operador-pipeline.html#cb23-9" tabindex="-1"></a>    Region,</span>
+<span id="cb23-10"><a href="el-operador-pipeline.html#cb23-10" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="dv">5</span>,</span>
+<span id="cb23-11"><a href="el-operador-pipeline.html#cb23-11" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Norte&quot;</span>, <span class="st">&quot;Sur&quot;</span>, <span class="st">&quot;Centro&quot;</span>, <span class="st">&quot;Occidente&quot;</span>, <span class="st">&quot;Oriente&quot;</span>)</span>
+<span id="cb23-12"><a href="el-operador-pipeline.html#cb23-12" tabindex="-1"></a>  )</span></code></pre></div>
+<p>La mayoría de veces, para los análisis con las bases de hogares, es necesario recodificar los niveles de los factores. El siguiente código permite generar los nombres de las regiones, junto con sus respectivos rótulos.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="el-operador-pipeline.html#cb24-1" tabindex="-1"></a>data1<span class="sc">$</span>IDRegion <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb24-2"><a href="el-operador-pipeline.html#cb24-2" tabindex="-1"></a>  data1<span class="sc">$</span>Region,</span>
+<span id="cb24-3"><a href="el-operador-pipeline.html#cb24-3" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Norte&quot;</span>, <span class="st">&quot;Sur&quot;</span>, <span class="st">&quot;Centro&quot;</span>, <span class="st">&quot;Occidente&quot;</span>, <span class="st">&quot;Oriente&quot;</span>),</span>
+<span id="cb24-4"><a href="el-operador-pipeline.html#cb24-4" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;01&quot;</span>, <span class="st">&quot;02&quot;</span>, <span class="st">&quot;03&quot;</span>, <span class="st">&quot;04&quot;</span>, <span class="st">&quot;05&quot;</span>)</span>
+<span id="cb24-5"><a href="el-operador-pipeline.html#cb24-5" tabindex="-1"></a>)</span></code></pre></div>
+<p>Por último, para efectos de visualización en tablas y gráficos es conviene codificar los nombres de las variables como sigue:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="el-operador-pipeline.html#cb25-1" tabindex="-1"></a>data1<span class="sc">$</span>Nom_corto <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb25-2"><a href="el-operador-pipeline.html#cb25-2" tabindex="-1"></a>  data1<span class="sc">$</span>Region,</span>
+<span id="cb25-3"><a href="el-operador-pipeline.html#cb25-3" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Norte&quot;</span>, <span class="st">&quot;Sur&quot;</span>, <span class="st">&quot;Centro&quot;</span>, <span class="st">&quot;Occidente&quot;</span>, <span class="st">&quot;Oriente&quot;</span>),</span>
+<span id="cb25-4"><a href="el-operador-pipeline.html#cb25-4" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;N&quot;</span>, <span class="st">&quot;S&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;O&quot;</span>, <span class="st">&quot;E&quot;</span>)</span>
+<span id="cb25-5"><a href="el-operador-pipeline.html#cb25-5" tabindex="-1"></a>)</span></code></pre></div>
+<p>Otra función muy útil en los procesamientos descriptivos de las encuestas de hogares es la función <code>select</code>, la cual permite seleccionar un grupo de variables de interés que se quieren analizar. Si, por ejemplo, se desea seleccionar de la base de ejemplo solo las variables que identifican al hogar (<code>HHID</code>), a las unidades primarias de muestreo (<code>PSU</code>), la Zona (<code>Zone</code>), el sexo de la persona (<code>Sex</code>) y sus ingresos (<code>Income</code>), se realiza de la siguiente manera:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="el-operador-pipeline.html#cb26-1" tabindex="-1"></a>datared <span class="ot">&lt;-</span> data1 <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="el-operador-pipeline.html#cb26-2" tabindex="-1"></a>  <span class="fu">select</span>(HHID, PSU, Zone, Sex, Income)</span></code></pre></div>
+<p>La función <code>select</code> no solo sirve para seleccionar variables de una base de datos, también se puede utilizar para eliminar algunas variables de la base de datos que ya no son de interés para el análisis o que, simplemente, se generaron en la manipulación de la base de datos como variables temporales para realizar algunos cálculos de interés. Por ejemplo, si se desea eliminar de la base de datos de ejemplo las variables de identificación del hogar y de identificación de las personas, se podría realizar introduciendo un signo “menos” (-) delante del nombre de la variable como sigue:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="el-operador-pipeline.html#cb27-1" tabindex="-1"></a>datagrey <span class="ot">&lt;-</span> data1 <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="el-operador-pipeline.html#cb27-2" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>HHID, <span class="sc">-</span>PersonID)</span></code></pre></div>
+<p>Por otro lado, si el objetivo fuese ordenar las filas de la base por alguna variable en particular, se utilizaría la función <code>arrange</code> para realizar esta operación. A continuación, se ejemplifica con la base de datos <code>dataingreso1</code>, cómo se ordena la base de acuerdo con la variable <code>Income</code>:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="el-operador-pipeline.html#cb28-1" tabindex="-1"></a>datadog <span class="ot">&lt;-</span> dataingreso1 <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="el-operador-pipeline.html#cb28-2" tabindex="-1"></a>  <span class="fu">arrange</span>(Income)</span>
+<span id="cb28-3"><a href="el-operador-pipeline.html#cb28-3" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="el-operador-pipeline.html#cb28-4" tabindex="-1"></a>datadog <span class="sc">%&gt;%</span> </span>
+<span id="cb28-5"><a href="el-operador-pipeline.html#cb28-5" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>##        HHID PersonID   Stratum     PSU  Zone    Sex Age MaritalST Income
+## 1 idHH02245  idPer01 idStrt017 PSU0166 Rural   Male  73   Widowed    265
+## 2 idHH02245  idPer02 idStrt017 PSU0166 Rural   Male  38   Married    265
+## 3 idHH02245  idPer03 idStrt017 PSU0166 Rural Female  37   Married    265
+## 4 idHH02245  idPer04 idStrt017 PSU0166 Rural   Male  16    Single    265
+## 5 idHH02245  idPer05 idStrt017 PSU0166 Rural   Male  12    Single    265
+## 6 idHH02245  idPer06 idStrt017 PSU0166 Rural   Male  11      &lt;NA&gt;    265
+##   Expenditure Employment  Poverty
+## 1      281.42   Inactive Relative
+## 2      281.42   Employed Relative
+## 3      281.42   Inactive Relative
+## 4      281.42   Employed Relative
+## 5      281.42       &lt;NA&gt; Relative
+## 6      281.42       &lt;NA&gt; Relative</code></pre>
+<p>Es posible utilizar la función <code>arrange</code> para hacer ordenamientos más complicados. Por ejemplo, ordenar por más de una variable. A modo de ejemplo, ordenemos la base de datos <code>dataingreso1</code> de acuerdo con las variables <code>Sexo</code> y <code>Edad</code>.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="el-operador-pipeline.html#cb30-1" tabindex="-1"></a>dataingreso1 <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="el-operador-pipeline.html#cb30-2" tabindex="-1"></a>  <span class="fu">arrange</span>(Sex, Age) <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="el-operador-pipeline.html#cb30-3" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>##        HHID PersonID   Stratum     PSU  Zone    Sex Age MaritalST Income
+## 1 idHH02586  idPer05 idStrt018 PSU0193 Urban Female   2      &lt;NA&gt;    600
+## 2 idHH23231  idPer05 idStrt018 PSU0193 Urban Female   2      &lt;NA&gt;    600
+## 3 idHH19448  idPer05 idStrt115 PSU1571 Urban Female   2      &lt;NA&gt;    600
+## 4 idHH40093  idPer05 idStrt115 PSU1571 Urban Female   2      &lt;NA&gt;    600
+## 5 idHH14415  idPer05 idStrt091 PSU1182 Urban Female   3      &lt;NA&gt;    600
+## 6 idHH35060  idPer05 idStrt091 PSU1182 Urban Female   3      &lt;NA&gt;    600
+##   Expenditure Employment Poverty
+## 1      379.15       &lt;NA&gt; NotPoor
+## 2      379.15       &lt;NA&gt; NotPoor
+## 3      411.02       &lt;NA&gt; NotPoor
+## 4      411.02       &lt;NA&gt; NotPoor
+## 5      399.55       &lt;NA&gt; NotPoor
+## 6      399.55       &lt;NA&gt; NotPoor</code></pre>
+<p>También es posible utilizar la función <code>arrange</code> junto con la opción <code>desc()</code> para que el ordenamiento sea descendente.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="el-operador-pipeline.html#cb32-1" tabindex="-1"></a>dataingreso1 <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="el-operador-pipeline.html#cb32-2" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Age)) <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="el-operador-pipeline.html#cb32-3" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>##        HHID PersonID   Stratum     PSU  Zone    Sex Age MaritalST Income
+## 1 idHH06945  idPer01 idStrt047 PSU0541 Urban Female  88 Separated    600
+## 2 idHH27590  idPer01 idStrt047 PSU0541 Urban Female  88 Separated    600
+## 3 idHH05798  idPer01 idStrt039 PSU0438 Urban Female  87   Widowed    600
+## 4 idHH26443  idPer01 idStrt039 PSU0438 Urban Female  87   Widowed    600
+## 5 idHH13013  idPer01 idStrt085 PSU1074 Urban Female  87   Widowed    600
+## 6 idHH33658  idPer01 idStrt085 PSU1074 Urban Female  87   Widowed    600
+##   Expenditure Employment Poverty
+## 1      543.59   Inactive NotPoor
+## 2      543.59   Inactive NotPoor
+## 3     1026.00   Inactive NotPoor
+## 4     1026.00   Inactive NotPoor
+## 5      266.00   Inactive NotPoor
+## 6      266.00   Inactive NotPoor</code></pre>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-magrittr2022" class="csl-entry">
+Bache, Stefan Milton, y Hadley Wickham. 2022. <em>magrittr: A Forward-Pipe Operator for R</em>. <a href="https://CRAN.R-project.org/package=magrittr">https://CRAN.R-project.org/package=magrittr</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="creación-de-variables-y-resumen-de-conteos.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/2021ASDA/02-RyBasesDeDatos.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Análisis de encuestas de hogares con R.pdf", "Análisis de encuestas de hogares con R.epub", "Análisis de encuestas de hogares con R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

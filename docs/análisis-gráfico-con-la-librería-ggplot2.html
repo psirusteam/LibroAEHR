@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>6.2 Análisis gráfico con la librería ggplot2 | Análisis de encuestas de hogares con R</title>
+  <meta name="description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="6.2 Análisis gráfico con la librería ggplot2 | Análisis de encuestas de hogares con R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  <meta name="github-repo" content="psirusteam/HHS-Handbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="6.2 Análisis gráfico con la librería ggplot2 | Análisis de encuestas de hogares con R" />
+  
+  <meta name="twitter:description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  
+
+<meta name="author" content="Andrés Gutiérrez, Cristian Téllez, Stalyn Guerrero" />
+
+
+<meta name="date" content="2024-03-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="análisis-gráfico-con-la-librería-survey.html"/>
+<link rel="next" href="mapas.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Análisis de encuestas con R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="introducción.html"><a href="introducción.html"><i class="fa fa-check"></i><b>1</b> Introducción</a></li>
+<li class="chapter" data-level="2" data-path="manejando-una-base-de-encuestas-de-hogares-con-r.html"><a href="manejando-una-base-de-encuestas-de-hogares-con-r.html"><i class="fa fa-check"></i><b>2</b> Manejando una base de encuestas de hogares con <code>R</code></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentos-básicos-de-r-y-rstudio.html"><a href="fundamentos-básicos-de-r-y-rstudio.html"><i class="fa fa-check"></i><b>2.1</b> Fundamentos básicos de <code>R</code> y <code>Rstudio</code></a></li>
+<li class="chapter" data-level="2.2" data-path="creación-de-proyectos-en-r.html"><a href="creación-de-proyectos-en-r.html"><i class="fa fa-check"></i><b>2.2</b> Creación de proyectos en <code>R</code></a></li>
+<li class="chapter" data-level="2.3" data-path="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html"><a href="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html"><i class="fa fa-check"></i><b>2.3</b> Lectura de las bases de datos y procesamientos básicos</a></li>
+<li class="chapter" data-level="2.4" data-path="el-operador-pipeline.html"><a href="el-operador-pipeline.html"><i class="fa fa-check"></i><b>2.4</b> El operador <code>pipeline</code> (%&gt;%)</a></li>
+<li class="chapter" data-level="2.5" data-path="creación-de-variables-y-resumen-de-conteos.html"><a href="creación-de-variables-y-resumen-de-conteos.html"><i class="fa fa-check"></i><b>2.5</b> Creación de variables y resumen de conteos</a></li>
+<li class="chapter" data-level="2.6" data-path="algunas-estadísticas-descriptivas-sobre-la-base-de-datos.html"><a href="algunas-estadísticas-descriptivas-sobre-la-base-de-datos.html"><i class="fa fa-check"></i><b>2.6</b> Algunas estadísticas descriptivas sobre la base de datos</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="conceptos-básicos-en-encuestas-de-hogares.html"><a href="conceptos-básicos-en-encuestas-de-hogares.html"><i class="fa fa-check"></i><b>3</b> Conceptos básicos en encuestas de hogares</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="unidades-y-marcos-de-muestreo.html"><a href="unidades-y-marcos-de-muestreo.html"><i class="fa fa-check"></i><b>3.1</b> Unidades y marcos de muestreo</a></li>
+<li class="chapter" data-level="3.2" data-path="la-base-de-datos-bigcity.html"><a href="la-base-de-datos-bigcity.html"><i class="fa fa-check"></i><b>3.2</b> La base de datos BigCity</a></li>
+<li class="chapter" data-level="3.3" data-path="un-esquema-de-muestreo-para-bigcity.html"><a href="un-esquema-de-muestreo-para-bigcity.html"><i class="fa fa-check"></i><b>3.3</b> Un esquema de muestreo para BigCity</a></li>
+<li class="chapter" data-level="3.4" data-path="calibración-de-los-factores-de-expansión.html"><a href="calibración-de-los-factores-de-expansión.html"><i class="fa fa-check"></i><b>3.4</b> Calibración de los factores de expansión</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="análisis-de-variables-continuas.html"><a href="análisis-de-variables-continuas.html"><i class="fa fa-check"></i><b>4</b> Análisis de variables continuas</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="definición-del-diseño-de-muestreo.html"><a href="definición-del-diseño-de-muestreo.html"><i class="fa fa-check"></i><b>4.1</b> Definición del diseño de muestreo</a></li>
+<li class="chapter" data-level="4.2" data-path="estimación-puntual.html"><a href="estimación-puntual.html"><i class="fa fa-check"></i><b>4.2</b> Estimación puntual</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-totales"><i class="fa fa-check"></i><b>4.2.1</b> Estimación de totales</a></li>
+<li class="chapter" data-level="4.2.2" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-promedios"><i class="fa fa-check"></i><b>4.2.2</b> Estimación de promedios</a></li>
+<li class="chapter" data-level="4.2.3" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-medidas-de-dispersión-y-localización"><i class="fa fa-check"></i><b>4.2.3</b> Estimación de medidas de dispersión y localización</a></li>
+<li class="chapter" data-level="4.2.4" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-del-coeficiente-de-gini"><i class="fa fa-check"></i><b>4.2.4</b> Estimación del coeficiente de Gini</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html"><i class="fa fa-check"></i><b>4.3</b> Relación entre varias variables</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#estimación-de-razones"><i class="fa fa-check"></i><b>4.3.1</b> Estimación de razones</a></li>
+<li class="chapter" data-level="4.3.2" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#prueba-de-hipótesis-para-la-diferencia-de-medias"><i class="fa fa-check"></i><b>4.3.2</b> Prueba de hipótesis para la diferencia de medias</a></li>
+<li class="chapter" data-level="4.3.3" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#contrastes"><i class="fa fa-check"></i><b>4.3.3</b> Contrastes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="análisis-de-variables-categóricas.html"><a href="análisis-de-variables-categóricas.html"><i class="fa fa-check"></i><b>5</b> Análisis de variables categóricas</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="definición-del-diseño-de-muestreo-1.html"><a href="definición-del-diseño-de-muestreo-1.html"><i class="fa fa-check"></i><b>5.1</b> Definición del diseño de muestreo</a></li>
+<li class="chapter" data-level="5.2" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html"><i class="fa fa-check"></i><b>5.2</b> Estimación puntual</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html#estimaciones-de-tamaños"><i class="fa fa-check"></i><b>5.2.1</b> Estimaciones de tamaños</a></li>
+<li class="chapter" data-level="5.2.2" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html#estimación-de-proporciones"><i class="fa fa-check"></i><b>5.2.2</b> Estimación de proporciones</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html"><i class="fa fa-check"></i><b>5.3</b> Relación entre varias variables</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#tablas"><i class="fa fa-check"></i><b>5.3.1</b> Tablas</a></li>
+<li class="chapter" data-level="5.3.2" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#pruebas-de-independencia"><i class="fa fa-check"></i><b>5.3.2</b> Pruebas de independencia</a></li>
+<li class="chapter" data-level="5.3.3" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#diferencia-de-proporciones-y-contrastes"><i class="fa fa-check"></i><b>5.3.3</b> Diferencia de proporciones y contrastes</a></li>
+<li class="chapter" data-level="5.3.4" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#razones-de-odds"><i class="fa fa-check"></i><b>5.3.4</b> Razones de odds</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="análisis-gráfico.html"><a href="análisis-gráfico.html"><i class="fa fa-check"></i><b>6</b> Análisis gráfico</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="análisis-gráfico-con-la-librería-survey.html"><a href="análisis-gráfico-con-la-librería-survey.html"><i class="fa fa-check"></i><b>6.1</b> Análisis gráfico con la librería <code>survey</code></a></li>
+<li class="chapter" data-level="6.2" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html"><i class="fa fa-check"></i><b>6.2</b> Análisis gráfico con la librería <code>ggplot2</code></a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#definición-del-tema"><i class="fa fa-check"></i><b>6.2.1</b> Definición del tema</a></li>
+<li class="chapter" data-level="6.2.2" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#histogramas"><i class="fa fa-check"></i><b>6.2.2</b> Histogramas</a></li>
+<li class="chapter" data-level="6.2.3" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#densidades"><i class="fa fa-check"></i><b>6.2.3</b> Densidades</a></li>
+<li class="chapter" data-level="6.2.4" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-caja"><i class="fa fa-check"></i><b>6.2.4</b> Diagramas de caja</a></li>
+<li class="chapter" data-level="6.2.5" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-dispersión"><i class="fa fa-check"></i><b>6.2.5</b> Diagramas de dispersión</a></li>
+<li class="chapter" data-level="6.2.6" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagrama-de-barras"><i class="fa fa-check"></i><b>6.2.6</b> Diagrama de barras</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="mapas.html"><a href="mapas.html"><i class="fa fa-check"></i><b>6.3</b> Mapas</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="modelos-de-regresión.html"><a href="modelos-de-regresión.html"><i class="fa fa-check"></i><b>7</b> Modelos de regresión</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="definiciones-básicas.html"><a href="definiciones-básicas.html"><i class="fa fa-check"></i><b>7.1</b> Definiciones básicas</a></li>
+<li class="chapter" data-level="7.2" data-path="estimación-de-los-parámetros-en-un-modelo-de-regresión-con-muestras-complejas..html"><a href="estimación-de-los-parámetros-en-un-modelo-de-regresión-con-muestras-complejas..html"><i class="fa fa-check"></i><b>7.2</b> Estimación de los parámetros en un modelo de regresión con muestras complejas.</a></li>
+<li class="chapter" data-level="7.3" data-path="la-ponderación-de-pfeffermann.html"><a href="la-ponderación-de-pfeffermann.html"><i class="fa fa-check"></i><b>7.3</b> La ponderación de Pfeffermann</a></li>
+<li class="chapter" data-level="7.4" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html"><i class="fa fa-check"></i><b>7.4</b> Diagnóstico del modelo</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#coeficientes-de-determinación"><i class="fa fa-check"></i><b>7.4.1</b> Coeficientes de determinación</a></li>
+<li class="chapter" data-level="7.4.2" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#residuales-estandarizados"><i class="fa fa-check"></i><b>7.4.2</b> Residuales estandarizados</a></li>
+<li class="chapter" data-level="7.4.3" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#observaciones-influyentes"><i class="fa fa-check"></i><b>7.4.3</b> Observaciones influyentes</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="inferencia-sobre-los-parámetros-del-modelo.html"><a href="inferencia-sobre-los-parámetros-del-modelo.html"><i class="fa fa-check"></i><b>7.5</b> Inferencia sobre los parámetros del Modelo</a></li>
+<li class="chapter" data-level="7.6" data-path="estimación-y-predicción.html"><a href="estimación-y-predicción.html"><i class="fa fa-check"></i><b>7.6</b> Estimación y predicción</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="modelos-lineales-generalizados.html"><a href="modelos-lineales-generalizados.html"><i class="fa fa-check"></i><b>8</b> Modelos lineales generalizados</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="modelo-de-regresión-logistica-para-proporciones.html"><a href="modelo-de-regresión-logistica-para-proporciones.html"><i class="fa fa-check"></i><b>8.1</b> Modelo de regresión logistica para proporciones</a></li>
+<li class="chapter" data-level="8.2" data-path="modelo-log-lineal-para-tablas-de-contingencia.html"><a href="modelo-log-lineal-para-tablas-de-contingencia.html"><i class="fa fa-check"></i><b>8.2</b> Modelo log-lineal para tablas de contingencia</a></li>
+<li class="chapter" data-level="8.3" data-path="modelo-multinomial-para-variables-con-múltiples-categorías.html"><a href="modelo-multinomial-para-variables-con-múltiples-categorías.html"><i class="fa fa-check"></i><b>8.3</b> Modelo multinomial para variables con múltiples categorías</a></li>
+<li class="chapter" data-level="8.4" data-path="modelo-gamma-para-variables-continuas-positivas.html"><a href="modelo-gamma-para-variables-continuas-positivas.html"><i class="fa fa-check"></i><b>8.4</b> Modelo Gamma para variables continuas positivas</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="modelos-multinivel.html"><a href="modelos-multinivel.html"><i class="fa fa-check"></i><b>9</b> Modelos multinivel</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="modelo-con-intercepto-aleatorio.html"><a href="modelo-con-intercepto-aleatorio.html"><i class="fa fa-check"></i><b>9.1</b> Modelo con intercepto aleatorio</a></li>
+<li class="chapter" data-level="9.2" data-path="modelo-con-pendiente-aleatoria.html"><a href="modelo-con-pendiente-aleatoria.html"><i class="fa fa-check"></i><b>9.2</b> Modelo con pendiente aleatoria</a></li>
+<li class="chapter" data-level="9.3" data-path="modelo-con-intercepto-y-pendiente-aleatoria.html"><a href="modelo-con-intercepto-y-pendiente-aleatoria.html"><i class="fa fa-check"></i><b>9.3</b> Modelo con intercepto y pendiente aleatoria</a></li>
+<li class="chapter" data-level="9.4" data-path="modelo-logístico-multinivel..html"><a href="modelo-logístico-multinivel..html"><i class="fa fa-check"></i><b>9.4</b> Modelo logístico multinivel.</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="imputación-múltiple-en-encuestas-de-hogares.html"><a href="imputación-múltiple-en-encuestas-de-hogares.html"><i class="fa fa-check"></i><b>10</b> Imputación múltiple en encuestas de hogares</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tres-patrones-para-la-ausencia-de-respuesta.html"><a href="tres-patrones-para-la-ausencia-de-respuesta.html"><i class="fa fa-check"></i><b>10.1</b> Tres patrones para la ausencia de respuesta</a></li>
+<li class="chapter" data-level="10.2" data-path="imputación-por-la-media-no-condicional..html"><a href="imputación-por-la-media-no-condicional..html"><i class="fa fa-check"></i><b>10.2</b> Imputación por la media no condicional.</a></li>
+<li class="chapter" data-level="10.3" data-path="imputación-por-la-media-condicional.html"><a href="imputación-por-la-media-condicional.html"><i class="fa fa-check"></i><b>10.3</b> Imputación por la media condicional</a></li>
+<li class="chapter" data-level="10.4" data-path="imputación-por-hot-deck.html"><a href="imputación-por-hot-deck.html"><i class="fa fa-check"></i><b>10.4</b> Imputación por <em>Hot-Deck</em></a></li>
+<li class="chapter" data-level="10.5" data-path="imputación-por-regresión.html"><a href="imputación-por-regresión.html"><i class="fa fa-check"></i><b>10.5</b> Imputación por regresión</a></li>
+<li class="chapter" data-level="10.6" data-path="imputación-por-el-vecino-más-cercano.html"><a href="imputación-por-el-vecino-más-cercano.html"><i class="fa fa-check"></i><b>10.6</b> Imputación por el vecino más cercano</a></li>
+<li class="chapter" data-level="10.7" data-path="imputación-por-el-vecino-más-cercano-con-regresión.html"><a href="imputación-por-el-vecino-más-cercano-con-regresión.html"><i class="fa fa-check"></i><b>10.7</b> Imputación por el vecino más cercano con regresión</a></li>
+<li class="chapter" data-level="10.8" data-path="imputación-múltiple..html"><a href="imputación-múltiple..html"><i class="fa fa-check"></i><b>10.8</b> Imputación múltiple.</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="estimación-de-parámetros-para-modelos-en-encuestas-complejas.html"><a href="estimación-de-parámetros-para-modelos-en-encuestas-complejas.html"><i class="fa fa-check"></i><b>11</b> Estimación de parámetros para modelos en encuestas complejas</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="acerca-de-las-muestras-aleatorias-y-su-análisis.html"><a href="acerca-de-las-muestras-aleatorias-y-su-análisis.html"><i class="fa fa-check"></i><b>11.1</b> Acerca de las muestras aleatorias y su análisis</a></li>
+<li class="chapter" data-level="11.2" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html"><i class="fa fa-check"></i><b>11.2</b> Modelos de superpoblación</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#primer-proceso-inferencial-el-modelo"><i class="fa fa-check"></i><b>11.2.1</b> Primer proceso inferencial: el modelo</a></li>
+<li class="chapter" data-level="11.2.2" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#segundo-proceso-inferencial-el-muestreo"><i class="fa fa-check"></i><b>11.2.2</b> Segundo proceso inferencial: el muestreo</a></li>
+<li class="chapter" data-level="11.2.3" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#inferencia-doble-los-modelos-y-el-muestreo"><i class="fa fa-check"></i><b>11.2.3</b> Inferencia doble: los modelos y el muestreo</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html"><i class="fa fa-check"></i><b>11.3</b> Método de Máxima Verosimilitud</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-distribución-bernoulli"><i class="fa fa-check"></i><b>11.3.1</b> MV para una distribución Bernoulli</a></li>
+<li class="chapter" data-level="11.3.2" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-distribución-normal"><i class="fa fa-check"></i><b>11.3.2</b> MV para una distribución normal</a></li>
+<li class="chapter" data-level="11.3.3" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-regresión-lineal-múltiple"><i class="fa fa-check"></i><b>11.3.3</b> MV para una regresión lineal múltiple</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html"><i class="fa fa-check"></i><b>11.4</b> Método de Máxima Pseudo-Verosimilitud</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-distribución-bernoulli"><i class="fa fa-check"></i><b>11.4.1</b> MPV para una distribución Bernoulli</a></li>
+<li class="chapter" data-level="11.4.2" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-distribución-normal"><i class="fa fa-check"></i><b>11.4.2</b> MPV para una distribución normal</a></li>
+<li class="chapter" data-level="11.4.3" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-regresión-múltiple"><i class="fa fa-check"></i><b>11.4.3</b> MPV para una regresión múltiple</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a Análisis de encuestas con R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis de encuestas de hogares con R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="análisis-gráfico-con-la-librería-ggplot2" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Análisis gráfico con la librería <code>ggplot2</code><a href="análisis-gráfico-con-la-librería-ggplot2.html#análisis-gráfico-con-la-librería-ggplot2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La librería <code>ggplot2</code> es una herramienta destacada para la visualización de datos en <code>R</code>. Es ampliament econocida y usada por los investigadores alrededor del mundo y es conocida por su sintaxis declarativa y flexibilidad. Al adoptar un enfoque basado en capas, permite a los usuarios crear visualizaciones complejas de manera intuitiva.</p>
+<div id="definición-del-tema" class="section level3 hasAnchor" number="6.2.1">
+<h3><span class="header-section-number">6.2.1</span> Definición del tema<a href="análisis-gráfico-con-la-librería-ggplot2.html#definición-del-tema" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En el ámbito de encuestas de hogares, <code>ggplot2</code> se convierte en una herramienta valiosa para representar visualmente tendencias en el tiempo, distribuciones de variables continuas y otros patrones relevantes. De hecho, su capacidad para trabajar con datos complejos facilita la exploración de este tipo de bases de datos, proporcionando una visión clara y efectiva de la realidad social que reflejan las encuestas de hogares.</p>
+<p>Para crear las gráficas de este documento es posible se utilizará por defecto un tema específico, que define la apariencia visual de los gráficos. El tema incluye aspectos como colores, fuentes, márgenes y otros elementos estéticos que permiten personalizar la presentación de un gráfico de acuerdo con las preferencias del usuario. La librería ggplot2 proporciona una variedad de temas predefinidos que pueden aplicarse a los gráficos para cambiar su apariencia de manera rápida y sencilla. El siguiente código define el tema que se usará en los gráficos del docuemnto.</p>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-1" tabindex="-1"></a>theme_cepal <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb269-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-2" tabindex="-1"></a>  <span class="fu">theme_light</span>(<span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb269-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-3" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb269-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-4" tabindex="-1"></a>      <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb269-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-5" tabindex="-1"></a>      <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb269-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-6" tabindex="-1"></a>      <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb269-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-7" tabindex="-1"></a>      <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb269-8"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-8" tabindex="-1"></a>      <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb269-9"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-9" tabindex="-1"></a>      <span class="at">legend.justification =</span> <span class="st">&quot;left&quot;</span>,</span>
+<span id="cb269-10"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-10" tabindex="-1"></a>      <span class="at">legend.direction =</span> <span class="st">&quot;horizontal&quot;</span>,</span>
+<span id="cb269-11"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-11" tabindex="-1"></a>      <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb269-12"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-12" tabindex="-1"></a>      ...</span>
+<span id="cb269-13"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-13" tabindex="-1"></a>    )</span>
+<span id="cb269-14"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb269-14" tabindex="-1"></a>}</span></code></pre></div>
+<p>Basado en lo anterior, los argumentos dentro de la función <code>theme()</code> en <code>ggplot2</code> se utilizan para personalizar la apariencia de diferentes elementos en un gráfico. en particular:</p>
+<ul>
+<li><code>axis.text.x</code> y <code>axis.ticks.x</code> controlan la apariencia de las etiquetas y marcas en el eje x. En este caso, se establece <code>element_blank()</code> para ocultar tanto las etiquetas como las marcas en el eje x.</li>
+<li><code>axis.text.y</code> y <code>axis.ticks.y</code> controlan la apariencia de las etiquetas y marcas en el eje y. Aquí también se establece <code>element_blank()</code> para ocultar ambas.</li>
+<li><code>legend.position</code> define la posición de la leyenda en el gráfico. En este caso, se establece en <code>bottom</code>, lo que significa que la leyenda se situará en la parte inferior del gráfico.</li>
+<li><code>legend.justification</code> y <code>legend.direction</code> define la alineación y dirección de la leyenda. En este caso, la leyenda se justifica a la izquierda (“left”) y se presenta en dirección horizontal.</li>
+<li><code>plot.title</code> controla la apariencia del título del gráfico. Se establece <code>element_text(size = 20, hjust = 0.5)</code> para especificar que el tamaño del texto del título sea 20 y que esté centrado horizontalmente (<code>hjust = 0.5</code>).</li>
+</ul>
+</div>
+<div id="histogramas" class="section level3 hasAnchor" number="6.2.2">
+<h3><span class="header-section-number">6.2.2</span> Histogramas<a href="análisis-gráfico-con-la-librería-ggplot2.html#histogramas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Un histograma es una representación gráfica de los datos de una variable empleando rectángulos (barras) cuya altura es proporcional a la frecuencia de los valores representados y su ancho proporcional a la amplitud de los intervalos de la clase. A continuación, se presenta cómo realizar un histograma para la variable ingresos utilizando los factores de expansión de la encuesta. EN primera instancia se define la fuente de información (<code>data</code>), luego se definen la variable que se desea graficar (<code>x</code>) y los pesos de muestreo (<code>weight</code>). Una vez definidos los parámetros generales, se define el tipo de gráfico, que para el caso de los histogramas es <code>geom_histogram</code>. Además, se definen los títulos que se quiere que tenga el histograma y por último, se aplica el tema de la CEPAL.</p>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb270-1" tabindex="-1"></a>HistInc <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> encuesta,</span>
+<span id="cb270-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb270-2" tabindex="-1"></a>                  <span class="fu">aes</span>(<span class="at">x =</span> Income, <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb270-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb270-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..)) <span class="sc">+</span></span>
+<span id="cb270-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb270-4" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb270-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb270-5" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Histograma ponderado del ingreso&quot;</span>) <span class="sc">+</span></span>
+<span id="cb270-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb270-6" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span>
+<span id="cb270-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb270-7" tabindex="-1"></a>HistInc</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/hist1-1.svg" width="672" /></p>
+<p>Por otro lado, repetimos ahora la secuencia de gráficos pero en este caso para la variable <code>Expenditure</code>:</p>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb271-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span>  encuesta,</span>
+<span id="cb271-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb271-2" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> Expenditure, <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb271-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb271-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..)) <span class="sc">+</span></span>
+<span id="cb271-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb271-4" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb271-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb271-5" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Histograma ponderado del gasto&quot;</span>) <span class="sc">+</span></span>
+<span id="cb271-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb271-6" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/hist2-1.svg" width="672" /></p>
+<p>Cuando el interés es realizar comparaciones entre dos o más agrupaciones, es posible hacer uso del parámetro <code>fill</code>, el cual rellena las barras del histograma con diferentes colores según el subgrupo poblacional. El siguiente ejemplo proporciona el código para realizar la comparación de la distribución de los ingresos poblacionales por zonas:</p>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb272-1" tabindex="-1"></a><span class="fu">ggplot</span>(encuesta,</span>
+<span id="cb272-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb272-2" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> Income, <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb272-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb272-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density.., <span class="at">fill =</span> Zone),</span>
+<span id="cb272-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb272-4" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb272-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb272-5" tabindex="-1"></a>                 <span class="at">position =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb272-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb272-6" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb272-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb272-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Histogramas ponderados del ingreso por zona&quot;</span>) <span class="sc">+</span></span>
+<span id="cb272-8"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb272-8" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/hist3-1.svg" width="672" /></p>
+<p>Como se pudo observar en la generación del histograma, se utilizó el parámetro <code>position</code>, el cual permite que las barras del gráfico sean distinguibles. Ahora, repetimos la secuencia de gráficos para la variable <code>Expenditure</code>.</p>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb273-1" tabindex="-1"></a><span class="fu">ggplot</span>(encuesta,</span>
+<span id="cb273-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb273-2" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> Expenditure, <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb273-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb273-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density.., <span class="at">fill =</span> Zone),</span>
+<span id="cb273-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb273-4" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb273-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb273-5" tabindex="-1"></a>                 <span class="at">position =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb273-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb273-6" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb273-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb273-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Histogramas ponderados del gasto por zona&quot;</span>) <span class="sc">+</span></span>
+<span id="cb273-8"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb273-8" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-7-1.svg" width="672" /></p>
+<p>Si quisieramos hacer una desagregación de la distribución del ingreso y del gasto por sexo, se debería usar el siguiente código que hace uso de la librería <code>patchworks</code> para posiconarlos de forma paralela.</p>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-1" tabindex="-1"></a>HistIncSex <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(encuesta,</span>
+<span id="cb274-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-2" tabindex="-1"></a>                     <span class="fu">aes</span>(<span class="at">x =</span> Income, <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb274-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density.., <span class="at">fill =</span> Sex),</span>
+<span id="cb274-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-4" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb274-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-5" tabindex="-1"></a>                 <span class="at">position =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb274-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-6" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb274-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-7" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Histogramas del ingreso por sexo&quot;</span>) <span class="sc">+</span></span>
+<span id="cb274-8"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-8" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span>
+<span id="cb274-9"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-9" tabindex="-1"></a></span>
+<span id="cb274-10"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-10" tabindex="-1"></a>HistExpSex <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(encuesta,</span>
+<span id="cb274-11"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-11" tabindex="-1"></a>                     <span class="fu">aes</span>(<span class="at">x =</span> Expenditure, <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb274-12"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-12" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density.., <span class="at">fill =</span> Sex),</span>
+<span id="cb274-13"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-13" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb274-14"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-14" tabindex="-1"></a>                 <span class="at">position =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb274-15"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-15" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb274-16"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-16" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Histogramas del gasto por sexo&quot;</span>) <span class="sc">+</span></span>
+<span id="cb274-17"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-17" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span>
+<span id="cb274-18"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-18" tabindex="-1"></a></span>
+<span id="cb274-19"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb274-19" tabindex="-1"></a>HistIncSex <span class="sc">|</span> HistExpSex</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-8-1.svg" width="672" /></p>
+</div>
+<div id="densidades" class="section level3 hasAnchor" number="6.2.3">
+<h3><span class="header-section-number">6.2.3</span> Densidades<a href="análisis-gráfico-con-la-librería-ggplot2.html#densidades" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Dadas las cualidades de la librería <code>ggplot2</code>, se pueden agregar nuevas capas a los gráficos; particularmente, a los histogramas antes realizados. La densidad se agrega con el argumento <code>geom_density</code> y se incorpora el parámetro <code>alpha</code> que regula la transparencia del relleno. Esta capa de densidad es útil cuando se trabaja con variables continuas, ya que proporciona una estimación suavizada de la función de densidad de probabilidad de los datos. Esta función utiliza un kernel de suavizamiento para construir una curva suave que se ajusta a los datos, ayudando a obtener una representación visual más clara de la forma general de la distribución. A continuación, se muestra cómo se agregan las densidades:</p>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb275-1" tabindex="-1"></a>HistInc <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="at">fill =</span> <span class="st">&quot;yellow&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) </span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-9-1.svg" width="60%" style="display: block; margin: auto;" /></p>
+<p>Ahora bien, al aplicar el argumento <code>aes(fill = Zone)</code> permite que la densidad sea agregada para cada una de las agrupaciones como se muestra a continuación.</p>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb276-1" tabindex="-1"></a>HistIncSex <span class="sc">+</span> <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Sex)) </span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-10-1.svg" width="672" /></p>
+</div>
+<div id="diagramas-de-caja" class="section level3 hasAnchor" number="6.2.4">
+<h3><span class="header-section-number">6.2.4</span> Diagramas de caja<a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-caja" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Los diagramas de caja (<em>boxplot</em>) son gráficos de resumen ampliamente utilizados en la práctica estadística. Este tipo de diagramas permite visualizar de forma general un conjunto de datos empleando la estimación directa de cinco cantidades: el mínimo, el máximo y los cuartiles Q1, Q2 y Q3. La forma generada por este gráfico compuesto por un rectángulo y dos brazos suministra información sobre la relación entre estas cantidades y permite verificar la existencia de valores atípicos.</p>
+<p>Para realizar este gráfico en <code>ggplot2</code> se utiliza la función <code>geom_boxplot</code>. A continuación, se presentan los Boxplot para las variables ingresos y gastos respectivamente:</p>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-1" tabindex="-1"></a>BoxInc <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(encuesta,</span>
+<span id="cb277-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-2" tabindex="-1"></a>                 <span class="fu">aes</span>(<span class="at">x =</span> Income, <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb277-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb277-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Boxplot ponderado de los ingresos&quot;</span>) <span class="sc">+</span></span>
+<span id="cb277-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-5" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb277-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-6" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span>
+<span id="cb277-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-7" tabindex="-1"></a></span>
+<span id="cb277-8"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-8" tabindex="-1"></a></span>
+<span id="cb277-9"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-9" tabindex="-1"></a>BoxExp <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(encuesta,</span>
+<span id="cb277-10"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-10" tabindex="-1"></a>                 <span class="fu">aes</span>(<span class="at">x =</span> Expenditure, <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb277-11"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-11" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb277-12"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-12" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Boxplot ponderado de los gastos&quot;</span>) <span class="sc">+</span></span>
+<span id="cb277-13"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-13" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb277-14"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-14" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span>
+<span id="cb277-15"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-15" tabindex="-1"></a></span>
+<span id="cb277-16"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb277-16" tabindex="-1"></a>BoxInc <span class="sc">|</span> BoxExp</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-11-1.svg" width="672" /></p>
+<p>En los gráficos anteriores se puede observar que la variable ingresos tiene más variabilidad que la variable gastos. En ambos gráficos se observan datos atípicos. Ahora bien, esta clase de diagramas también permiten la comparación entre dos o más niveles de agrupamiento, por ejemplo, por zonas para las variables ingresos y gastos como se muestra a continuación.</p>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-1" tabindex="-1"></a>BoxIncZone <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(encuesta,</span>
+<span id="cb278-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-2" tabindex="-1"></a>                     <span class="fu">aes</span>(<span class="at">x =</span> Income, <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb278-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Zone)) <span class="sc">+</span></span>
+<span id="cb278-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Boxplot de los ingresos por zona&quot;</span>) <span class="sc">+</span></span>
+<span id="cb278-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-5" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb278-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-6" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span>
+<span id="cb278-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-7" tabindex="-1"></a></span>
+<span id="cb278-8"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-8" tabindex="-1"></a>BoxExpZone <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(encuesta,</span>
+<span id="cb278-9"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-9" tabindex="-1"></a>                     <span class="fu">aes</span>(<span class="at">x =</span> Expenditure, <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb278-10"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-10" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Zone)) <span class="sc">+</span></span>
+<span id="cb278-11"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-11" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Boxplot de los gastos por zona&quot;</span>) <span class="sc">+</span></span>
+<span id="cb278-12"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-12" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb278-13"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-13" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span>
+<span id="cb278-14"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-14" tabindex="-1"></a></span>
+<span id="cb278-15"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb278-15" tabindex="-1"></a>BoxIncZone <span class="sc">|</span> BoxExpZone</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-12-1.svg" width="672" /></p>
+<p>Observándose, entre otros que, para la variable gasto en la zona rural es donde más datos atípicos hay. Ahora, si se desea personalizar los colores del relleno, es posible hacer uso de la función <code>scale_fill_manual</code>como se muestra a continuación:</p>
+<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb279-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb279-1" tabindex="-1"></a>colorZona <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">Urban =</span> <span class="st">&quot;#48C9B0&quot;</span>, <span class="at">Rural =</span> <span class="st">&quot;#117864&quot;</span>)</span>
+<span id="cb279-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb279-2" tabindex="-1"></a></span>
+<span id="cb279-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb279-3" tabindex="-1"></a>BoxIncZone <span class="sc">+</span> <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> colorZona) <span class="sc">|</span></span>
+<span id="cb279-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb279-4" tabindex="-1"></a>  BoxExpZone <span class="sc">+</span> <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> colorZona)</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-13-1.svg" width="60%" style="display: block; margin: auto;" /></p>
+<p>Realizando la comparación para más de dos categorías, por ejemplo región, se procede como:</p>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-1" tabindex="-1"></a>BoxIncReg <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb280-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-2" tabindex="-1"></a>  <span class="at">data =</span> encuesta,</span>
+<span id="cb280-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-3" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Income, <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb280-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-4" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Region)) <span class="sc">+</span></span>
+<span id="cb280-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-5" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Boxplot de los ingresos por región&quot;</span>) <span class="sc">+</span></span>
+<span id="cb280-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-6" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb280-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-7" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span>
+<span id="cb280-8"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-8" tabindex="-1"></a></span>
+<span id="cb280-9"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-9" tabindex="-1"></a>BoxExpReg <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb280-10"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-10" tabindex="-1"></a>  <span class="at">data =</span> encuesta,</span>
+<span id="cb280-11"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-11" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Expenditure, <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb280-12"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-12" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Region)) <span class="sc">+</span></span>
+<span id="cb280-13"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-13" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Boxplot de los gastos por región&quot;</span>) <span class="sc">+</span></span>
+<span id="cb280-14"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-14" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb280-15"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-15" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span>
+<span id="cb280-16"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-16" tabindex="-1"></a></span>
+<span id="cb280-17"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb280-17" tabindex="-1"></a>BoxIncReg <span class="sc">|</span> BoxExpReg</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-14-1.svg" width="672" /></p>
+<p>Una ventaja de este tipo de visualizaciones es que se pueden extender las comparaciones a variables que tienen más de dos categorías, creándose así una sinergia de posibles conclusiones sobre la distribución de las variables.</p>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb281-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> encuesta,</span>
+<span id="cb281-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb281-2" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> Income, <span class="at">y =</span> Sex, <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb281-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb281-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> Region)) <span class="sc">+</span></span>
+<span id="cb281-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb281-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Boxplot de los ingresos por región y sexo&quot;</span>) <span class="sc">+</span></span>
+<span id="cb281-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb281-5" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-15-1.svg" width="672" /></p>
+</div>
+<div id="diagramas-de-dispersión" class="section level3 hasAnchor" number="6.2.5">
+<h3><span class="header-section-number">6.2.5</span> Diagramas de dispersión<a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-dispersión" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Un diagrama de dispersión (<em>scaterplot</em>) representa cada observación como un punto, posicionado según el valor de dos variables continuas. Además de una posición horizontal y vertical, cada punto también puede tener un tamaño, un color y una forma. Estos atributos se denominan estética y son las propiedades que se pueden percibir en el gráfico. Cada estética puede asignarse a una variable o establecerse en un valor constante.</p>
+<p>Para visualizar estas relaciones en encuestas que provienen de un diseño de muestreo complejo que podría asignar diferentes factores de expansión a cada hogar, es posible realizar un diagrama de dispersión ponderado. Este es una representación gráfica de los datos que incorpora los pesos de muestreo finales para resaltar la importancia relativa de cada unidad observada en la población. En un diagrama de dispersión convencional, cada punto tiene el mismo peso en la visualización, lo que significa que todos los puntos se tratan de manera igualitaria. En cambio, uno ponderado asigna pesos específicos a cada punto, reflejando su relevancia o contribución a la representación global.</p>
+<p>La ponderación generalmente se logra mediante el uso de un tercer conjunto de datos que proporciona los pesos correspondientes a cada observación. Para realizar este tipo de gráfico se usará la función <code>geom_point</code>, como se muestra a continuación:</p>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb282-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> encuesta,</span>
+<span id="cb282-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb282-2" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> Income,</span>
+<span id="cb282-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb282-3" tabindex="-1"></a>           <span class="at">x =</span> Expenditure,</span>
+<span id="cb282-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb282-4" tabindex="-1"></a>           <span class="at">weight =</span> wk)) <span class="sc">+</span></span>
+<span id="cb282-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb282-5" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb282-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb282-6" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Scatterplot ponderado entre los ingresos y los gastos&quot;</span>) <span class="sc">+</span></span>
+<span id="cb282-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb282-7" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-16-1.svg" width="672" /></p>
+<p>Note que, en este caso, el parámetro <code>weight</code> no está aportando información visual al gráfico. Luego, el parámetro <code>alpha</code> se puede usar para controlar el tamaño de los puntos, para tener un mejor panorama del comportamiento de la muestra y su expansión.</p>
+<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb283-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb283-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> encuesta,</span>
+<span id="cb283-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb283-2" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> Income, <span class="at">x =</span> Expenditure)) <span class="sc">+</span></span>
+<span id="cb283-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb283-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> wk), <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb283-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb283-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Scatterplot ponderado entre los ingresos y los gastos&quot;</span>) <span class="sc">+</span></span>
+<span id="cb283-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb283-5" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/hist14-1.svg" width="672" /></p>
+<p>Otra forma de usar la variable <code>wk</code>, es asignar la intensidad del color según el valor de los factores de expansión.</p>
+<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb284-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb284-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> encuesta,</span>
+<span id="cb284-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb284-2" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> Income, <span class="at">x =</span> Expenditure)) <span class="sc">+</span></span>
+<span id="cb284-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb284-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">col =</span> wk), <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb284-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb284-4" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Scatterplot ponderado entre los ingresos y los gastos&quot;</span>) <span class="sc">+</span></span>
+<span id="cb284-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb284-5" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-17-1.svg" width="672" /></p>
+<p>Se puede extender las bondades de los gráficos de <code>ggplot2</code> para obtener mayor información de las muestra. Por ejemplo, agrupar los datos por Zona. Para lograr esto se introduce el parámetro <code>shape</code>.</p>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb285-1" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb285-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb285-2" tabindex="-1"></a>  <span class="at">data =</span> encuesta,</span>
+<span id="cb285-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb285-3" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">y =</span> Income, </span>
+<span id="cb285-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb285-4" tabindex="-1"></a>        <span class="at">x =</span> Expenditure,</span>
+<span id="cb285-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb285-5" tabindex="-1"></a>        <span class="at">shape =</span> Zone)) <span class="sc">+</span> </span>
+<span id="cb285-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb285-6" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> wk, <span class="at">color =</span> Zone), <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb285-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb285-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">size =</span> <span class="st">&quot;Peso&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb285-8"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb285-8" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;Scatterplot por zona entre los ingresos y los gastos&quot;</span>) <span class="sc">+</span></span>
+<span id="cb285-9"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb285-9" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-18-1.svg" width="672" /></p>
+</div>
+<div id="diagrama-de-barras" class="section level3 hasAnchor" number="6.2.6">
+<h3><span class="header-section-number">6.2.6</span> Diagrama de barras<a href="análisis-gráfico-con-la-librería-ggplot2.html#diagrama-de-barras" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Un diagrama de barras es una representación gráfica que utiliza barras rectangulares para mostrar la relación entre distintas categorías. Cada barra representa la frecuencia, proporción o cantidad asociada a una categoría específica, y la longitud de la barra es proporcional al valor que está representando. Estos diagramas son efectivos para visualizar datos discretos y comparar cantidades entre diferentes categorías de manera clara y sencilla. Sin embargo, en encuestas de hogares, la altura de las barras siempre va a representar una estimación que, a su vez, está sujeta al error de muestreo. Incorporar esta incertidumbre en los gráficos es una manera rápida y correcta de plantear hipótesis en la comparación de subgrupos poblacionales.</p>
+<p>Para realizar estos gráficos, en primer lugar, se deben realizar las estimaciones puntuales de los valores que se van a graficar. En el siguiente ejemplo, se estima la cantidad de personas en la zona urbana y la rural, junto con sus respectivos errores estándar.</p>
+<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb286-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb286-1" tabindex="-1"></a>tamano_zona <span class="ot">&lt;-</span> diseno <span class="sc">%&gt;%</span></span>
+<span id="cb286-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb286-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Zone) <span class="sc">%&gt;%</span></span>
+<span id="cb286-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb286-3" tabindex="-1"></a>  <span class="fu">summarise</span>( <span class="at">Nd =</span> <span class="fu">survey_total</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>)))</span>
+<span id="cb286-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb286-4" tabindex="-1"></a>tamano_zona </span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Zone</th>
+<th align="right">Nd</th>
+<th align="right">Nd_se</th>
+<th align="right">Nd_low</th>
+<th align="right">Nd_upp</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Rural</td>
+<td align="right">72102</td>
+<td align="right">3062</td>
+<td align="right">66039</td>
+<td align="right">78165</td>
+</tr>
+<tr class="even">
+<td align="left">Urban</td>
+<td align="right">78164</td>
+<td align="right">2847</td>
+<td align="right">72526</td>
+<td align="right">83802</td>
+</tr>
+</tbody>
+</table>
+<p>Para realizar este tipo de gráficos se requerirá de dos funciones, la primera <code>geom_bar</code>, que se utiliza para crear la capa de las barras que representarán la estimación del tamaño de cada zona; la altura de la barra es proporcional al valor que representa. La segunda función es <code>geom_errorbar</code> que se utiliza para agregar barras de error a un gráfico, que es útil porque precisamente queremos representar la variabilidad asociada con los valores estimados en la barra. El siguiente código permite reproducir este tipo de gráficos. Note que, los valores <code>ymax</code> y <code>ymin</code> se utilizan para definir los extremos superior e inferior de las barras de error, los cuales corresponden a los límites superior e inferior de los intervalos de confianza de la tabal anterior.</p>
+<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb287-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb287-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tamano_zona,</span>
+<span id="cb287-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb287-2" tabindex="-1"></a>       <span class="fu">aes</span>(</span>
+<span id="cb287-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb287-3" tabindex="-1"></a>         <span class="at">x =</span> Zone,</span>
+<span id="cb287-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb287-4" tabindex="-1"></a>         <span class="at">y =</span> Nd,</span>
+<span id="cb287-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb287-5" tabindex="-1"></a>         <span class="at">ymax =</span> Nd_upp,</span>
+<span id="cb287-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb287-6" tabindex="-1"></a>         <span class="at">ymin =</span> Nd_low,</span>
+<span id="cb287-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb287-7" tabindex="-1"></a>         <span class="at">fill =</span> Zone</span>
+<span id="cb287-8"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb287-8" tabindex="-1"></a>       )) <span class="sc">+</span></span>
+<span id="cb287-9"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb287-9" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
+<span id="cb287-10"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb287-10" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>),</span>
+<span id="cb287-11"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb287-11" tabindex="-1"></a>                <span class="at">width =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb287-12"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb287-12" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-20-1.svg" width="672" /></p>
+<p>Como se ha visto en los gráficos anteriores, este tipo de gráficos se pueden extender también a variables con más de dos categorías. Primero se realiza la estimación puntual junto con sus errores estándar asociados.</p>
+<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb288-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb288-1" tabindex="-1"></a>tamano_pobreza <span class="ot">&lt;-</span> diseno <span class="sc">%&gt;%</span></span>
+<span id="cb288-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb288-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Poverty) <span class="sc">%&gt;%</span></span>
+<span id="cb288-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb288-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Nd =</span> <span class="fu">survey_total</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>)))</span>
+<span id="cb288-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb288-4" tabindex="-1"></a>tamano_pobreza</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Poverty</th>
+<th align="right">Nd</th>
+<th align="right">Nd_se</th>
+<th align="right">Nd_low</th>
+<th align="right">Nd_upp</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">NotPoor</td>
+<td align="right">91398</td>
+<td align="right">4395</td>
+<td align="right">82696</td>
+<td align="right">100101</td>
+</tr>
+<tr class="even">
+<td align="left">Extreme</td>
+<td align="right">21519</td>
+<td align="right">4949</td>
+<td align="right">11719</td>
+<td align="right">31319</td>
+</tr>
+<tr class="odd">
+<td align="left">Relative</td>
+<td align="right">37349</td>
+<td align="right">3695</td>
+<td align="right">30032</td>
+<td align="right">44666</td>
+</tr>
+</tbody>
+</table>
+<p>El gráfico asociado a las anteriores estimaciones se obtiene con una sintaxis homologa a la anterior.</p>
+<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb289-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb289-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tamano_pobreza,</span>
+<span id="cb289-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb289-2" tabindex="-1"></a>       <span class="fu">aes</span>(</span>
+<span id="cb289-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb289-3" tabindex="-1"></a>         <span class="at">x =</span> Poverty,</span>
+<span id="cb289-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb289-4" tabindex="-1"></a>         <span class="at">y =</span> Nd,</span>
+<span id="cb289-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb289-5" tabindex="-1"></a>         <span class="at">ymax =</span> Nd_upp,</span>
+<span id="cb289-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb289-6" tabindex="-1"></a>         <span class="at">ymin =</span> Nd_low,</span>
+<span id="cb289-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb289-7" tabindex="-1"></a>         <span class="at">fill =</span> Poverty</span>
+<span id="cb289-8"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb289-8" tabindex="-1"></a>       )) <span class="sc">+</span></span>
+<span id="cb289-9"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb289-9" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
+<span id="cb289-10"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb289-10" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>),</span>
+<span id="cb289-11"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb289-11" tabindex="-1"></a>                <span class="at">width =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb289-12"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb289-12" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-22-1.svg" width="672" /></p>
+<p>De forma similar a los gráficos Boxplot, es posible realizar comparaciones entre más de dos variables. A continuación, se obtienen las estimaciones puntuales y los errores estándar para los tamaños absolutos de los cruces entre las dos categorías de desempleo y las tres categorías de pobreza.</p>
+<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb290-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb290-1" tabindex="-1"></a>tamano_ocupacion_pobreza <span class="ot">&lt;-</span> diseno <span class="sc">%&gt;%</span></span>
+<span id="cb290-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb290-2" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(desempleo)) <span class="sc">%&gt;%</span> </span>
+<span id="cb290-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb290-3" tabindex="-1"></a>  <span class="fu">group_by</span>(desempleo, Poverty) <span class="sc">%&gt;%</span></span>
+<span id="cb290-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb290-4" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Nd =</span> <span class="fu">survey_total</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb290-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb290-5" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() </span>
+<span id="cb290-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb290-6" tabindex="-1"></a>tamano_ocupacion_pobreza</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">desempleo</th>
+<th align="left">Poverty</th>
+<th align="right">Nd</th>
+<th align="right">Nd_se</th>
+<th align="right">Nd_low</th>
+<th align="right">Nd_upp</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="left">NotPoor</td>
+<td align="right">68946</td>
+<td align="right">3676.3</td>
+<td align="right">61666.8</td>
+<td align="right">76226</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="left">Extreme</td>
+<td align="right">11549</td>
+<td align="right">2208.8</td>
+<td align="right">7175.8</td>
+<td align="right">15923</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="left">Relative</td>
+<td align="right">22847</td>
+<td align="right">2558.5</td>
+<td align="right">17780.5</td>
+<td align="right">27913</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">NotPoor</td>
+<td align="right">1768</td>
+<td align="right">405.4</td>
+<td align="right">965.7</td>
+<td align="right">2571</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">Extreme</td>
+<td align="right">1169</td>
+<td align="right">348.1</td>
+<td align="right">479.9</td>
+<td align="right">1859</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">Relative</td>
+<td align="right">1697</td>
+<td align="right">457.8</td>
+<td align="right">790.7</td>
+<td align="right">2604</td>
+</tr>
+</tbody>
+</table>
+<p>El gráfico para la tabla anterior queda de ejemplificado de la siguiente manera.</p>
+<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb291-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb291-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tamano_ocupacion_pobreza,</span>
+<span id="cb291-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb291-2" tabindex="-1"></a>       <span class="fu">aes</span>(</span>
+<span id="cb291-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb291-3" tabindex="-1"></a>         <span class="at">x =</span> Poverty,</span>
+<span id="cb291-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb291-4" tabindex="-1"></a>         <span class="at">y =</span> Nd,</span>
+<span id="cb291-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb291-5" tabindex="-1"></a>         <span class="at">ymax =</span> Nd_upp,</span>
+<span id="cb291-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb291-6" tabindex="-1"></a>         <span class="at">ymin =</span> Nd_low,</span>
+<span id="cb291-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb291-7" tabindex="-1"></a>         <span class="at">fill =</span> <span class="fu">as.factor</span>(desempleo)</span>
+<span id="cb291-8"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb291-8" tabindex="-1"></a>       )) <span class="sc">+</span></span>
+<span id="cb291-9"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb291-9" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
+<span id="cb291-10"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb291-10" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>),</span>
+<span id="cb291-11"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb291-11" tabindex="-1"></a>                <span class="at">width =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb291-12"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb291-12" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-24-1.svg" width="672" /></p>
+<p>En estos gráficos también se pueden presentar proporciones estimadas, o frecuencias relativas, como se muestra a continuación para la estimación de la proporción de personas en las tres categorías de pobreza cruzada con la zona.</p>
+<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb292-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb292-1" tabindex="-1"></a>prop_ZonaH_Pobreza <span class="ot">&lt;-</span> sub_Hombre <span class="sc">%&gt;%</span></span>
+<span id="cb292-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb292-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Zone, Poverty) <span class="sc">%&gt;%</span></span>
+<span id="cb292-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb292-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">prop =</span> <span class="fu">survey_prop</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>)))</span>
+<span id="cb292-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb292-4" tabindex="-1"></a>prop_ZonaH_Pobreza</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 6
+## # Groups:   Zone [2]
+##   Zone  Poverty   prop prop_se prop_low prop_upp
+##   &lt;chr&gt; &lt;fct&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Rural NotPoor  0.549  0.0626   0.424     0.668
+## 2 Rural Extreme  0.198  0.0675   0.0958    0.364
+## 3 Rural Relative 0.254  0.0372   0.187     0.334
+## 4 Urban NotPoor  0.660  0.0366   0.584     0.728
+## 5 Urban Extreme  0.113  0.0245   0.0726    0.171
+## 6 Urban Relative 0.227  0.0260   0.180     0.283</code></pre>
+<p>Después de obtener la tabla con los valores que se quieren presentar en el gráfico, los códigos computacionales para realizar un diagrama de barras es el siguiente:</p>
+<div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb294-1"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb294-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> prop_ZonaH_Pobreza,</span>
+<span id="cb294-2"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb294-2" tabindex="-1"></a>       <span class="fu">aes</span>(</span>
+<span id="cb294-3"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb294-3" tabindex="-1"></a>         <span class="at">x =</span> Poverty,</span>
+<span id="cb294-4"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb294-4" tabindex="-1"></a>         <span class="at">y =</span> prop,</span>
+<span id="cb294-5"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb294-5" tabindex="-1"></a>         <span class="at">ymax =</span> prop_upp,</span>
+<span id="cb294-6"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb294-6" tabindex="-1"></a>         <span class="at">ymin =</span> prop_low,</span>
+<span id="cb294-7"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb294-7" tabindex="-1"></a>         <span class="at">fill =</span> Zone</span>
+<span id="cb294-8"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb294-8" tabindex="-1"></a>       )) <span class="sc">+</span></span>
+<span id="cb294-9"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb294-9" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
+<span id="cb294-10"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb294-10" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>),</span>
+<span id="cb294-11"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb294-11" tabindex="-1"></a>                <span class="at">width =</span> <span class="fl">0.3</span>) <span class="sc">+</span> <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> colorZona) <span class="sc">+</span></span>
+<span id="cb294-12"><a href="análisis-gráfico-con-la-librería-ggplot2.html#cb294-12" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="06-Gr%C3%A1ficas_files/figure-html/unnamed-chunk-26-1.svg" width="672" /></p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="análisis-gráfico-con-la-librería-survey.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="mapas.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/2021ASDA/06-Gráficas.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Análisis de encuestas de hogares con R.pdf", "Análisis de encuestas de hogares con R.epub", "Análisis de encuestas de hogares con R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

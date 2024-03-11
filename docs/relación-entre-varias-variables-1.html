@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5.3 Relación entre varias variables | Análisis de encuestas de hogares con R</title>
+  <meta name="description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="5.3 Relación entre varias variables | Análisis de encuestas de hogares con R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  <meta name="github-repo" content="psirusteam/HHS-Handbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5.3 Relación entre varias variables | Análisis de encuestas de hogares con R" />
+  
+  <meta name="twitter:description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  
+
+<meta name="author" content="Andrés Gutiérrez, Cristian Téllez, Stalyn Guerrero" />
+
+
+<meta name="date" content="2024-03-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="estimación-puntual-1.html"/>
+<link rel="next" href="análisis-gráfico.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Análisis de encuestas con R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="introducción.html"><a href="introducción.html"><i class="fa fa-check"></i><b>1</b> Introducción</a></li>
+<li class="chapter" data-level="2" data-path="manejando-una-base-de-encuestas-de-hogares-con-r.html"><a href="manejando-una-base-de-encuestas-de-hogares-con-r.html"><i class="fa fa-check"></i><b>2</b> Manejando una base de encuestas de hogares con <code>R</code></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentos-básicos-de-r-y-rstudio.html"><a href="fundamentos-básicos-de-r-y-rstudio.html"><i class="fa fa-check"></i><b>2.1</b> Fundamentos básicos de <code>R</code> y <code>Rstudio</code></a></li>
+<li class="chapter" data-level="2.2" data-path="creación-de-proyectos-en-r.html"><a href="creación-de-proyectos-en-r.html"><i class="fa fa-check"></i><b>2.2</b> Creación de proyectos en <code>R</code></a></li>
+<li class="chapter" data-level="2.3" data-path="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html"><a href="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html"><i class="fa fa-check"></i><b>2.3</b> Lectura de las bases de datos y procesamientos básicos</a></li>
+<li class="chapter" data-level="2.4" data-path="el-operador-pipeline.html"><a href="el-operador-pipeline.html"><i class="fa fa-check"></i><b>2.4</b> El operador <code>pipeline</code> (%&gt;%)</a></li>
+<li class="chapter" data-level="2.5" data-path="creación-de-variables-y-resumen-de-conteos.html"><a href="creación-de-variables-y-resumen-de-conteos.html"><i class="fa fa-check"></i><b>2.5</b> Creación de variables y resumen de conteos</a></li>
+<li class="chapter" data-level="2.6" data-path="algunas-estadísticas-descriptivas-sobre-la-base-de-datos.html"><a href="algunas-estadísticas-descriptivas-sobre-la-base-de-datos.html"><i class="fa fa-check"></i><b>2.6</b> Algunas estadísticas descriptivas sobre la base de datos</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="conceptos-básicos-en-encuestas-de-hogares.html"><a href="conceptos-básicos-en-encuestas-de-hogares.html"><i class="fa fa-check"></i><b>3</b> Conceptos básicos en encuestas de hogares</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="unidades-y-marcos-de-muestreo.html"><a href="unidades-y-marcos-de-muestreo.html"><i class="fa fa-check"></i><b>3.1</b> Unidades y marcos de muestreo</a></li>
+<li class="chapter" data-level="3.2" data-path="la-base-de-datos-bigcity.html"><a href="la-base-de-datos-bigcity.html"><i class="fa fa-check"></i><b>3.2</b> La base de datos BigCity</a></li>
+<li class="chapter" data-level="3.3" data-path="un-esquema-de-muestreo-para-bigcity.html"><a href="un-esquema-de-muestreo-para-bigcity.html"><i class="fa fa-check"></i><b>3.3</b> Un esquema de muestreo para BigCity</a></li>
+<li class="chapter" data-level="3.4" data-path="calibración-de-los-factores-de-expansión.html"><a href="calibración-de-los-factores-de-expansión.html"><i class="fa fa-check"></i><b>3.4</b> Calibración de los factores de expansión</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="análisis-de-variables-continuas.html"><a href="análisis-de-variables-continuas.html"><i class="fa fa-check"></i><b>4</b> Análisis de variables continuas</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="definición-del-diseño-de-muestreo.html"><a href="definición-del-diseño-de-muestreo.html"><i class="fa fa-check"></i><b>4.1</b> Definición del diseño de muestreo</a></li>
+<li class="chapter" data-level="4.2" data-path="estimación-puntual.html"><a href="estimación-puntual.html"><i class="fa fa-check"></i><b>4.2</b> Estimación puntual</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-totales"><i class="fa fa-check"></i><b>4.2.1</b> Estimación de totales</a></li>
+<li class="chapter" data-level="4.2.2" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-promedios"><i class="fa fa-check"></i><b>4.2.2</b> Estimación de promedios</a></li>
+<li class="chapter" data-level="4.2.3" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-medidas-de-dispersión-y-localización"><i class="fa fa-check"></i><b>4.2.3</b> Estimación de medidas de dispersión y localización</a></li>
+<li class="chapter" data-level="4.2.4" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-del-coeficiente-de-gini"><i class="fa fa-check"></i><b>4.2.4</b> Estimación del coeficiente de Gini</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html"><i class="fa fa-check"></i><b>4.3</b> Relación entre varias variables</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#estimación-de-razones"><i class="fa fa-check"></i><b>4.3.1</b> Estimación de razones</a></li>
+<li class="chapter" data-level="4.3.2" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#prueba-de-hipótesis-para-la-diferencia-de-medias"><i class="fa fa-check"></i><b>4.3.2</b> Prueba de hipótesis para la diferencia de medias</a></li>
+<li class="chapter" data-level="4.3.3" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#contrastes"><i class="fa fa-check"></i><b>4.3.3</b> Contrastes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="análisis-de-variables-categóricas.html"><a href="análisis-de-variables-categóricas.html"><i class="fa fa-check"></i><b>5</b> Análisis de variables categóricas</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="definición-del-diseño-de-muestreo-1.html"><a href="definición-del-diseño-de-muestreo-1.html"><i class="fa fa-check"></i><b>5.1</b> Definición del diseño de muestreo</a></li>
+<li class="chapter" data-level="5.2" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html"><i class="fa fa-check"></i><b>5.2</b> Estimación puntual</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html#estimaciones-de-tamaños"><i class="fa fa-check"></i><b>5.2.1</b> Estimaciones de tamaños</a></li>
+<li class="chapter" data-level="5.2.2" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html#estimación-de-proporciones"><i class="fa fa-check"></i><b>5.2.2</b> Estimación de proporciones</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html"><i class="fa fa-check"></i><b>5.3</b> Relación entre varias variables</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#tablas"><i class="fa fa-check"></i><b>5.3.1</b> Tablas</a></li>
+<li class="chapter" data-level="5.3.2" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#pruebas-de-independencia"><i class="fa fa-check"></i><b>5.3.2</b> Pruebas de independencia</a></li>
+<li class="chapter" data-level="5.3.3" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#diferencia-de-proporciones-y-contrastes"><i class="fa fa-check"></i><b>5.3.3</b> Diferencia de proporciones y contrastes</a></li>
+<li class="chapter" data-level="5.3.4" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#razones-de-odds"><i class="fa fa-check"></i><b>5.3.4</b> Razones de odds</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="análisis-gráfico.html"><a href="análisis-gráfico.html"><i class="fa fa-check"></i><b>6</b> Análisis gráfico</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="análisis-gráfico-con-la-librería-survey.html"><a href="análisis-gráfico-con-la-librería-survey.html"><i class="fa fa-check"></i><b>6.1</b> Análisis gráfico con la librería <code>survey</code></a></li>
+<li class="chapter" data-level="6.2" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html"><i class="fa fa-check"></i><b>6.2</b> Análisis gráfico con la librería <code>ggplot2</code></a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#definición-del-tema"><i class="fa fa-check"></i><b>6.2.1</b> Definición del tema</a></li>
+<li class="chapter" data-level="6.2.2" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#histogramas"><i class="fa fa-check"></i><b>6.2.2</b> Histogramas</a></li>
+<li class="chapter" data-level="6.2.3" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#densidades"><i class="fa fa-check"></i><b>6.2.3</b> Densidades</a></li>
+<li class="chapter" data-level="6.2.4" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-caja"><i class="fa fa-check"></i><b>6.2.4</b> Diagramas de caja</a></li>
+<li class="chapter" data-level="6.2.5" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-dispersión"><i class="fa fa-check"></i><b>6.2.5</b> Diagramas de dispersión</a></li>
+<li class="chapter" data-level="6.2.6" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagrama-de-barras"><i class="fa fa-check"></i><b>6.2.6</b> Diagrama de barras</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="mapas.html"><a href="mapas.html"><i class="fa fa-check"></i><b>6.3</b> Mapas</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="modelos-de-regresión.html"><a href="modelos-de-regresión.html"><i class="fa fa-check"></i><b>7</b> Modelos de regresión</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="definiciones-básicas.html"><a href="definiciones-básicas.html"><i class="fa fa-check"></i><b>7.1</b> Definiciones básicas</a></li>
+<li class="chapter" data-level="7.2" data-path="estimación-de-los-parámetros-en-un-modelo-de-regresión-con-muestras-complejas..html"><a href="estimación-de-los-parámetros-en-un-modelo-de-regresión-con-muestras-complejas..html"><i class="fa fa-check"></i><b>7.2</b> Estimación de los parámetros en un modelo de regresión con muestras complejas.</a></li>
+<li class="chapter" data-level="7.3" data-path="la-ponderación-de-pfeffermann.html"><a href="la-ponderación-de-pfeffermann.html"><i class="fa fa-check"></i><b>7.3</b> La ponderación de Pfeffermann</a></li>
+<li class="chapter" data-level="7.4" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html"><i class="fa fa-check"></i><b>7.4</b> Diagnóstico del modelo</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#coeficientes-de-determinación"><i class="fa fa-check"></i><b>7.4.1</b> Coeficientes de determinación</a></li>
+<li class="chapter" data-level="7.4.2" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#residuales-estandarizados"><i class="fa fa-check"></i><b>7.4.2</b> Residuales estandarizados</a></li>
+<li class="chapter" data-level="7.4.3" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#observaciones-influyentes"><i class="fa fa-check"></i><b>7.4.3</b> Observaciones influyentes</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="inferencia-sobre-los-parámetros-del-modelo.html"><a href="inferencia-sobre-los-parámetros-del-modelo.html"><i class="fa fa-check"></i><b>7.5</b> Inferencia sobre los parámetros del Modelo</a></li>
+<li class="chapter" data-level="7.6" data-path="estimación-y-predicción.html"><a href="estimación-y-predicción.html"><i class="fa fa-check"></i><b>7.6</b> Estimación y predicción</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="modelos-lineales-generalizados.html"><a href="modelos-lineales-generalizados.html"><i class="fa fa-check"></i><b>8</b> Modelos lineales generalizados</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="modelo-de-regresión-logistica-para-proporciones.html"><a href="modelo-de-regresión-logistica-para-proporciones.html"><i class="fa fa-check"></i><b>8.1</b> Modelo de regresión logistica para proporciones</a></li>
+<li class="chapter" data-level="8.2" data-path="modelo-log-lineal-para-tablas-de-contingencia.html"><a href="modelo-log-lineal-para-tablas-de-contingencia.html"><i class="fa fa-check"></i><b>8.2</b> Modelo log-lineal para tablas de contingencia</a></li>
+<li class="chapter" data-level="8.3" data-path="modelo-multinomial-para-variables-con-múltiples-categorías.html"><a href="modelo-multinomial-para-variables-con-múltiples-categorías.html"><i class="fa fa-check"></i><b>8.3</b> Modelo multinomial para variables con múltiples categorías</a></li>
+<li class="chapter" data-level="8.4" data-path="modelo-gamma-para-variables-continuas-positivas.html"><a href="modelo-gamma-para-variables-continuas-positivas.html"><i class="fa fa-check"></i><b>8.4</b> Modelo Gamma para variables continuas positivas</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="modelos-multinivel.html"><a href="modelos-multinivel.html"><i class="fa fa-check"></i><b>9</b> Modelos multinivel</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="modelo-con-intercepto-aleatorio.html"><a href="modelo-con-intercepto-aleatorio.html"><i class="fa fa-check"></i><b>9.1</b> Modelo con intercepto aleatorio</a></li>
+<li class="chapter" data-level="9.2" data-path="modelo-con-pendiente-aleatoria.html"><a href="modelo-con-pendiente-aleatoria.html"><i class="fa fa-check"></i><b>9.2</b> Modelo con pendiente aleatoria</a></li>
+<li class="chapter" data-level="9.3" data-path="modelo-con-intercepto-y-pendiente-aleatoria.html"><a href="modelo-con-intercepto-y-pendiente-aleatoria.html"><i class="fa fa-check"></i><b>9.3</b> Modelo con intercepto y pendiente aleatoria</a></li>
+<li class="chapter" data-level="9.4" data-path="modelo-logístico-multinivel..html"><a href="modelo-logístico-multinivel..html"><i class="fa fa-check"></i><b>9.4</b> Modelo logístico multinivel.</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="imputación-múltiple-en-encuestas-de-hogares.html"><a href="imputación-múltiple-en-encuestas-de-hogares.html"><i class="fa fa-check"></i><b>10</b> Imputación múltiple en encuestas de hogares</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tres-patrones-para-la-ausencia-de-respuesta.html"><a href="tres-patrones-para-la-ausencia-de-respuesta.html"><i class="fa fa-check"></i><b>10.1</b> Tres patrones para la ausencia de respuesta</a></li>
+<li class="chapter" data-level="10.2" data-path="imputación-por-la-media-no-condicional..html"><a href="imputación-por-la-media-no-condicional..html"><i class="fa fa-check"></i><b>10.2</b> Imputación por la media no condicional.</a></li>
+<li class="chapter" data-level="10.3" data-path="imputación-por-la-media-condicional.html"><a href="imputación-por-la-media-condicional.html"><i class="fa fa-check"></i><b>10.3</b> Imputación por la media condicional</a></li>
+<li class="chapter" data-level="10.4" data-path="imputación-por-hot-deck.html"><a href="imputación-por-hot-deck.html"><i class="fa fa-check"></i><b>10.4</b> Imputación por <em>Hot-Deck</em></a></li>
+<li class="chapter" data-level="10.5" data-path="imputación-por-regresión.html"><a href="imputación-por-regresión.html"><i class="fa fa-check"></i><b>10.5</b> Imputación por regresión</a></li>
+<li class="chapter" data-level="10.6" data-path="imputación-por-el-vecino-más-cercano.html"><a href="imputación-por-el-vecino-más-cercano.html"><i class="fa fa-check"></i><b>10.6</b> Imputación por el vecino más cercano</a></li>
+<li class="chapter" data-level="10.7" data-path="imputación-por-el-vecino-más-cercano-con-regresión.html"><a href="imputación-por-el-vecino-más-cercano-con-regresión.html"><i class="fa fa-check"></i><b>10.7</b> Imputación por el vecino más cercano con regresión</a></li>
+<li class="chapter" data-level="10.8" data-path="imputación-múltiple..html"><a href="imputación-múltiple..html"><i class="fa fa-check"></i><b>10.8</b> Imputación múltiple.</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="estimación-de-parámetros-para-modelos-en-encuestas-complejas.html"><a href="estimación-de-parámetros-para-modelos-en-encuestas-complejas.html"><i class="fa fa-check"></i><b>11</b> Estimación de parámetros para modelos en encuestas complejas</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="acerca-de-las-muestras-aleatorias-y-su-análisis.html"><a href="acerca-de-las-muestras-aleatorias-y-su-análisis.html"><i class="fa fa-check"></i><b>11.1</b> Acerca de las muestras aleatorias y su análisis</a></li>
+<li class="chapter" data-level="11.2" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html"><i class="fa fa-check"></i><b>11.2</b> Modelos de superpoblación</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#primer-proceso-inferencial-el-modelo"><i class="fa fa-check"></i><b>11.2.1</b> Primer proceso inferencial: el modelo</a></li>
+<li class="chapter" data-level="11.2.2" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#segundo-proceso-inferencial-el-muestreo"><i class="fa fa-check"></i><b>11.2.2</b> Segundo proceso inferencial: el muestreo</a></li>
+<li class="chapter" data-level="11.2.3" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#inferencia-doble-los-modelos-y-el-muestreo"><i class="fa fa-check"></i><b>11.2.3</b> Inferencia doble: los modelos y el muestreo</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html"><i class="fa fa-check"></i><b>11.3</b> Método de Máxima Verosimilitud</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-distribución-bernoulli"><i class="fa fa-check"></i><b>11.3.1</b> MV para una distribución Bernoulli</a></li>
+<li class="chapter" data-level="11.3.2" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-distribución-normal"><i class="fa fa-check"></i><b>11.3.2</b> MV para una distribución normal</a></li>
+<li class="chapter" data-level="11.3.3" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-regresión-lineal-múltiple"><i class="fa fa-check"></i><b>11.3.3</b> MV para una regresión lineal múltiple</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html"><i class="fa fa-check"></i><b>11.4</b> Método de Máxima Pseudo-Verosimilitud</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-distribución-bernoulli"><i class="fa fa-check"></i><b>11.4.1</b> MPV para una distribución Bernoulli</a></li>
+<li class="chapter" data-level="11.4.2" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-distribución-normal"><i class="fa fa-check"></i><b>11.4.2</b> MPV para una distribución normal</a></li>
+<li class="chapter" data-level="11.4.3" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-regresión-múltiple"><i class="fa fa-check"></i><b>11.4.3</b> MPV para una regresión múltiple</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a Análisis de encuestas con R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis de encuestas de hogares con R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="relación-entre-varias-variables-1" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Relación entre varias variables<a href="relación-entre-varias-variables-1.html#relación-entre-varias-variables-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Las tablas de contingencia y las pruebas de independencia son herramientas esenciales en el análisis de las encuestas de hogares, puesto que permiten analizar relaciones entre variables categóricas. Estas tablas organizan las estimaciones poblacionales en función de dos o más características, revelando patrones y asociaciones. Las pruebas de independencia evalúan si las variables están relacionadas o son independientes. Este análisis es crucial en investigaciones y toma de decisiones, ya que proporciona información sobre la dependencia entre factores, influyendo en la formulación de estrategias basadas en estimaciones precisas y exactas.</p>
+<div id="tablas" class="section level3 hasAnchor" number="5.3.1">
+<h3><span class="header-section-number">5.3.1</span> Tablas<a href="relación-entre-varias-variables-1.html#tablas" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En la literatura especializada las tablas también se denominan como tablas de contingencia o tablas cruzadas. En general, una tabla se asume como un arreglo bidimensional de <span class="math inline">\(r=1,\ldots,R\)</span> filas y <span class="math inline">\(c=1,\ldots,C\)</span> columnas. Estas son herramientas muy utilizadas en el análisis de encuestas de hogares puesto que, al estar conformada por al menos dos filas y dos columnas, representan información de variables categóricas en términos de conteos de frecuencia al mismo tiempo. Estas tablas tienen el objetivo de representar de manera resumida la relación entre diferentes variables categóricas. En la muestra no expandida, estas tablas se definen con frecuencias no ponderadas como se muestra a continuación:</p>
+<table>
+<colgroup>
+<col width="31%" />
+<col width="21%" />
+<col width="24%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable 2</th>
+<th>Variable 1</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>0</td>
+<td>1</td>
+<td>Marginal fila</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td><span class="math inline">\(n^{00}\)</span></td>
+<td><span class="math inline">\(n^{01}\)</span></td>
+<td><span class="math inline">\(n^{0+}\)</span></td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td><span class="math inline">\(n^{10}\)</span></td>
+<td><span class="math inline">\(n^{11}\)</span></td>
+<td><span class="math inline">\(n^{1+}\)</span></td>
+</tr>
+<tr class="even">
+<td>Marginal columna</td>
+<td><span class="math inline">\(n^{+0}\)</span></td>
+<td><span class="math inline">\(n^{+1}\)</span></td>
+<td><span class="math inline">\(n^{++}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Mientras que, en un análisis ponderado sobre la muestra expandida, la tabla de doble entrada se presenta con la estimación poblacional de las frecuencias, justo como sigue:</p>
+<table>
+<colgroup>
+<col width="31%" />
+<col width="21%" />
+<col width="24%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable 2</th>
+<th>Variable 1</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>0</td>
+<td>1</td>
+<td>Marginal fila</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td><span class="math inline">\(\hat{N}^{00}_{\omega}\)</span></td>
+<td><span class="math inline">\(\hat{N}^{01}_{\omega}\)</span></td>
+<td><span class="math inline">\(\hat{N}^{0+}_{\omega}\)</span></td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td><span class="math inline">\(\hat{N}^{10}_{\omega}\)</span></td>
+<td><span class="math inline">\(\hat{N}^{11}_{\omega}\)</span></td>
+<td><span class="math inline">\(\hat{N}^{1+}_{\omega}\)</span></td>
+</tr>
+<tr class="even">
+<td>Marginal columna</td>
+<td><span class="math inline">\(\hat{N}^{+0}_{\omega}\)</span></td>
+<td><span class="math inline">\(\hat{N}^{+1}_{\omega}\)</span></td>
+<td><span class="math inline">\(\hat{N}_{\omega}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>De esta manera, teniendo en cuenta que el subíndice <span class="math inline">\(i\in\left(r,c\right)\)</span> representa a los individuos que están clasificados en la celda (<span class="math inline">\(r, c\)</span>), entonces el estimador de la frecuencia en esta celda está dado por la siguiente expresión.</p>
+<p><span class="math display">\[\begin{eqnarray}
+\hat{N}^{rc}_{\omega}={ \sum_{h=1}^{H}\sum_{\alpha=1}^{\alpha_{h}}\sum_{i\in\left(r,c\right)}^{n_{h\alpha}}}\omega_{h\alpha i}
+\end{eqnarray}\]</span></p>
+<p>Los estimadores de las demás frecuencias en la tabla se definen de forma similar, inclusive las marginales por fila y por columna. Las proporciones estimadas a partir de estas frecuencias muestrales ponderadas, se obtienen de la siguiente manera</p>
+<p><span class="math display">\[\begin{eqnarray}
+\hat{p}_{\omega}^{rc}=\frac{\hat{N}^{rc}_{\omega}}{\hat{N}_{\omega}}
+\end{eqnarray}\]</span></p>
+<p>Utilizando la función <code>group_by</code> es posible obtener resultados por más de un nivel de agregación. A continuación, se muestra la estimación ocupación desagregada por niveles de pobreza:</p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="relación-entre-varias-variables-1.html#cb216-1" tabindex="-1"></a>diseno <span class="sc">%&gt;%</span></span>
+<span id="cb216-2"><a href="relación-entre-varias-variables-1.html#cb216-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Employment, Poverty) <span class="sc">%&gt;%</span></span>
+<span id="cb216-3"><a href="relación-entre-varias-variables-1.html#cb216-3" tabindex="-1"></a>  <span class="fu">cascade</span>(<span class="at">Nd =</span> <span class="fu">survey_total</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>)),</span>
+<span id="cb216-4"><a href="relación-entre-varias-variables-1.html#cb216-4" tabindex="-1"></a>          <span class="at">.fill =</span> <span class="st">&quot;Total&quot;</span>) </span></code></pre></div>
+<pre><code>## # A tibble: 17 × 6
+## # Groups:   Employment [5]
+##    Employment Poverty       Nd Nd_se  Nd_low  Nd_upp
+##    &lt;fct&gt;      &lt;fct&gt;      &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Unemployed NotPoor    1768.  405.    966.   2571.
+##  2 Unemployed Extreme    1169.  348.    480.   1859.
+##  3 Unemployed Relative   1697.  458.    791.   2604.
+##  4 Unemployed Total      4635.  761.   3129.   6141.
+##  5 Inactive   NotPoor   24346. 1736.  20908.  27784.
+##  6 Inactive   Extreme    6422. 1321.   3807.   9037.
+##  7 Inactive   Relative  10697. 1460.   7806.  13589.
+##  8 Inactive   Total     41465. 2163.  37183.  45748.
+##  9 Employed   NotPoor   44600. 2596.  39460.  49741.
+## 10 Employed   Extreme    5128. 1122.   2907.   7349.
+## 11 Employed   Relative  12149. 1347.   9483.  14816.
+## 12 Employed   Total     61877. 2540.  56847.  66907.
+## 13 Total      Total    150266. 4181. 141986. 158546.
+## 14 &lt;NA&gt;       NotPoor   20684. 1257.  18195.  23172.
+## 15 &lt;NA&gt;       Extreme    8800. 2980.   2900.  14701.
+## 16 &lt;NA&gt;       Relative  12805. 1551.   9734.  15876.
+## 17 &lt;NA&gt;       Total     42289. 2780.  36784.  47794.</code></pre>
+<p>De las anteriores salidas se puede estimar, entre otros, que 44600 personas que trabajan no son pobres con un intervalo de confianza entre 39459 y 49741. Asimismo, se estima que 6421 personas se encuentran inactivas y al mismo tiempo están en situación de pobreza extrema con un intervalo de confianza entre 3806 y 9037. Para obtener un arreglo rectangular con las estimaciones anteriores, es posible utilizar la función <code>svytable</code> del paquete <code>survey</code> de la siguiente manera:</p>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="relación-entre-varias-variables-1.html#cb218-1" tabindex="-1"></a><span class="fu">svytable</span>( <span class="sc">~</span> Poverty <span class="sc">+</span> Employment, diseno)</span></code></pre></div>
+<pre><code>##           Employment
+## Poverty    Unemployed  Inactive  Employed
+##   NotPoor    1768.375 24346.008 44600.347
+##   Extreme    1169.201  6421.825  5127.531
+##   Relative   1697.231 10697.414 12149.142</code></pre>
+<p>Por otro lado, también es posible tener tablas que reporten las estimaciones de frecuencias relativas, o porcentajes, en la población. Este análisis se hace, por supuesto, de manera ponderada sobre la muestra expandida. La tabla de doble entrada con la estimación poblacional de las proporciones se presenta a continuación:</p>
+<table>
+<colgroup>
+<col width="31%" />
+<col width="21%" />
+<col width="24%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable 2</th>
+<th>Variable 1</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>0</td>
+<td>1</td>
+<td>Marginal fila</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td><span class="math inline">\(\hat{p}^{00}_{\omega}\)</span></td>
+<td><span class="math inline">\(\hat{p}^{01}_{\omega}\)</span></td>
+<td><span class="math inline">\(\hat{p}^{0+}_{\omega}\)</span></td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td><span class="math inline">\(\hat{p}^{10}_{\omega}\)</span></td>
+<td><span class="math inline">\(\hat{p}^{11}_{\omega}\)</span></td>
+<td><span class="math inline">\(\hat{p}^{1+}_{\omega}\)</span></td>
+</tr>
+<tr class="even">
+<td>Marginal columna</td>
+<td><span class="math inline">\(\hat{p}^{+0}_{\omega}\)</span></td>
+<td><span class="math inline">\(\hat{p}^{+1}_{\omega}\)</span></td>
+<td><span class="math inline">\(\hat{p}_{\omega}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>De la misma manera que para las frecuencias absolutas, teniendo en cuenta que el subíndice <span class="math inline">\(i\in\left(r,c\right)\)</span> representa a los individuos que están clasificados en la celda (<span class="math inline">\(r, c\)</span>), entonces el estimador de la proporción asociada a esta celda está dado por la siguiente expresión.</p>
+<p><span class="math display">\[
+\hat{p}^{rc}_{\omega}=\frac{\hat{N}^{rc}_{\omega}}{\hat{N}_{\omega}}=
+\frac{\sum_{h=1}^{H}\sum_{\alpha=1}^{\alpha_{h}}\sum_{i\in\left(r,c\right)}^{n_{h\alpha}}\omega_{h\alpha i}}{\sum_{h=1}^{H}\sum_{\alpha=1}^{\alpha_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}}
+\]</span></p>
+<p>Por ejemplo, si se desea estimar la proporción de personas por zona y en estado de pobreza, se realiza de la siguiente manera:</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="relación-entre-varias-variables-1.html#cb220-1" tabindex="-1"></a><span class="fu">svytable</span>( <span class="sc">~</span> Poverty <span class="sc">+</span> Zone, diseno, <span class="at">Ntotal =</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>##           Zone
+## Poverty         Rural      Urban
+##   NotPoor  0.26460893 0.34363467
+##   Extreme  0.08547174 0.05773275
+##   Relative 0.12974844 0.11880348</code></pre>
+</div>
+<div id="pruebas-de-independencia" class="section level3 hasAnchor" number="5.3.2">
+<h3><span class="header-section-number">5.3.2</span> Pruebas de independencia<a href="relación-entre-varias-variables-1.html#pruebas-de-independencia" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Sobre las tablas estimadas, es posible realizar pruebas de independecia para corroborar si existe o no asociación entre dos variables de tipo categórico. Que dos variables sean independientes significa que el comportamiento estructural de una variable no depende de la otra, ni viceversa. <span class="citation">Heeringa, West, y Berglund (<a href="#ref-Heeringa_West_Berglund_2017">2017</a>)</span> afirman que, bajo muestreo aleaotrio simple, dos variables categóricas son independientes si la proporción esperada en la fila <span class="math inline">\(r\)</span> y la columna <span class="math inline">\(c\)</span>, denotada como <span class="math inline">\(\pi^{rc}\)</span>, guarda la siguiente relación:</p>
+<p><span class="math display">\[
+\pi^{rc} = \frac{n^{r+}\times n^{+c}}{(n^{++})^2}
+\]</span></p>
+<p>De esta forma, una manera de corroborar si existe independencia entras las variables de interés es comparar directamente las proporciones estimadas <span class="math inline">\(\hat{p}^{rc}_{\omega}\)</span> con las proporciones esperadas <span class="math inline">\(\pi^{rc}\)</span>. Si hay una diferencia muy grande entre ellas, entonces la hipótesis de independencia no sería corroborada por los datos recolectados. Por ende, se define la siguiente estadística <span class="math inline">\(\chi^{2}_{RS}\)</span> <span class="citation">(<a href="#ref-rao1984adjusted">Rao y Scott 1984b</a>)</span>, que sigue una distribución Ji cuadrado con <span class="math inline">\((R-1) \times (C-1)\)</span> grados de libertad.</p>
+<p><span class="math display">\[\begin{eqnarray}
+\chi^{2}_{RS}  =  \frac{\chi^{2}_{Pearson}}{GDEFF}
+\end{eqnarray}\]</span></p>
+<p>En donde</p>
+<p><span class="math display">\[
+\chi^{2}_{Pearson} = n^{++}\ \left(\sum_r\sum_c (\hat{p}^{rc}_{\omega} -\pi^{rc} )^2/\pi^{rc}\right)
+\]</span></p>
+<p>Además, <span class="math inline">\(GDEFF\)</span> es una estimación del efecto de diseño generalizado de Rao–Scott, dado por</p>
+<p><span class="math display">\[
+GDEFF=\frac{\sum_{r}\sum_{c}\left(1-p_{rc}\right)d^{2}\left(p_{rc}\right)-\sum_{r}\left(1-p_{r+}\right)d^{2}\left(p_{r+}\right)-\sum_{c}\left(1-p_{+c}\right)d^{2}\left(p_{+c}\right)}{\left(R-1\right)\left(C-1\right)}
+\]</span></p>
+<p>Como lo mencionan <span class="citation">Heeringa, West, y Berglund (<a href="#ref-Heeringa_West_Berglund_2017">2017</a>)</span>, fueron <span class="citation">Fay (<a href="#ref-fay1979adjusting">1979</a>)</span>, junto con <span class="citation">Fellegi (<a href="#ref-fellegi1980approximate">1980</a>)</span> quienes empezaron a proponer la corrección del estadístico chi-cuadrado de Pearson basada en un efecto de diseño generalizado. <span class="citation">Rao y Scott (<a href="#ref-rao1984chi_squared">1984a</a>)</span> y más tarde <span class="citation">Thomas y Rao (<a href="#ref-thomas1987small_sample">1987</a>)</span> ampliaron la teoría de las correcciones del efecto de diseño generalizado para estas pruebas estadísticas. El método de Rao-Scott requiere el cálculo de efectos de diseño generalizados que son analíticamente más complicados que el enfoque de Fellegi. Las correcciones de Rao-Scott son ahora el estándar en los procedimientos para el análisis de datos de encuestas categóricas en sistemas de software como Stata y SAS.</p>
+<p>Adicional a lo anterior, la prueba de independencia F de Fisher permite analizar si dos variables dicotómicas están asociadas cuando la muestra que se observó es demasiado pequeña y no se cumplen las condiciones para aplicar la prueba <span class="math inline">\(\chi^{2}_{Pearson}\)</span>. Para utilizar esta técnica, tengamos en cuenta las expresiones para la probabilidad estimada y la misma estadística <span class="math inline">\(\chi{2}\)</span> de Pearson. A partir de estas, la estadística de razón de verosimilitud se define como:</p>
+<p><span class="math display">\[
+G^{2}=2\times n_{++}\times\sum_{r}\sum_{c}p_{cr}\times\ln\left(\frac{p_{rc}}{\hat{\pi}_{rc}}\right)
+\]</span></p>
+<p>donde, <span class="math inline">\(r\)</span> es el número de filas y <span class="math inline">\(c\)</span> representa el número de columnas, la prueba tiene <span class="math inline">\((R-1)\times (C-1)\)</span> grados de libertad. Realizando una corrección por el efecto de diseño generalizado, la estadística basada en la razón de verosimilitud se calcula como:</p>
+<p><span class="math display">\[
+G^2_{(R-S)}  =  G^2\big/GDEFF
+\]</span></p>
+<p>Por tanto, la estadística F para independencia basada en la prueba chi-cuadrado de Pearson se calcula como sigue:</p>
+<p><span class="math display">\[
+F_{R-S,Pearson}=\chi_{R-S}^{2}\big/\left[\left(R-1\right)\left(C-1\right)\right]\sim F_{\left(R-1\right)\left(C-1\right),\left(R-1\right)\left(C-1\right)df}
+\]</span></p>
+<p>y, la estadística F para independencia basada en la razón de verosimilitudes se calcula como sigue:</p>
+<p><span class="math display">\[
+F_{R-S,LRT}=G_{R-S}^{2}\big/\left(C-1\right)\sim F_{\left(C-1\right),df}
+\]</span></p>
+<p>donde <span class="math inline">\(C\)</span> es el número de columnas de la tabla cruzada.</p>
+<p>Para realizar la prueba de independencia <span class="math inline">\(\chi^{2}_{RS}\)</span> en <code>R</code>, se utilizará la función <code>svychisq</code> del paquete <code>survey</code>. Esta función requiere que se definan las variables de interés (<code>formula</code>) y el diseño muestral (<code>desing</code>). Ahora, para ejemplificar el uso de esta función tomaremos la base de datos de ejemplo y se probará si la pobreza es independiente del sexo. A continuación, se presentan los códigos computacionales:</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="relación-entre-varias-variables-1.html#cb222-1" tabindex="-1"></a><span class="fu">svychisq</span>(<span class="at">formula =</span> <span class="sc">~</span> Sex <span class="sc">+</span> pobreza,</span>
+<span id="cb222-2"><a href="relación-entre-varias-variables-1.html#cb222-2" tabindex="-1"></a>         <span class="at">design =</span> diseno,</span>
+<span id="cb222-3"><a href="relación-entre-varias-variables-1.html#cb222-3" tabindex="-1"></a>         <span class="at">statistic =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s X^2: Rao &amp; Scott adjustment
+## 
+## data:  NextMethod()
+## F = 0.056464, ndf = 1, ddf = 119, p-value = 0.8126</code></pre>
+<p>De la anterior salida, se puede concluir con una confianza del 95% y basado en las estimaciones sobre la muestra expandida que la pobreza no depende del sexo de las personas, puesto que que el valor p (0.8126) es mayor que el nivel de significación (0.05). En este mismo sentido, si se desea saber si el desempleo está relacionado con el sexo, se realiza la prueba de hipótesis como sigue:</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="relación-entre-varias-variables-1.html#cb224-1" tabindex="-1"></a><span class="fu">svychisq</span>(</span>
+<span id="cb224-2"><a href="relación-entre-varias-variables-1.html#cb224-2" tabindex="-1"></a>  <span class="at">formula =</span> <span class="sc">~</span> Sex <span class="sc">+</span> Employment,</span>
+<span id="cb224-3"><a href="relación-entre-varias-variables-1.html#cb224-3" tabindex="-1"></a>  <span class="at">design =</span> diseno,</span>
+<span id="cb224-4"><a href="relación-entre-varias-variables-1.html#cb224-4" tabindex="-1"></a>  <span class="at">statistic =</span> <span class="st">&quot;F&quot;</span></span>
+<span id="cb224-5"><a href="relación-entre-varias-variables-1.html#cb224-5" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s X^2: Rao &amp; Scott adjustment
+## 
+## data:  NextMethod()
+## F = 62.251, ndf = 1.6865, ddf = 200.6978, p-value &lt; 2.2e-16</code></pre>
+<p>De la anterior salida, se puede concluir con una confianza del 95% y basado en las estimaciones sobre la muestra expandida que la desocupación depende del sexo de las personas, puesto que que el valor p (2.2e-16) no es mayor que el nivel de significación (0.05). Es decir, estas dos variables no son independientes. Si en el análisis ahora se quisiera verificar si la pobreza de las personas es independiente de las regiones establecidas en la base de datos, se realiza de la siguiente manera:</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="relación-entre-varias-variables-1.html#cb226-1" tabindex="-1"></a><span class="fu">svychisq</span>(</span>
+<span id="cb226-2"><a href="relación-entre-varias-variables-1.html#cb226-2" tabindex="-1"></a>  <span class="at">formula =</span> <span class="sc">~</span> Region <span class="sc">+</span> pobreza,</span>
+<span id="cb226-3"><a href="relación-entre-varias-variables-1.html#cb226-3" tabindex="-1"></a>  <span class="at">design =</span> diseno,</span>
+<span id="cb226-4"><a href="relación-entre-varias-variables-1.html#cb226-4" tabindex="-1"></a>  <span class="at">statistic =</span> <span class="st">&quot;F&quot;</span></span>
+<span id="cb226-5"><a href="relación-entre-varias-variables-1.html#cb226-5" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s X^2: Rao &amp; Scott adjustment
+## 
+## data:  NextMethod()
+## F = 0.48794, ndf = 3.0082, ddf = 357.9731, p-value = 0.6914</code></pre>
+<p>Concluyendo que sí hay independencia entre la pobreza y la región. Lo anterior implica que, no existe relación entre las personas en estado de pobreza por región.</p>
+</div>
+<div id="diferencia-de-proporciones-y-contrastes" class="section level3 hasAnchor" number="5.3.3">
+<h3><span class="header-section-number">5.3.3</span> Diferencia de proporciones y contrastes<a href="relación-entre-varias-variables-1.html#diferencia-de-proporciones-y-contrastes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Como lo mencionan <span class="citation">Heeringa, West, y Berglund (<a href="#ref-Heeringa_West_Berglund_2017">2017</a>)</span>, las estimaciones de las proporciones de las filas en las tablas de doble entrada son estimaciones de subpoblaciones en las que la subpoblación se define por los niveles de la variable categórica. En algunas ocasiones, puede ser de interés estimar diferencias de las proporciones de las categorías entre dos niveles o en dos subpoblaciones. Como ya se vio en el capítulo anterior, esto puede ser logrado utilizando contrastes.</p>
+<p>A manera de ejemplo, considere que se requiere estimar el contraste de proporciones de mujeres en estado de pobreza contra los hombres en esta misma condición (<span class="math inline">\(\hat{\Delta}_{\omega} = \hat{p}^{F1}_{\omega}-\hat{p}^{M1}_{\omega}\)</span>). Para ello, primero estimamos la proporción de hombres y mujeres en estado de pobreza como se ha mostrado en capítulos anteriores:</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="relación-entre-varias-variables-1.html#cb228-1" tabindex="-1"></a>(</span>
+<span id="cb228-2"><a href="relación-entre-varias-variables-1.html#cb228-2" tabindex="-1"></a>  tab_sex_pobreza <span class="ot">&lt;-</span> <span class="fu">svyby</span>(</span>
+<span id="cb228-3"><a href="relación-entre-varias-variables-1.html#cb228-3" tabindex="-1"></a>    <span class="at">formula =</span> <span class="sc">~</span> pobreza,</span>
+<span id="cb228-4"><a href="relación-entre-varias-variables-1.html#cb228-4" tabindex="-1"></a>    <span class="at">by =</span> <span class="sc">~</span> Sex,</span>
+<span id="cb228-5"><a href="relación-entre-varias-variables-1.html#cb228-5" tabindex="-1"></a>    <span class="at">design =</span> diseno ,</span>
+<span id="cb228-6"><a href="relación-entre-varias-variables-1.html#cb228-6" tabindex="-1"></a>    svymean,</span>
+<span id="cb228-7"><a href="relación-entre-varias-variables-1.html#cb228-7" tabindex="-1"></a>    <span class="at">na.rm =</span> T,</span>
+<span id="cb228-8"><a href="relación-entre-varias-variables-1.html#cb228-8" tabindex="-1"></a>    <span class="at">covmat =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb228-9"><a href="relación-entre-varias-variables-1.html#cb228-9" tabindex="-1"></a>    <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>)</span>
+<span id="cb228-10"><a href="relación-entre-varias-variables-1.html#cb228-10" tabindex="-1"></a>  )</span>
+<span id="cb228-11"><a href="relación-entre-varias-variables-1.html#cb228-11" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>##           Sex   pobreza         se      ci_l      ci_u
+## Female Female 0.3892389 0.03159581 0.3273123 0.4511656
+## Male     Male 0.3945612 0.03662762 0.3227724 0.4663501</code></pre>
+<p>Ahora bien, para calcular la estimación de la diferencia de proporciones junto con sus errores estándares, se realizarán los siguientes pasos:</p>
+<ul>
+<li><em>Paso 1:</em> Calcular la diferencia de estimaciones</li>
+</ul>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="relación-entre-varias-variables-1.html#cb230-1" tabindex="-1"></a><span class="fl">0.3892</span> <span class="sc">-</span> <span class="fl">0.3946</span>              </span></code></pre></div>
+<pre><code>## [1] -0.0054</code></pre>
+<ul>
+<li><em>Paso 2:</em> Con la función <code>vcov</code> obtener la matriz de covarianzas:</li>
+</ul>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="relación-entre-varias-variables-1.html#cb232-1" tabindex="-1"></a><span class="fu">vcov</span>(tab_sex_pobreza)</span></code></pre></div>
+<pre><code>##              Female         Male
+## Female 0.0009982953 0.0009182927
+## Male   0.0009182927 0.0013415823</code></pre>
+<ul>
+<li><em>Paso 3:</em> Calcular el error estándar es:</li>
+</ul>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="relación-entre-varias-variables-1.html#cb234-1" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fl">0.0009983</span> <span class="sc">+</span> <span class="fl">0.0013416</span> <span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span><span class="fl">0.0009183</span>)</span></code></pre></div>
+<pre><code>## [1] 0.02243435</code></pre>
+<p>Ahora bien, aplicando la función <code>svycontrast</code> se puede obtener la estimación de la diferencia de proporciones anterior de manera más expedita:</p>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="relación-entre-varias-variables-1.html#cb236-1" tabindex="-1"></a><span class="fu">svycontrast</span>(tab_sex_pobreza,</span>
+<span id="cb236-2"><a href="relación-entre-varias-variables-1.html#cb236-2" tabindex="-1"></a>            <span class="fu">list</span>(<span class="at">diff_Sex =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="sc">-</span><span class="dv">1</span>))) </span></code></pre></div>
+<pre><code>##            contrast     SE
+## diff_Sex -0.0053223 0.0224</code></pre>
+<p>De lo que se concluye que, la diferencia entre las proporciones estimadas de mujeres y hombres en condición de pobreza es -0.005 (-0.5%) con una error estándar estimado de 0.022.</p>
+<p>Otro ejercicio de interés en un análisis de encuestas de hogares es verificar la si existen brechas en la condición de ocupación (por ejemplo en el desempleo) por sexo. Al igual que el ejemplo anterior, se inicia con la estimación del porcentaje de desempleados por sexo, omitiendo las personas menores de edad:</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="relación-entre-varias-variables-1.html#cb238-1" tabindex="-1"></a>tab_sex_desempleo <span class="ot">&lt;-</span> <span class="fu">svyby</span>(</span>
+<span id="cb238-2"><a href="relación-entre-varias-variables-1.html#cb238-2" tabindex="-1"></a>  <span class="at">formula =</span> <span class="sc">~</span> desempleo,</span>
+<span id="cb238-3"><a href="relación-entre-varias-variables-1.html#cb238-3" tabindex="-1"></a>  <span class="at">by =</span> <span class="sc">~</span> Sex,</span>
+<span id="cb238-4"><a href="relación-entre-varias-variables-1.html#cb238-4" tabindex="-1"></a>  <span class="at">design  =</span> diseno <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(desempleo)) ,</span>
+<span id="cb238-5"><a href="relación-entre-varias-variables-1.html#cb238-5" tabindex="-1"></a>  <span class="at">FUN     =</span> svymean,</span>
+<span id="cb238-6"><a href="relación-entre-varias-variables-1.html#cb238-6" tabindex="-1"></a>  <span class="at">na.rm =</span> T,</span>
+<span id="cb238-7"><a href="relación-entre-varias-variables-1.html#cb238-7" tabindex="-1"></a>  <span class="at">covmat =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb238-8"><a href="relación-entre-varias-variables-1.html#cb238-8" tabindex="-1"></a>  <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>)</span>
+<span id="cb238-9"><a href="relación-entre-varias-variables-1.html#cb238-9" tabindex="-1"></a>)</span>
+<span id="cb238-10"><a href="relación-entre-varias-variables-1.html#cb238-10" tabindex="-1"></a>tab_sex_desempleo</span></code></pre></div>
+<pre><code>##           Sex  desempleo          se       ci_l       ci_u
+## Female Female 0.02168620 0.005580042 0.01074952 0.03262288
+## Male     Male 0.06782601 0.012161141 0.04399062 0.09166141</code></pre>
+<p>Para calcular la estimación de la diferencia de proporciones junto con sus errores estándares, se realizarán los siguientes pasos:</p>
+<ul>
+<li><em>Paso 1</em>: Diferencia de las estimaciones</li>
+</ul>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="relación-entre-varias-variables-1.html#cb240-1" tabindex="-1"></a><span class="fl">0.02169</span> <span class="sc">-</span> <span class="fl">0.06783</span>   </span></code></pre></div>
+<pre><code>## [1] -0.04614</code></pre>
+<ul>
+<li><em>Paso 2:</em> Con la función <code>vcov</code> obtener la matriz de covarianzas:</li>
+</ul>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="relación-entre-varias-variables-1.html#cb242-1" tabindex="-1"></a><span class="fu">vcov</span>(tab_sex_desempleo)</span></code></pre></div>
+<pre><code>##              Female         Male
+## Female 3.113687e-05 2.081301e-05
+## Male   2.081301e-05 1.478933e-04</code></pre>
+<ul>
+<li><em>Paso 3</em>: Estimación del error estándar.</li>
+</ul>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="relación-entre-varias-variables-1.html#cb244-1" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fl">0.00003114</span>  <span class="sc">+</span> <span class="fl">0.00014789</span> <span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span><span class="fl">0.00002081</span>)</span></code></pre></div>
+<pre><code>## [1] 0.0117222</code></pre>
+<p>Siguiendo el ejemplo anterior, utilizando la función <code>svycontrast</code> se tiene que:</p>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="relación-entre-varias-variables-1.html#cb246-1" tabindex="-1"></a><span class="fu">svycontrast</span>(tab_sex_desempleo,</span>
+<span id="cb246-2"><a href="relación-entre-varias-variables-1.html#cb246-2" tabindex="-1"></a>            <span class="fu">list</span>(<span class="at">diff_Sex =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>))) </span></code></pre></div>
+<pre><code>##          contrast     SE
+## diff_Sex  0.04614 0.0117</code></pre>
+<p>De los resultados anteriores, se concluye que la estimación del contraste es 0.04 (4%) con un error estándar estimado de 0.011.</p>
+<p>Adentrándose un poco más en la complejidad de los contrates, otro ejercicio que se puede realizar en una encuesta de hogares es estimar la proporción de desempleados por región. Para la realización de este ejercicio, se seguirán los pasos de los dos ejemplos anteriores:</p>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="relación-entre-varias-variables-1.html#cb248-1" tabindex="-1"></a>tab_region_desempleo <span class="ot">&lt;-</span> <span class="fu">svyby</span>(</span>
+<span id="cb248-2"><a href="relación-entre-varias-variables-1.html#cb248-2" tabindex="-1"></a>  <span class="at">formula =</span>  <span class="sc">~</span> desempleo,</span>
+<span id="cb248-3"><a href="relación-entre-varias-variables-1.html#cb248-3" tabindex="-1"></a>  <span class="at">by =</span> <span class="sc">~</span> Region,</span>
+<span id="cb248-4"><a href="relación-entre-varias-variables-1.html#cb248-4" tabindex="-1"></a>  <span class="at">design  =</span> diseno <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(desempleo)) ,</span>
+<span id="cb248-5"><a href="relación-entre-varias-variables-1.html#cb248-5" tabindex="-1"></a>  <span class="at">FUN     =</span> svymean,</span>
+<span id="cb248-6"><a href="relación-entre-varias-variables-1.html#cb248-6" tabindex="-1"></a>  <span class="at">na.rm =</span> T,</span>
+<span id="cb248-7"><a href="relación-entre-varias-variables-1.html#cb248-7" tabindex="-1"></a>  <span class="at">covmat =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb248-8"><a href="relación-entre-varias-variables-1.html#cb248-8" tabindex="-1"></a>  <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>)</span>
+<span id="cb248-9"><a href="relación-entre-varias-variables-1.html#cb248-9" tabindex="-1"></a>)</span>
+<span id="cb248-10"><a href="relación-entre-varias-variables-1.html#cb248-10" tabindex="-1"></a></span>
+<span id="cb248-11"><a href="relación-entre-varias-variables-1.html#cb248-11" tabindex="-1"></a>tab_region_desempleo</span></code></pre></div>
+<pre><code>##              Region  desempleo         se        ci_l       ci_u
+## Norte         Norte 0.04877722 0.02002293 0.009532997 0.08802144
+## Sur             Sur 0.06563877 0.02375124 0.019087202 0.11219034
+## Centro       Centro 0.03873259 0.01240317 0.014422832 0.06304235
+## Occidente Occidente 0.03996523 0.01229650 0.015864529 0.06406592
+## Oriente     Oriente 0.02950231 0.01256905 0.004867428 0.05413719</code></pre>
+<p>Ahora, asuma que el interés es realizar contrastes para la proporción de desempleados entre las regiones Norte y Sur, entre Sur y Centro y, finalmente, entre Occidente y Oriente. A continuación se tendrían las estimaciones puntuales:</p>
+<ul>
+<li><span class="math inline">\(\hat{p}_{Norte} - \hat{p}_{Centro} = 0.04877722 - 0.03873259 = -0.01004463\)</span>,</li>
+<li><span class="math inline">\(\hat{p}_{Sur} - \hat{p}_{Centro} = 0.06563877 - 0.03873259 = 0.02690618\)</span><br />
+</li>
+<li><span class="math inline">\(\hat{p}_{Occidente} - \hat{p}_{Oriente} = 0.03996523 - 0.02950231 = 0.01046292\)</span></li>
+</ul>
+<p>Asimismo, escrita de forma matricial, la matriz de contraste sería:</p>
+<p><span class="math display">\[
+A =
+\left[\begin{array}{ccccc}
+1 &amp; 0 &amp; -1 &amp; 0 &amp; 0\\
+0 &amp; 1 &amp; -1 &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; 1 &amp; -1
+\end{array}\right]
+\]</span></p>
+<p>La matriz de varianzas y covarianzas de las proporciones estimadas es:</p>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="relación-entre-varias-variables-1.html#cb250-1" tabindex="-1"></a><span class="fu">vcov</span>(tab_region_desempleo)</span></code></pre></div>
+<p>Por tanto, la varianza estimada para cada diferencia de proporciones está dada por:</p>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="relación-entre-varias-variables-1.html#cb251-1" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fl">0.0004009178</span> <span class="sc">+</span> <span class="fl">0.0001538386</span> <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="dv">0</span>)</span></code></pre></div>
+<pre><code>## [1] 0.02355327</code></pre>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="relación-entre-varias-variables-1.html#cb253-1" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fl">0.0005641213</span> <span class="sc">+</span> <span class="fl">0.0001538386</span> <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="dv">0</span>)</span></code></pre></div>
+<pre><code>## [1] 0.02679477</code></pre>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="relación-entre-varias-variables-1.html#cb255-1" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fl">0.0001512039</span> <span class="sc">+</span> <span class="fl">0.000157981</span> <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="dv">0</span>)</span></code></pre></div>
+<pre><code>## [1] 0.01758365</code></pre>
+<p>Usando la función <code>svycontrast</code>, la estimación de los contrastes sería:</p>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="relación-entre-varias-variables-1.html#cb257-1" tabindex="-1"></a><span class="fu">svycontrast</span>(tab_region_desempleo,</span>
+<span id="cb257-2"><a href="relación-entre-varias-variables-1.html#cb257-2" tabindex="-1"></a>            <span class="fu">list</span>(</span>
+<span id="cb257-3"><a href="relación-entre-varias-variables-1.html#cb257-3" tabindex="-1"></a>              <span class="at">Norte_sur =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb257-4"><a href="relación-entre-varias-variables-1.html#cb257-4" tabindex="-1"></a>              <span class="at">Sur_centro =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb257-5"><a href="relación-entre-varias-variables-1.html#cb257-5" tabindex="-1"></a>              <span class="at">Occidente_Oriente =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb257-6"><a href="relación-entre-varias-variables-1.html#cb257-6" tabindex="-1"></a>            )) </span></code></pre></div>
+<pre><code>##                   contrast     SE
+## Norte_sur         0.010045 0.0236
+## Sur_centro        0.026906 0.0268
+## Occidente_Oriente 0.010463 0.0176</code></pre>
+</div>
+<div id="razones-de-odds" class="section level3 hasAnchor" number="5.3.4">
+<h3><span class="header-section-number">5.3.4</span> Razones de odds<a href="relación-entre-varias-variables-1.html#razones-de-odds" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Como lo menciona <span class="citation">Monroy, Rivera, y Dávila (<a href="#ref-monroy2018analisis">2018</a>)</span>, la traducción más aproximada del término odds es “ventaja” que denota la posibilidad de que un evento ocurra con relación a que no ocurra; es decir, es un número que expresa cuánto más probable es que se produzca un evento frente a que no se produzca. También se puede utilizar para cuantificar la asociación entre los niveles de una variable y un factor categórico. Por ejemplo, considere la siguiente salida que relaciona el sexo con la pobreza:</p>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="relación-entre-varias-variables-1.html#cb259-1" tabindex="-1"></a>tab_Sex_Pobr <span class="ot">&lt;-</span></span>
+<span id="cb259-2"><a href="relación-entre-varias-variables-1.html#cb259-2" tabindex="-1"></a>  <span class="fu">svymean</span>(</span>
+<span id="cb259-3"><a href="relación-entre-varias-variables-1.html#cb259-3" tabindex="-1"></a>    <span class="at">x =</span> <span class="sc">~</span> <span class="fu">interaction</span> (Sex, pobreza),</span>
+<span id="cb259-4"><a href="relación-entre-varias-variables-1.html#cb259-4" tabindex="-1"></a>    <span class="at">design =</span> diseno,</span>
+<span id="cb259-5"><a href="relación-entre-varias-variables-1.html#cb259-5" tabindex="-1"></a>    <span class="at">se =</span> T,</span>
+<span id="cb259-6"><a href="relación-entre-varias-variables-1.html#cb259-6" tabindex="-1"></a>    <span class="at">na.rm =</span> T,</span>
+<span id="cb259-7"><a href="relación-entre-varias-variables-1.html#cb259-7" tabindex="-1"></a>    <span class="at">ci =</span> T,</span>
+<span id="cb259-8"><a href="relación-entre-varias-variables-1.html#cb259-8" tabindex="-1"></a>    <span class="at">keep.vars =</span> T</span>
+<span id="cb259-9"><a href="relación-entre-varias-variables-1.html#cb259-9" tabindex="-1"></a>  )</span>
+<span id="cb259-10"><a href="relación-entre-varias-variables-1.html#cb259-10" tabindex="-1"></a></span>
+<span id="cb259-11"><a href="relación-entre-varias-variables-1.html#cb259-11" tabindex="-1"></a>tab_Sex_Pobr </span></code></pre></div>
+<pre><code>##                                      mean     SE
+## interaction(Sex, pobreza)Female.0 0.32187 0.0178
+## interaction(Sex, pobreza)Male.0   0.28637 0.0177
+## interaction(Sex, pobreza)Female.1 0.20513 0.0166
+## interaction(Sex, pobreza)Male.1   0.18663 0.0178</code></pre>
+<p>Las ODDS de ser mujer dado que es pobre son <span class="math inline">\(ODDS(Sexo = Mujer|Pobre) = \hat{p}^{1|Female}_{\omega} / (1 - \hat{p}^{1|Female}_{\omega}) = \hat{p}^{1|Female}_{\omega} / \hat{p}^{0|Female}_{\omega} = 0.20/0.32=0.63\)</span>. Por otro lado, las ODDS de ser hombre dado que es pobre son <span class="math inline">\(ODDS(Sexo = Hombre|Pobre) = \hat{p}^{1|Male}_{\omega} / \hat{p}^{0|Male}_{\omega}=0.18/0.28=0.65\)</span>. De esta forma, la razón de odds estaría dada por la siguiente expresión.</p>
+<p><span class="math display">\[
+\widehat{OR}_{\omega}^{Sexo-Pobreza} =  \frac{ODDS(Sexo = Mujer|Pobre)}{ODDS(Sex = Hombre|Pobre)} =
+\frac{\frac{P(Sex = Female \mid pobreza = 1 )}{P(Sex = Female \mid pobreza = 0 )}}{
+\frac{P(Sex = Male \mid pobreza = 1 )}{P(Sex = Male \mid pobreza = 0 )}
+}
+= \frac{0.63}{0.65}=0.97
+\]</span></p>
+<p>El procedimiento para realizarlo en <code>R</code>, luego de haber estimado las respectivas proporciones de la tabla cruzada entre las variables sexo y pobreza, se centra en realizar el contraste dividiendo cada uno de los elementos de la expresión mostrada anteriormente:</p>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="relación-entre-varias-variables-1.html#cb261-1" tabindex="-1"></a><span class="fu">svycontrast</span>(<span class="at">stat =</span> tab_Sex_Pobr,</span>
+<span id="cb261-2"><a href="relación-entre-varias-variables-1.html#cb261-2" tabindex="-1"></a>            <span class="at">contrasts =</span></span>
+<span id="cb261-3"><a href="relación-entre-varias-variables-1.html#cb261-3" tabindex="-1"></a>              <span class="fu">quote</span>((</span>
+<span id="cb261-4"><a href="relación-entre-varias-variables-1.html#cb261-4" tabindex="-1"></a>                <span class="st">`</span><span class="at">interaction(Sex, pobreza)Female.1</span><span class="st">`</span> <span class="sc">/</span></span>
+<span id="cb261-5"><a href="relación-entre-varias-variables-1.html#cb261-5" tabindex="-1"></a>                  <span class="st">`</span><span class="at">interaction(Sex, pobreza)Female.0</span><span class="st">`</span></span>
+<span id="cb261-6"><a href="relación-entre-varias-variables-1.html#cb261-6" tabindex="-1"></a>              ) <span class="sc">/</span></span>
+<span id="cb261-7"><a href="relación-entre-varias-variables-1.html#cb261-7" tabindex="-1"></a>                (</span>
+<span id="cb261-8"><a href="relación-entre-varias-variables-1.html#cb261-8" tabindex="-1"></a>                  <span class="st">`</span><span class="at">interaction(Sex, pobreza)Male.1</span><span class="st">`</span> <span class="sc">/</span></span>
+<span id="cb261-9"><a href="relación-entre-varias-variables-1.html#cb261-9" tabindex="-1"></a>                    <span class="st">`</span><span class="at">interaction(Sex, pobreza)Male.0</span><span class="st">`</span></span>
+<span id="cb261-10"><a href="relación-entre-varias-variables-1.html#cb261-10" tabindex="-1"></a>                )</span>
+<span id="cb261-11"><a href="relación-entre-varias-variables-1.html#cb261-11" tabindex="-1"></a>              ))</span></code></pre></div>
+<pre><code>##            nlcon     SE
+## contrast 0.97791 0.0919</code></pre>
+<p>Del anterior resultado se estima que el odds de las mujeres que están en condición de pobreza es 0.97 (muy cercano a uno) comparándolo con el odds de los hombres que están en condición de pobreza. En otras palabras, se estima que las probabilidades de que las mujeres no estén en estado de pobreza sin tener en cuenta ninguna otra variable de la encuesta es cerca de 3% mayor que las probabilidades de los hombres.</p>
+
+</div>
+</div>
+<!-- </div> -->
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-fay1979adjusting" class="csl-entry">
+Fay, Robert E. 1979. <span>«On adjusting the Pearson Chi-square statistic for cluster sampling»</span>. En <em>Proceedings of the Social Statistics Section, American Statistical Association</em>, 402-5. Washington, DC.
+</div>
+<div id="ref-fellegi1980approximate" class="csl-entry">
+Fellegi, Ivan P. 1980. <span>«Approximate tests of independence and goodness of fit based on stratified multistage samples»</span>. <em>Journal of the American Statistical Association</em> 75: 261-68.
+</div>
+<div id="ref-Heeringa_West_Berglund_2017" class="csl-entry">
+Heeringa, Steven G., Brady T. West, y Patricia A. Berglund. 2017. <em>Applied survey data analysis</em>. Chapman y Hall CRC statistics en the social y behavioral sciences series. CRC Press.
+</div>
+<div id="ref-monroy2018analisis" class="csl-entry">
+Monroy, L. G., M. A. Rivera, y L. R. and Dávila. 2018. <em>Análisis estadístico de datos categóricos</em>. Universidad Nacional de Colombia.
+</div>
+<div id="ref-rao1984chi_squared" class="csl-entry">
+Rao, J. N. K., y A. J. Scott. 1984a. <span>«On chi-squared test for multiway contingency tables with cell proportions estimated from survey data»</span>. <em>The Annals of Statistics</em> 12: 46-60.
+</div>
+<div id="ref-rao1984adjusted" class="csl-entry">
+———. 1984b. <span>«On chi-squared tests for multiway contingency tables with cell proportions estimated from survey data»</span>. <em>The Annals of Statistics</em> 12 (1): 46-60.
+</div>
+<div id="ref-thomas1987small_sample" class="csl-entry">
+Thomas, D. R., y J. N. K. Rao. 1987. <span>«Small-sample comparisons of level and power for simple goodness-of-fit statistics under cluster sampling»</span>. <em>Journal of the American Statistical Association</em> 82: 630-36.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="estimación-puntual-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="análisis-gráfico.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/2021ASDA/05-Categóricas.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Análisis de encuestas de hogares con R.pdf", "Análisis de encuestas de hogares con R.epub", "Análisis de encuestas de hogares con R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

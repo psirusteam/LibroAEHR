@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4.2 Estimación puntual | Análisis de encuestas de hogares con R</title>
+  <meta name="description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4.2 Estimación puntual | Análisis de encuestas de hogares con R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  <meta name="github-repo" content="psirusteam/HHS-Handbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4.2 Estimación puntual | Análisis de encuestas de hogares con R" />
+  
+  <meta name="twitter:description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  
+
+<meta name="author" content="Andrés Gutiérrez, Cristian Téllez, Stalyn Guerrero" />
+
+
+<meta name="date" content="2024-03-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="definición-del-diseño-de-muestreo.html"/>
+<link rel="next" href="relación-entre-varias-variables.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Análisis de encuestas con R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="introducción.html"><a href="introducción.html"><i class="fa fa-check"></i><b>1</b> Introducción</a></li>
+<li class="chapter" data-level="2" data-path="manejando-una-base-de-encuestas-de-hogares-con-r.html"><a href="manejando-una-base-de-encuestas-de-hogares-con-r.html"><i class="fa fa-check"></i><b>2</b> Manejando una base de encuestas de hogares con <code>R</code></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentos-básicos-de-r-y-rstudio.html"><a href="fundamentos-básicos-de-r-y-rstudio.html"><i class="fa fa-check"></i><b>2.1</b> Fundamentos básicos de <code>R</code> y <code>Rstudio</code></a></li>
+<li class="chapter" data-level="2.2" data-path="creación-de-proyectos-en-r.html"><a href="creación-de-proyectos-en-r.html"><i class="fa fa-check"></i><b>2.2</b> Creación de proyectos en <code>R</code></a></li>
+<li class="chapter" data-level="2.3" data-path="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html"><a href="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html"><i class="fa fa-check"></i><b>2.3</b> Lectura de las bases de datos y procesamientos básicos</a></li>
+<li class="chapter" data-level="2.4" data-path="el-operador-pipeline.html"><a href="el-operador-pipeline.html"><i class="fa fa-check"></i><b>2.4</b> El operador <code>pipeline</code> (%&gt;%)</a></li>
+<li class="chapter" data-level="2.5" data-path="creación-de-variables-y-resumen-de-conteos.html"><a href="creación-de-variables-y-resumen-de-conteos.html"><i class="fa fa-check"></i><b>2.5</b> Creación de variables y resumen de conteos</a></li>
+<li class="chapter" data-level="2.6" data-path="algunas-estadísticas-descriptivas-sobre-la-base-de-datos.html"><a href="algunas-estadísticas-descriptivas-sobre-la-base-de-datos.html"><i class="fa fa-check"></i><b>2.6</b> Algunas estadísticas descriptivas sobre la base de datos</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="conceptos-básicos-en-encuestas-de-hogares.html"><a href="conceptos-básicos-en-encuestas-de-hogares.html"><i class="fa fa-check"></i><b>3</b> Conceptos básicos en encuestas de hogares</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="unidades-y-marcos-de-muestreo.html"><a href="unidades-y-marcos-de-muestreo.html"><i class="fa fa-check"></i><b>3.1</b> Unidades y marcos de muestreo</a></li>
+<li class="chapter" data-level="3.2" data-path="la-base-de-datos-bigcity.html"><a href="la-base-de-datos-bigcity.html"><i class="fa fa-check"></i><b>3.2</b> La base de datos BigCity</a></li>
+<li class="chapter" data-level="3.3" data-path="un-esquema-de-muestreo-para-bigcity.html"><a href="un-esquema-de-muestreo-para-bigcity.html"><i class="fa fa-check"></i><b>3.3</b> Un esquema de muestreo para BigCity</a></li>
+<li class="chapter" data-level="3.4" data-path="calibración-de-los-factores-de-expansión.html"><a href="calibración-de-los-factores-de-expansión.html"><i class="fa fa-check"></i><b>3.4</b> Calibración de los factores de expansión</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="análisis-de-variables-continuas.html"><a href="análisis-de-variables-continuas.html"><i class="fa fa-check"></i><b>4</b> Análisis de variables continuas</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="definición-del-diseño-de-muestreo.html"><a href="definición-del-diseño-de-muestreo.html"><i class="fa fa-check"></i><b>4.1</b> Definición del diseño de muestreo</a></li>
+<li class="chapter" data-level="4.2" data-path="estimación-puntual.html"><a href="estimación-puntual.html"><i class="fa fa-check"></i><b>4.2</b> Estimación puntual</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-totales"><i class="fa fa-check"></i><b>4.2.1</b> Estimación de totales</a></li>
+<li class="chapter" data-level="4.2.2" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-promedios"><i class="fa fa-check"></i><b>4.2.2</b> Estimación de promedios</a></li>
+<li class="chapter" data-level="4.2.3" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-medidas-de-dispersión-y-localización"><i class="fa fa-check"></i><b>4.2.3</b> Estimación de medidas de dispersión y localización</a></li>
+<li class="chapter" data-level="4.2.4" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-del-coeficiente-de-gini"><i class="fa fa-check"></i><b>4.2.4</b> Estimación del coeficiente de Gini</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html"><i class="fa fa-check"></i><b>4.3</b> Relación entre varias variables</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#estimación-de-razones"><i class="fa fa-check"></i><b>4.3.1</b> Estimación de razones</a></li>
+<li class="chapter" data-level="4.3.2" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#prueba-de-hipótesis-para-la-diferencia-de-medias"><i class="fa fa-check"></i><b>4.3.2</b> Prueba de hipótesis para la diferencia de medias</a></li>
+<li class="chapter" data-level="4.3.3" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#contrastes"><i class="fa fa-check"></i><b>4.3.3</b> Contrastes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="análisis-de-variables-categóricas.html"><a href="análisis-de-variables-categóricas.html"><i class="fa fa-check"></i><b>5</b> Análisis de variables categóricas</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="definición-del-diseño-de-muestreo-1.html"><a href="definición-del-diseño-de-muestreo-1.html"><i class="fa fa-check"></i><b>5.1</b> Definición del diseño de muestreo</a></li>
+<li class="chapter" data-level="5.2" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html"><i class="fa fa-check"></i><b>5.2</b> Estimación puntual</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html#estimaciones-de-tamaños"><i class="fa fa-check"></i><b>5.2.1</b> Estimaciones de tamaños</a></li>
+<li class="chapter" data-level="5.2.2" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html#estimación-de-proporciones"><i class="fa fa-check"></i><b>5.2.2</b> Estimación de proporciones</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html"><i class="fa fa-check"></i><b>5.3</b> Relación entre varias variables</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#tablas"><i class="fa fa-check"></i><b>5.3.1</b> Tablas</a></li>
+<li class="chapter" data-level="5.3.2" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#pruebas-de-independencia"><i class="fa fa-check"></i><b>5.3.2</b> Pruebas de independencia</a></li>
+<li class="chapter" data-level="5.3.3" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#diferencia-de-proporciones-y-contrastes"><i class="fa fa-check"></i><b>5.3.3</b> Diferencia de proporciones y contrastes</a></li>
+<li class="chapter" data-level="5.3.4" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#razones-de-odds"><i class="fa fa-check"></i><b>5.3.4</b> Razones de odds</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="análisis-gráfico.html"><a href="análisis-gráfico.html"><i class="fa fa-check"></i><b>6</b> Análisis gráfico</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="análisis-gráfico-con-la-librería-survey.html"><a href="análisis-gráfico-con-la-librería-survey.html"><i class="fa fa-check"></i><b>6.1</b> Análisis gráfico con la librería <code>survey</code></a></li>
+<li class="chapter" data-level="6.2" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html"><i class="fa fa-check"></i><b>6.2</b> Análisis gráfico con la librería <code>ggplot2</code></a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#definición-del-tema"><i class="fa fa-check"></i><b>6.2.1</b> Definición del tema</a></li>
+<li class="chapter" data-level="6.2.2" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#histogramas"><i class="fa fa-check"></i><b>6.2.2</b> Histogramas</a></li>
+<li class="chapter" data-level="6.2.3" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#densidades"><i class="fa fa-check"></i><b>6.2.3</b> Densidades</a></li>
+<li class="chapter" data-level="6.2.4" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-caja"><i class="fa fa-check"></i><b>6.2.4</b> Diagramas de caja</a></li>
+<li class="chapter" data-level="6.2.5" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-dispersión"><i class="fa fa-check"></i><b>6.2.5</b> Diagramas de dispersión</a></li>
+<li class="chapter" data-level="6.2.6" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagrama-de-barras"><i class="fa fa-check"></i><b>6.2.6</b> Diagrama de barras</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="mapas.html"><a href="mapas.html"><i class="fa fa-check"></i><b>6.3</b> Mapas</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="modelos-de-regresión.html"><a href="modelos-de-regresión.html"><i class="fa fa-check"></i><b>7</b> Modelos de regresión</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="definiciones-básicas.html"><a href="definiciones-básicas.html"><i class="fa fa-check"></i><b>7.1</b> Definiciones básicas</a></li>
+<li class="chapter" data-level="7.2" data-path="estimación-de-los-parámetros-en-un-modelo-de-regresión-con-muestras-complejas..html"><a href="estimación-de-los-parámetros-en-un-modelo-de-regresión-con-muestras-complejas..html"><i class="fa fa-check"></i><b>7.2</b> Estimación de los parámetros en un modelo de regresión con muestras complejas.</a></li>
+<li class="chapter" data-level="7.3" data-path="la-ponderación-de-pfeffermann.html"><a href="la-ponderación-de-pfeffermann.html"><i class="fa fa-check"></i><b>7.3</b> La ponderación de Pfeffermann</a></li>
+<li class="chapter" data-level="7.4" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html"><i class="fa fa-check"></i><b>7.4</b> Diagnóstico del modelo</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#coeficientes-de-determinación"><i class="fa fa-check"></i><b>7.4.1</b> Coeficientes de determinación</a></li>
+<li class="chapter" data-level="7.4.2" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#residuales-estandarizados"><i class="fa fa-check"></i><b>7.4.2</b> Residuales estandarizados</a></li>
+<li class="chapter" data-level="7.4.3" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#observaciones-influyentes"><i class="fa fa-check"></i><b>7.4.3</b> Observaciones influyentes</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="inferencia-sobre-los-parámetros-del-modelo.html"><a href="inferencia-sobre-los-parámetros-del-modelo.html"><i class="fa fa-check"></i><b>7.5</b> Inferencia sobre los parámetros del Modelo</a></li>
+<li class="chapter" data-level="7.6" data-path="estimación-y-predicción.html"><a href="estimación-y-predicción.html"><i class="fa fa-check"></i><b>7.6</b> Estimación y predicción</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="modelos-lineales-generalizados.html"><a href="modelos-lineales-generalizados.html"><i class="fa fa-check"></i><b>8</b> Modelos lineales generalizados</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="modelo-de-regresión-logistica-para-proporciones.html"><a href="modelo-de-regresión-logistica-para-proporciones.html"><i class="fa fa-check"></i><b>8.1</b> Modelo de regresión logistica para proporciones</a></li>
+<li class="chapter" data-level="8.2" data-path="modelo-log-lineal-para-tablas-de-contingencia.html"><a href="modelo-log-lineal-para-tablas-de-contingencia.html"><i class="fa fa-check"></i><b>8.2</b> Modelo log-lineal para tablas de contingencia</a></li>
+<li class="chapter" data-level="8.3" data-path="modelo-multinomial-para-variables-con-múltiples-categorías.html"><a href="modelo-multinomial-para-variables-con-múltiples-categorías.html"><i class="fa fa-check"></i><b>8.3</b> Modelo multinomial para variables con múltiples categorías</a></li>
+<li class="chapter" data-level="8.4" data-path="modelo-gamma-para-variables-continuas-positivas.html"><a href="modelo-gamma-para-variables-continuas-positivas.html"><i class="fa fa-check"></i><b>8.4</b> Modelo Gamma para variables continuas positivas</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="modelos-multinivel.html"><a href="modelos-multinivel.html"><i class="fa fa-check"></i><b>9</b> Modelos multinivel</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="modelo-con-intercepto-aleatorio.html"><a href="modelo-con-intercepto-aleatorio.html"><i class="fa fa-check"></i><b>9.1</b> Modelo con intercepto aleatorio</a></li>
+<li class="chapter" data-level="9.2" data-path="modelo-con-pendiente-aleatoria.html"><a href="modelo-con-pendiente-aleatoria.html"><i class="fa fa-check"></i><b>9.2</b> Modelo con pendiente aleatoria</a></li>
+<li class="chapter" data-level="9.3" data-path="modelo-con-intercepto-y-pendiente-aleatoria.html"><a href="modelo-con-intercepto-y-pendiente-aleatoria.html"><i class="fa fa-check"></i><b>9.3</b> Modelo con intercepto y pendiente aleatoria</a></li>
+<li class="chapter" data-level="9.4" data-path="modelo-logístico-multinivel..html"><a href="modelo-logístico-multinivel..html"><i class="fa fa-check"></i><b>9.4</b> Modelo logístico multinivel.</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="imputación-múltiple-en-encuestas-de-hogares.html"><a href="imputación-múltiple-en-encuestas-de-hogares.html"><i class="fa fa-check"></i><b>10</b> Imputación múltiple en encuestas de hogares</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tres-patrones-para-la-ausencia-de-respuesta.html"><a href="tres-patrones-para-la-ausencia-de-respuesta.html"><i class="fa fa-check"></i><b>10.1</b> Tres patrones para la ausencia de respuesta</a></li>
+<li class="chapter" data-level="10.2" data-path="imputación-por-la-media-no-condicional..html"><a href="imputación-por-la-media-no-condicional..html"><i class="fa fa-check"></i><b>10.2</b> Imputación por la media no condicional.</a></li>
+<li class="chapter" data-level="10.3" data-path="imputación-por-la-media-condicional.html"><a href="imputación-por-la-media-condicional.html"><i class="fa fa-check"></i><b>10.3</b> Imputación por la media condicional</a></li>
+<li class="chapter" data-level="10.4" data-path="imputación-por-hot-deck.html"><a href="imputación-por-hot-deck.html"><i class="fa fa-check"></i><b>10.4</b> Imputación por <em>Hot-Deck</em></a></li>
+<li class="chapter" data-level="10.5" data-path="imputación-por-regresión.html"><a href="imputación-por-regresión.html"><i class="fa fa-check"></i><b>10.5</b> Imputación por regresión</a></li>
+<li class="chapter" data-level="10.6" data-path="imputación-por-el-vecino-más-cercano.html"><a href="imputación-por-el-vecino-más-cercano.html"><i class="fa fa-check"></i><b>10.6</b> Imputación por el vecino más cercano</a></li>
+<li class="chapter" data-level="10.7" data-path="imputación-por-el-vecino-más-cercano-con-regresión.html"><a href="imputación-por-el-vecino-más-cercano-con-regresión.html"><i class="fa fa-check"></i><b>10.7</b> Imputación por el vecino más cercano con regresión</a></li>
+<li class="chapter" data-level="10.8" data-path="imputación-múltiple..html"><a href="imputación-múltiple..html"><i class="fa fa-check"></i><b>10.8</b> Imputación múltiple.</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="estimación-de-parámetros-para-modelos-en-encuestas-complejas.html"><a href="estimación-de-parámetros-para-modelos-en-encuestas-complejas.html"><i class="fa fa-check"></i><b>11</b> Estimación de parámetros para modelos en encuestas complejas</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="acerca-de-las-muestras-aleatorias-y-su-análisis.html"><a href="acerca-de-las-muestras-aleatorias-y-su-análisis.html"><i class="fa fa-check"></i><b>11.1</b> Acerca de las muestras aleatorias y su análisis</a></li>
+<li class="chapter" data-level="11.2" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html"><i class="fa fa-check"></i><b>11.2</b> Modelos de superpoblación</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#primer-proceso-inferencial-el-modelo"><i class="fa fa-check"></i><b>11.2.1</b> Primer proceso inferencial: el modelo</a></li>
+<li class="chapter" data-level="11.2.2" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#segundo-proceso-inferencial-el-muestreo"><i class="fa fa-check"></i><b>11.2.2</b> Segundo proceso inferencial: el muestreo</a></li>
+<li class="chapter" data-level="11.2.3" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#inferencia-doble-los-modelos-y-el-muestreo"><i class="fa fa-check"></i><b>11.2.3</b> Inferencia doble: los modelos y el muestreo</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html"><i class="fa fa-check"></i><b>11.3</b> Método de Máxima Verosimilitud</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-distribución-bernoulli"><i class="fa fa-check"></i><b>11.3.1</b> MV para una distribución Bernoulli</a></li>
+<li class="chapter" data-level="11.3.2" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-distribución-normal"><i class="fa fa-check"></i><b>11.3.2</b> MV para una distribución normal</a></li>
+<li class="chapter" data-level="11.3.3" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-regresión-lineal-múltiple"><i class="fa fa-check"></i><b>11.3.3</b> MV para una regresión lineal múltiple</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html"><i class="fa fa-check"></i><b>11.4</b> Método de Máxima Pseudo-Verosimilitud</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-distribución-bernoulli"><i class="fa fa-check"></i><b>11.4.1</b> MPV para una distribución Bernoulli</a></li>
+<li class="chapter" data-level="11.4.2" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-distribución-normal"><i class="fa fa-check"></i><b>11.4.2</b> MPV para una distribución normal</a></li>
+<li class="chapter" data-level="11.4.3" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-regresión-múltiple"><i class="fa fa-check"></i><b>11.4.3</b> MPV para una regresión múltiple</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a Análisis de encuestas con R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis de encuestas de hogares con R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="estimación-puntual" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Estimación puntual<a href="estimación-puntual.html#estimación-puntual" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Después de realizar el análisis gráfico de las tendencias de las variables continuas de la encuesta, es necesario obtener las estimaciones puntuales de los parámetros que se midieron. Dichas estimaciones se pueden obtener de forma general, para toda la población, o desagregadas por dominios de interés, de acuerdo con las necesidades de la investigación. Entiéndase como estimaciones puntuales en el contexto de las encuestas de hogares a la estimación de totales, promedios, razones, medias, etc. Como lo mencionan <span class="citation">Heeringa, West, y Berglund (<a href="#ref-Heeringa_West_Berglund_2017">2017</a>)</span>, la estimación de los totales o promedios de un avariable de interés en la población junto con la estimación de su varianza ha jugado un papel muy importante en el desarrollo de la teoría del muestreo probabilístico, dado que permiten llegar a valores insesgados y precisos, dando una estimación muy acertada de lo que está pasando en los hogares estudiados y con ello tomar decisiones de política publica de manera informada.</p>
+<div id="estimación-de-totales" class="section level3 hasAnchor" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Estimación de totales<a href="estimación-puntual.html#estimación-de-totales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Una vez definido el diseño muestral, lo cual se hizo en la sección anterior, se procede a realizar los procesos de estimación de los parámetros de interés. Para la estimación de totales con diseños muestrales complejos que incluyen estratificación <span class="math inline">\(\left(h=1,2,...,H\right)\)</span> y submuestreo en las UPM (que se suponen están dentro del estrato <span class="math inline">\(h\)</span>) indexadas por <span class="math inline">\(\alpha=1,2,...,a_{h}\)</span>, el estimador para el total se puede escribir como:</p>
+<p><span class="math display">\[\begin{eqnarray}
+\hat{y}_{\omega} &amp; = &amp; \sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}y_{h\alpha i}.
+\end{eqnarray}\]</span></p>
+<p>En donde <span class="math inline">\(n_{h\alpha}\)</span> es el tamaño de muestra de hogares o personas en la UPM <span class="math inline">\(\alpha\)</span> del estrato <span class="math inline">\(h\)</span>; <span class="math inline">\(a_{h}\)</span> es el tamaño de muestra de UPM dentro del estrato <span class="math inline">\(h\)</span>; <span class="math inline">\(H\)</span> es el total de los estratos en el diseño de muestreo. Finalmente, <span class="math inline">\(y_{h\alpha i}\)</span> y <span class="math inline">\(\omega_{h\alpha i}\)</span> corresponden respectivamente con la observación de la variable de interés y el factor de expansión del elemento <span class="math inline">\(i\)</span> asociado a la UPM <span class="math inline">\(\alpha\)</span> dentro del estrato <span class="math inline">\(h\)</span>. El estimador insesgado de la varianza para este estimador <span class="math inline">\(\hat{y}_{\omega}\)</span> es:</p>
+<p><span class="math display">\[\begin{eqnarray}
+\widehat{var}\left(\hat{y}_{\omega}\right) &amp; = &amp; \sum_{h=1}^{H}\frac{a_{h}}{\left(a_{h}-1\right)}\left[\sum_{\alpha=1}^{a_{h}}\left(\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}y_{h\alpha i}\right)^{2}-\frac{\left({ \sum_{\alpha=1}^{a_{h}}}\omega_{h\alpha i}y_{h\alpha i}\right)^{2}}{a_{h}}\right]
+\end{eqnarray}\]</span></p>
+<p>Como se puede observar, calcular la estimación del total y su varianza estimada es complejo. Sin embargo, dichos cálculos se pueden hacer en <code>R</code> mediante la función <code>svytotal</code>. El intervalo de confianza está dado por la siguiente expresión:</p>
+<p><span class="math display">\[\begin{eqnarray}
+\hat{y}_{\omega} \pm 1.96 * \sqrt{\widehat{var}\left(\hat{y}_{\omega}\right)}
+\end{eqnarray}\]</span></p>
+<p>El intervalos de confianza en <code>R</code> se calcula con la función <code>confint</code>. A continuación, se muestran los códigos pertinentes:</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="estimación-puntual.html#cb89-1" tabindex="-1"></a>total_Ingresos <span class="ot">&lt;-</span> <span class="fu">svytotal</span>( <span class="sc">~</span> Income, diseno, <span class="at">deff =</span> T,)</span>
+<span id="cb89-2"><a href="estimación-puntual.html#cb89-2" tabindex="-1"></a>total_Ingresos</span></code></pre></div>
+<pre><code>##           total       SE DEff
+## Income 85793667  4778674   11</code></pre>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="estimación-puntual.html#cb91-1" tabindex="-1"></a><span class="fu">confint</span>(total_Ingresos, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div>
+<pre><code>##           2.5 %   97.5 %
+## Income 76427637 95159697</code></pre>
+<p>Los argumentos que utiliza de la función <code>svytotal</code> son muy sencillos. Para el ejemplo, se introduce primero la variable en la cual está la información que se desea estimar (<code>Income</code>). Posterior a esto, se introduce el diseño muestral del cual proviene la muestra y, por último, se indica si desea que se reporte el efecto de diseño <code>deff</code> de la estimación o no. Por otro lado, para el cálculo del intervalo de confianza, lo único que se requiere es indicarle a la función <code>confint</code> el estimador y la confianza requerida.</p>
+<p>Para seguir ilustrando el uso de la función <code>svytotal</code> y de <code>confint</code>, estimaremos el total de gastos de los hogares, pero ahora el intervalo de confianza se calculará al 90% de confianza. Los siguientes códigos realizan las estimaciones:</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="estimación-puntual.html#cb93-1" tabindex="-1"></a>total_gastos <span class="ot">&lt;-</span> <span class="fu">svytotal</span> ( <span class="sc">~</span> Expenditure, diseno, <span class="at">deff =</span> T)</span>
+<span id="cb93-2"><a href="estimación-puntual.html#cb93-2" tabindex="-1"></a>total_gastos</span></code></pre></div>
+<pre><code>##                total       SE   DEff
+## Expenditure 55677504  2604138 10.222</code></pre>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="estimación-puntual.html#cb95-1" tabindex="-1"></a><span class="fu">confint</span>(total_gastos, <span class="at">level =</span> <span class="fl">0.9</span>)</span></code></pre></div>
+<pre><code>##                  5 %     95 %
+## Expenditure 51394077 59960931</code></pre>
+<p>Si el objetivo ahora es estimar el total de los ingresos pero discriminando por sexo, se utilizará la función <code>cascade</code>de la librería <code>srvyr</code>, la cual permite agregar la suma de las categorías al final la tabla. También se utilizará la función <code>group_by</code> la cual permite obtener resultados agrupados por los niveles de interés.</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="estimación-puntual.html#cb97-1" tabindex="-1"></a>diseno <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Sex) <span class="sc">%&gt;%</span></span>
+<span id="cb97-2"><a href="estimación-puntual.html#cb97-2" tabindex="-1"></a>  <span class="fu">cascade</span>(<span class="at">Total =</span> <span class="fu">survey_total</span>(Income, <span class="at">level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb97-3"><a href="estimación-puntual.html#cb97-3" tabindex="-1"></a>                               <span class="at">vartype =</span>  <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>)),</span>
+<span id="cb97-4"><a href="estimación-puntual.html#cb97-4" tabindex="-1"></a>          <span class="at">.fill =</span> <span class="st">&quot;Total ingreso&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 5
+##   Sex               Total Total_se Total_low Total_upp
+##   &lt;chr&gt;             &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Female        44153820. 2324452. 39551172. 48756467.
+## 2 Male          41639847. 2870194. 35956576. 47323118.
+## 3 Total ingreso 85793667. 4778674. 76331414. 95255920.</code></pre>
+<p>Como se pudo observar en lo códigos anteriores, otra forma de obtener las estimaciones del total, su desviación estándar y el intervalo de confianza es usando el argumento <code>vartype</code> e indicándole las opciones “se”, “ci” respectivamente.</p>
+</div>
+<div id="estimación-de-promedios" class="section level3 hasAnchor" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Estimación de promedios<a href="estimación-puntual.html#estimación-de-promedios" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La estimación del promedio o media poblacional es un parámetro muy importante en las encuestas de hogares. Según <span class="citation">Gutiérrez (<a href="#ref-Gutierrez_2016">2016</a>)</span>, un estimador de la media poblacional se puede escribir como una razón no lineal de dos totales de población finitas estimados como sigue:</p>
+<p><span class="math display">\[\begin{eqnarray}
+\hat{\bar{y}}_{\omega} &amp; = &amp; \frac{\sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}y_{h\alpha i}}{\sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}}  =  \frac{\hat{y}_{\omega}}{\hat{N}_{\omega}}.
+\end{eqnarray}\]</span></p>
+<p>Como observación, se debe tener en cuenta que, si <span class="math inline">\(y\)</span> es una variable
+binaria, la media ponderada estima la proporción de la población.
+Por otro lado, como <span class="math inline">\(\hat{\bar{y}}_{\omega}\)</span> no es una estadística lineal,
+no existe una fórmula cerrada para la varianza de este estimador.
+Es por lo anterior que, se deben recurrir a usar métodos de remuestreo
+o series de Taylor. Para este caso en particular, usando series de
+Taylor, la varianza del estimador es como sigue:</p>
+<p><span class="math display">\[\begin{eqnarray}
+var\left(\hat{\bar{y}}_{\omega}\right) &amp; \dot{=} &amp; \frac{var\left(\hat{y}_{\omega}\right)+\hat{\bar{y}}_{\omega}^{2}\times var\left(\hat{N}_{\omega}\right)-2\times\hat{\bar{y}}_{\omega}\times cov\left(\hat{y}_{\omega},\hat{N}_{\omega}\right)}{\hat{N}_{\omega}^{2}}
+\end{eqnarray}\]</span></p>
+<p>Como se puede observar, el cálculo de la estimación de la varianza tiene componentes complejos de calcular de manera analítica, como la covarianza entre el total estimado y el tamaño poblacional estimado. Sin embargo, <code>R</code> incorpora estos cálculos de forma automática. A continuación, se presenta la sintaxis para estimar la media de los ingresos.</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="estimación-puntual.html#cb99-1" tabindex="-1"></a>Media_ingresos <span class="ot">&lt;-</span> <span class="fu">svymean</span>( <span class="sc">~</span> Income, diseno, <span class="at">deff =</span> T)</span>
+<span id="cb99-2"><a href="estimación-puntual.html#cb99-2" tabindex="-1"></a>Media_ingresos</span></code></pre></div>
+<pre><code>##           mean      SE   DEff
+## Income 570.945  28.478 8.8211</code></pre>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="estimación-puntual.html#cb101-1" tabindex="-1"></a><span class="fu">confint</span>(Media_ingresos, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div>
+<pre><code>##           2.5 %   97.5 %
+## Income 515.1299 626.7607</code></pre>
+<p>Como se puede observar, los argumentos que utiliza la función <code>svymean</code> para realizar la estimación del promedio de los ingresos, junto con su error estándar estimado son similares a los utilizados con la función <code>svytotal</code>. Algo similar ocurre con los intervalos de confianza. Por otro lado, se estima la media de los gastos en los hogares como sigue a continuación:</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="estimación-puntual.html#cb103-1" tabindex="-1"></a>Media_gastos <span class="ot">&lt;-</span> <span class="fu">svymean</span> ( <span class="sc">~</span> Expenditure, diseno, <span class="at">deff =</span> T)</span>
+<span id="cb103-2"><a href="estimación-puntual.html#cb103-2" tabindex="-1"></a>Media_gastos</span></code></pre></div>
+<pre><code>##                mean      SE   DEff
+## Expenditure 370.526  13.294 6.0156</code></pre>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="estimación-puntual.html#cb105-1" tabindex="-1"></a><span class="fu">confint</span>(Media_gastos)</span></code></pre></div>
+<pre><code>##                2.5 %   97.5 %
+## Expenditure 344.4697 396.5829</code></pre>
+<p>También se pueden realizar estimaciones de la media por subgrupos siguiendo el mismo esquema mostrado para la función <code>svytotal</code>. Particularmente, los gastos de los hogares discriminados por sexo es:</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="estimación-puntual.html#cb107-1" tabindex="-1"></a>diseno <span class="sc">%&gt;%</span></span>
+<span id="cb107-2"><a href="estimación-puntual.html#cb107-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Sex) <span class="sc">%&gt;%</span></span>
+<span id="cb107-3"><a href="estimación-puntual.html#cb107-3" tabindex="-1"></a>  <span class="fu">cascade</span>(<span class="at">Media =</span> <span class="fu">survey_mean</span>(Expenditure, <span class="at">level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb107-4"><a href="estimación-puntual.html#cb107-4" tabindex="-1"></a>                              <span class="at">vartype =</span>  <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>)),</span>
+<span id="cb107-5"><a href="estimación-puntual.html#cb107-5" tabindex="-1"></a>          <span class="at">.fill =</span> <span class="st">&quot;Gasto promedio&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb107-6"><a href="estimación-puntual.html#cb107-6" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Sex))</span></code></pre></div>
+<pre><code>## # A tibble: 3 × 5
+##   Sex            Media Media_se Media_low Media_upp
+##   &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Male            374.     16.1      343.      406.
+## 2 Gasto promedio  371.     13.3      344.      397.
+## 3 Female          367.     12.3      343.      391.</code></pre>
+<p>También se pueden realizar estimaciones del promedio en desagregaciones más complejas, por ejemplo las interacciones entre sexo y zona. El siguiente código permite obtenerlos:</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="estimación-puntual.html#cb109-1" tabindex="-1"></a>diseno <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Zone, Sex) <span class="sc">%&gt;%</span></span>
+<span id="cb109-2"><a href="estimación-puntual.html#cb109-2" tabindex="-1"></a>  <span class="fu">cascade</span>(<span class="at">Media =</span> <span class="fu">survey_mean</span>(Expenditure, <span class="at">level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb109-3"><a href="estimación-puntual.html#cb109-3" tabindex="-1"></a>                              <span class="at">vartype =</span>  <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>)),</span>
+<span id="cb109-4"><a href="estimación-puntual.html#cb109-4" tabindex="-1"></a>          <span class="at">.fill =</span> <span class="st">&quot;Promedio&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb109-5"><a href="estimación-puntual.html#cb109-5" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Zone), <span class="fu">desc</span>(Sex)) <span class="sc">%&gt;%</span></span>
+<span id="cb109-6"><a href="estimación-puntual.html#cb109-6" tabindex="-1"></a>  <span class="fu">data.frame</span>()</span></code></pre></div>
+<pre><code>##       Zone      Sex    Media Media_se Media_low Media_upp
+## 1    Urban Promedio 459.6162 22.20655  415.6450  503.5874
+## 2    Urban     Male 469.8124 26.96068  416.4276  523.1973
+## 3    Urban   Female 450.8151 20.11853  410.9784  490.6518
+## 4    Rural Promedio 273.9461 10.26141  253.6275  294.2647
+## 5    Rural     Male 275.3018 10.24848  255.0088  295.5948
+## 6    Rural   Female 272.6769 11.61470  249.6786  295.6751
+## 7 Promedio Promedio 370.5263 13.29444  344.2020  396.8506</code></pre>
+</div>
+<div id="estimación-de-medidas-de-dispersión-y-localización" class="section level3 hasAnchor" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> Estimación de medidas de dispersión y localización<a href="estimación-puntual.html#estimación-de-medidas-de-dispersión-y-localización" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En las encuestas de hogares siempre es necesario estimar medidas de dispersión de las variables estudiadas. Por ejemplo, para conocer qué tan disímiles son los ingresos en un país determinado y con esto poder tomar acciones de política pública. Por lo anterior, es importante estudiar este tipo de parámetros. A continuación, se presenta el estimador de la desviación estándar:</p>
+<p><span class="math display">\[\begin{eqnarray*}
+s_{\omega}\left(y\right) &amp; = &amp; \frac{\sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}\left(y_{h\alpha i}-\hat{\bar{y}}_{\omega}\right)^{2}}{\sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}-1}
+\end{eqnarray*}\]</span></p>
+<p>Para llevar a cabo la estimación de la desviación estándar en <code>R</code>, se utiliza la función <code>survey_var</code>, la cual se ejemplifica a continuación:</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="estimación-puntual.html#cb111-1" tabindex="-1"></a>diseno <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Zone) <span class="sc">%&gt;%</span></span>
+<span id="cb111-2"><a href="estimación-puntual.html#cb111-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Sd =</span> <span class="fu">sqrt</span>(<span class="fu">survey_var</span>(</span>
+<span id="cb111-3"><a href="estimación-puntual.html#cb111-3" tabindex="-1"></a>    Income,</span>
+<span id="cb111-4"><a href="estimación-puntual.html#cb111-4" tabindex="-1"></a>    <span class="at">level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb111-5"><a href="estimación-puntual.html#cb111-5" tabindex="-1"></a>    <span class="at">vartype =</span>  <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>),</span>
+<span id="cb111-6"><a href="estimación-puntual.html#cb111-6" tabindex="-1"></a>  )))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 5
+##   Zone     Sd Sd_se Sd_low Sd_upp
+##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 Rural  310.  117.   263.   352.
+## 2 Urban  582.  285.   422.   707.</code></pre>
+<p>Como se pudo ver en el ejemplo anterior, se estimó la desviación estándar de los ingresos por zona reportando el error estándar en la estimación y un intervalo de confianza al 95%. Los argumentos que utiliza la función <code>survey_var</code> son similares a los usados en las funciones anteriores para estimar medias y totales. Si el interés ahora se centra en estimar la desviación estándar desagregando por sexo y zona, los códigos computacionales son los siguientes:</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="estimación-puntual.html#cb113-1" tabindex="-1"></a>diseno <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Zone, Sex) <span class="sc">%&gt;%</span></span>
+<span id="cb113-2"><a href="estimación-puntual.html#cb113-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Sd =</span> <span class="fu">sqrt</span>(<span class="fu">survey_var</span>(</span>
+<span id="cb113-3"><a href="estimación-puntual.html#cb113-3" tabindex="-1"></a>    Income,</span>
+<span id="cb113-4"><a href="estimación-puntual.html#cb113-4" tabindex="-1"></a>    <span class="at">level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb113-5"><a href="estimación-puntual.html#cb113-5" tabindex="-1"></a>    <span class="at">vartype =</span>  <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>),</span>
+<span id="cb113-6"><a href="estimación-puntual.html#cb113-6" tabindex="-1"></a>  )))</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 6
+## # Groups:   Zone [2]
+##   Zone  Sex       Sd Sd_se Sd_low Sd_upp
+##   &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 Rural Female  295.  112.   250.   334.
+## 2 Rural Male    326.  125.   274.   370.
+## 3 Urban Female  568.  286.   401.   697.
+## 4 Urban Male    597.  289.   437.   722.</code></pre>
+<p>Las medidas de posición no central (percentiles) se establecen con el fin de conocer otros puntos característicos de la distribución de los datos que no son los valores centrales. Entre las medidas de posición no central más importantes están la mediana, los cuartiles y los percentiles. En la mayoría de las encuestas de hogares no solo se estiman totales, medias y proporciones; para algunos indicadores es necesario estimar otros parámetros, por ejemplo, medianas y percentiles.</p>
+<p>La mediana es una medida de tendencia central la cual, a diferencia del promedio, no es fácilmente influenciada por datos atípicos y, por esto, se conoce como una medida robusta. La mediana es el valor que divide la población en dos partes iguales. Lo que implica que, la mitad de las observaciones de la característica de interés está por encima de la mediana y la otra mitad está por debajo.</p>
+<p>Por otro lado, la estimación de los percentiles de los ingresos en un país determinado puede definir el inicio de una política pública. por ejemplo, al establecer un impuesto a aquellas personas naturales que etán ubicadas en el 10% más alto de la distribución de los ingresos o por el contrario, generar subsidios de transporte a aquellas personas que están en el 15% inferior de la distribución de los ingresos.</p>
+<p>La estimación de cuantiles se basa en los resultados relacionados con el estimador ponderado para totales, empleando una estimación de la función de distribución (CDF, por sus siglas en inglés) acumulada de la población. Específicamente, la CDF para una variable y en una población finita dada de tamaño <span class="math inline">\(N\)</span> se define de la siguiente manera:</p>
+<p><span class="math display">\[\begin{eqnarray*}
+F\left(x\right) &amp; = &amp; \frac{{ \sum_{i=1}^{N}}I\left(y_{i}\leq x\right)}{N}
+\end{eqnarray*}\]</span></p>
+<p>En donde, <span class="math inline">\(I\left(y_{i}\leq x\right)\)</span> es una variable indicadora que toma el valor de 1 si <span class="math inline">\(y_{i}\)</span> es menor o igual a un valor específico
+<span class="math inline">\(x\)</span>, y cero en cualquier otro caso. Un estimador de la CDF en un diseño de muestreo complejo está dado por:</p>
+<p><span class="math display">\[\begin{eqnarray}
+\hat{F}_{\omega}\left(x\right) &amp; = &amp; \frac{\sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}I\left(y_{i}\leq x\right)}{\sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}}
+\end{eqnarray}\]</span></p>
+<p>Una vez estimada la CDF utilizando los pesos del diseño muestral, el cuantil <span class="math inline">\(q\)</span>-ésimo de una variable <span class="math inline">\(y\)</span> es el valor más pequeño de <span class="math inline">\(y\)</span> tal que la CDF es mayor o igual que <span class="math inline">\(q\)</span>. Como es bien sabido, la mediana es aquel valor donde la CDF es mayor o igual a 0.5 y, por tanto, la media estimada es aquel valor donde la estimación de CDF es mayor o igual a 0.5. Siguiendo las recomendaciones de <span class="citation">Heeringa, West, y Berglund (<a href="#ref-Heeringa_West_Berglund_2017">2017</a>)</span>, para estimar cuantiles primero se consideran las estadísticas de orden que se denotan como <span class="math inline">\(y_{(1)},\ldots,y_{(n)}\)</span>, y se encuentra el valor de <span class="math inline">\(j\)</span> <span class="math inline">\((j=1,\ldots,n)\)</span> tal que:</p>
+<p><span class="math display">\[\begin{eqnarray*}
+\hat{F}_{\omega}\left(y_{j}\right)\leq q\leq\hat{F}_{\omega}\left(y_{j+1}\right)
+\end{eqnarray*}\]</span></p>
+<p>Ahora bien, la estimación del q-ésimo cuantil <span class="math inline">\(y_{(q)}\)</span> en un diseño de muestreo complejo está dado por:</p>
+<p><span class="math display">\[\begin{eqnarray}
+\hat{y}_{(q)} &amp; = &amp; y_{j}+\frac{q-\hat{F}_{\omega}\left(y_{j}\right)}{\hat{F}_{\omega}\left(y_{j+1}\right)-\hat{F}_{\omega}\left(y_{j}\right)}\left(y_{j+1}-y_{j}\right)
+\end{eqnarray}\]</span></p>
+<p>Para la estimación de la varianza e intervalos de confianza de cuantiles, <span class="citation">Kovar, Rao, y Wu (<a href="#ref-kovar1988bootstrap">1988</a>)</span> muestran los resultados de un estudio de simulación en donde recomiendan el uso de la técnica BRR (<em>Balanced Repeated Replication</em>) para estimarla. Los estimadores y procedimientos antes mencionados para la estimación de percentiles y sus varianzas están implementados en <code>R</code>. Particularmente, la estimación de la mediana se realiza usando la función <code>survey_median</code>. A continuación, se muestra la sintaxis de cómo calcular la mediana de los gastos, la desviación estándar y el intervalo de confianza al 95% de los hogares en la población.</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="estimación-puntual.html#cb115-1" tabindex="-1"></a>diseno <span class="sc">%&gt;%</span></span>
+<span id="cb115-2"><a href="estimación-puntual.html#cb115-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Mediana =</span></span>
+<span id="cb115-3"><a href="estimación-puntual.html#cb115-3" tabindex="-1"></a>              <span class="fu">survey_median</span>(</span>
+<span id="cb115-4"><a href="estimación-puntual.html#cb115-4" tabindex="-1"></a>                Expenditure,</span>
+<span id="cb115-5"><a href="estimación-puntual.html#cb115-5" tabindex="-1"></a>                <span class="at">level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb115-6"><a href="estimación-puntual.html#cb115-6" tabindex="-1"></a>                <span class="at">vartype =</span>  <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>),</span>
+<span id="cb115-7"><a href="estimación-puntual.html#cb115-7" tabindex="-1"></a>              ))</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 4
+##   Mediana Mediana_se Mediana_low Mediana_upp
+##     &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+## 1    298.       8.83        282.        317.</code></pre>
+<p>Como se puede observar, los argumentos de la función <code>survey_median</code> son similares a los del total y la media. Ahora bien, al igual que con los demás parámetros, si el objetivo ahora es estimar la mediana de los gastos de los hogares, pero esta vez discriminada por zona y también por sexo, el código computacional sería el siguiente:</p>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="estimación-puntual.html#cb117-1" tabindex="-1"></a>diseno <span class="sc">%&gt;%</span></span>
+<span id="cb117-2"><a href="estimación-puntual.html#cb117-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Zone) <span class="sc">%&gt;%</span></span>
+<span id="cb117-3"><a href="estimación-puntual.html#cb117-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Mediana =</span></span>
+<span id="cb117-4"><a href="estimación-puntual.html#cb117-4" tabindex="-1"></a>              <span class="fu">survey_median</span>(</span>
+<span id="cb117-5"><a href="estimación-puntual.html#cb117-5" tabindex="-1"></a>                Expenditure,</span>
+<span id="cb117-6"><a href="estimación-puntual.html#cb117-6" tabindex="-1"></a>                <span class="at">level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb117-7"><a href="estimación-puntual.html#cb117-7" tabindex="-1"></a>                <span class="at">vartype =</span>  <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>),</span>
+<span id="cb117-8"><a href="estimación-puntual.html#cb117-8" tabindex="-1"></a>              ))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 5
+##   Zone  Mediana Mediana_se Mediana_low Mediana_upp
+##   &lt;chr&gt;   &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Rural    241.       11.0        214.        258.
+## 2 Urban    381.       19.8        337.        416.</code></pre>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="estimación-puntual.html#cb119-1" tabindex="-1"></a>diseno <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Sex) <span class="sc">%&gt;%</span> </span>
+<span id="cb119-2"><a href="estimación-puntual.html#cb119-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Mediana =</span> </span>
+<span id="cb119-3"><a href="estimación-puntual.html#cb119-3" tabindex="-1"></a>  <span class="fu">survey_median</span>(</span>
+<span id="cb119-4"><a href="estimación-puntual.html#cb119-4" tabindex="-1"></a>    Expenditure,</span>
+<span id="cb119-5"><a href="estimación-puntual.html#cb119-5" tabindex="-1"></a>    <span class="at">level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb119-6"><a href="estimación-puntual.html#cb119-6" tabindex="-1"></a>    <span class="at">vartype =</span>  <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>),</span>
+<span id="cb119-7"><a href="estimación-puntual.html#cb119-7" tabindex="-1"></a>   ))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 5
+##   Sex    Mediana Mediana_se Mediana_low Mediana_upp
+##   &lt;chr&gt;    &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+## 1 Female    300.      10.5         282.        324.
+## 2 Male      297.       9.29        277.        314.</code></pre>
+<p>Si el objetivo ahora es estimar cuantiles, por ejemplo, el cuantil 0.25 de los gastos de los hogares, se realizaría usando la función <code>survey_quantile</code> como sigue:</p>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="estimación-puntual.html#cb121-1" tabindex="-1"></a>diseno <span class="sc">%&gt;%</span></span>
+<span id="cb121-2"><a href="estimación-puntual.html#cb121-2" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Q =</span>  <span class="fu">survey_quantile</span>(</span>
+<span id="cb121-3"><a href="estimación-puntual.html#cb121-3" tabindex="-1"></a>    Expenditure,</span>
+<span id="cb121-4"><a href="estimación-puntual.html#cb121-4" tabindex="-1"></a>    <span class="at">quantiles =</span> <span class="fl">0.5</span>,</span>
+<span id="cb121-5"><a href="estimación-puntual.html#cb121-5" tabindex="-1"></a>    <span class="at">level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb121-6"><a href="estimación-puntual.html#cb121-6" tabindex="-1"></a>    <span class="at">vartype =</span>  <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>),</span>
+<span id="cb121-7"><a href="estimación-puntual.html#cb121-7" tabindex="-1"></a>    <span class="at">interval_type =</span> <span class="st">&quot;score&quot;</span></span>
+<span id="cb121-8"><a href="estimación-puntual.html#cb121-8" tabindex="-1"></a>  ))</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 4
+##   Q_q50 Q_q50_se Q_q50_low Q_q50_upp
+##   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1  298.     12.0      265.      312.</code></pre>
+<p>Si ahora se desea estimar el cuantil 0.25 pero discriminando por sexo y por zona se realizaría como sigue:</p>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="estimación-puntual.html#cb123-1" tabindex="-1"></a>diseno <span class="sc">%&gt;%</span></span>
+<span id="cb123-2"><a href="estimación-puntual.html#cb123-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Sex) <span class="sc">%&gt;%</span></span>
+<span id="cb123-3"><a href="estimación-puntual.html#cb123-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Q =</span>  <span class="fu">survey_quantile</span>(</span>
+<span id="cb123-4"><a href="estimación-puntual.html#cb123-4" tabindex="-1"></a>    Expenditure,</span>
+<span id="cb123-5"><a href="estimación-puntual.html#cb123-5" tabindex="-1"></a>    <span class="at">quantiles =</span> <span class="fl">0.25</span>,</span>
+<span id="cb123-6"><a href="estimación-puntual.html#cb123-6" tabindex="-1"></a>    <span class="at">level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb123-7"><a href="estimación-puntual.html#cb123-7" tabindex="-1"></a>    <span class="at">vartype =</span>  <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>),</span>
+<span id="cb123-8"><a href="estimación-puntual.html#cb123-8" tabindex="-1"></a>    <span class="at">interval_type =</span> <span class="st">&quot;score&quot;</span></span>
+<span id="cb123-9"><a href="estimación-puntual.html#cb123-9" tabindex="-1"></a>  ))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 5
+##   Sex    Q_q25 Q_q25_se Q_q25_low Q_q25_upp
+##   &lt;chr&gt;  &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Female  210.     14.9      169.      228.
+## 2 Male    193.     10.4      163.      205.</code></pre>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="estimación-puntual.html#cb125-1" tabindex="-1"></a>diseno <span class="sc">%&gt;%</span></span>
+<span id="cb125-2"><a href="estimación-puntual.html#cb125-2" tabindex="-1"></a>  <span class="fu">group_by</span>(Zone) <span class="sc">%&gt;%</span></span>
+<span id="cb125-3"><a href="estimación-puntual.html#cb125-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Q =</span>  <span class="fu">survey_quantile</span>(</span>
+<span id="cb125-4"><a href="estimación-puntual.html#cb125-4" tabindex="-1"></a>    Expenditure,</span>
+<span id="cb125-5"><a href="estimación-puntual.html#cb125-5" tabindex="-1"></a>    <span class="at">quantiles =</span> <span class="fl">0.25</span>,</span>
+<span id="cb125-6"><a href="estimación-puntual.html#cb125-6" tabindex="-1"></a>    <span class="at">level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb125-7"><a href="estimación-puntual.html#cb125-7" tabindex="-1"></a>    <span class="at">vartype =</span>  <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>),</span>
+<span id="cb125-8"><a href="estimación-puntual.html#cb125-8" tabindex="-1"></a>    <span class="at">interval_type =</span> <span class="st">&quot;score&quot;</span></span>
+<span id="cb125-9"><a href="estimación-puntual.html#cb125-9" tabindex="-1"></a>  ))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 5
+##   Zone  Q_q25 Q_q25_se Q_q25_low Q_q25_upp
+##   &lt;chr&gt; &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Rural  160.     4.64      145.      163.
+## 2 Urban  258.     9.05      256.      292.</code></pre>
+</div>
+<div id="estimación-del-coeficiente-de-gini" class="section level3 hasAnchor" number="4.2.4">
+<h3><span class="header-section-number">4.2.4</span> Estimación del coeficiente de Gini<a href="estimación-puntual.html#estimación-del-coeficiente-de-gini" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La desigualdad en todos los aspectos es un problema común en todos los países del mundo. Particularmente, la desigualdad económica atañe a muchas instituciones internacionales. Dado lo anterior, es de particular interés poder medir la desigualdad económica de los hogares en los países y para esto, el indicador más utilizado es el coeficiente de Gini (<span class="math inline">\(G\)</span>). El valor de este índice se encuentra entre 0 y 1. Un valor del coeficiente de Gini de <span class="math inline">\(G = 0\)</span> indica perfecta igualdad en la distribución de la riqueza, con valores más grandes significa una desigualdad cada vez mayor en la distribución de la riqueza. Siguiendo la ecuación de estimación de <span class="citation">David A. Binder y Kovacevic (<a href="#ref-binder1995estimating">1995</a>)</span>, un estimador del coeficiente de Gini es:</p>
+<p><span class="math display">\[\begin{eqnarray}
+\widehat{G}_{\omega}\left(y\right) = \frac{2 \times \sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}^{*}\hat{F}_{\omega}^{h\alpha i}y^{h\alpha i}-1}{\hat{\bar{y}}_{\omega}}
+\end{eqnarray}\]</span></p>
+<p>En donde, <span class="math inline">\(\omega_{h\alpha i}^{*}\)</span> es una ponderación normalizada, dada por la siguiente expresión:</p>
+<p><span class="math display">\[
+\omega_{h\alpha i}^{*}=\frac{\omega_{h\alpha i}}{\sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}}
+\]</span></p>
+<p>Mientras que <span class="math inline">\(\hat{F}_{h\alpha i}{}_{\omega}\)</span> es la estimación de la CDF para el individuo <span class="math inline">\(i\)</span> en el conglomerado <span class="math inline">\(\alpha\)</span> del estrato <span class="math inline">\(h\)</span>; asimismo, <span class="math inline">\(\hat{\bar{y}}_{\omega}\)</span> es la estimación del promedio. <span class="citation">Osier (<a href="#ref-osier2009variance">2009</a>)</span> junto con <span class="citation">Langel y Tillé (<a href="#ref-Langel_Tille_2013">2013</a>)</span> proveen importantes detalles computacionales para la estimación de la varianza de este estimador complejo.</p>
+<p>Por consiguiente, para calcular el índice de Gini y su varianza estimada en una encuesta de hogares, <code>R</code> tiene cargados los procedimientos en la librería <code>convey</code>. A continuación, se muestra la sintaxis de cómo se realiza la estimación del índice de Gini para los hogares en la base de ejemplo de este capítulo. En primer lugar, se carga el diseño de muestreo con la función <code>convey_prep</code>. Luego, se estima el índice Gini con la función <code>svygini</code>. En los argumentos de esta última función se introducen la variable ingresos y el diseño muestral complejo.</p>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="estimación-puntual.html#cb127-1" tabindex="-1"></a><span class="fu">library</span>(convey)</span>
+<span id="cb127-2"><a href="estimación-puntual.html#cb127-2" tabindex="-1"></a>diseno_gini <span class="ot">&lt;-</span> <span class="fu">convey_prep</span>(diseno)</span>
+<span id="cb127-3"><a href="estimación-puntual.html#cb127-3" tabindex="-1"></a><span class="fu">svygini</span>(<span class="sc">~</span> Income, <span class="at">design =</span> diseno_gini)</span></code></pre></div>
+<pre><code>##           gini     SE
+## Income 0.41328 0.0187</code></pre>
+<p>Por otro lado, si el interés ahora es estimar la curva de Lorenz que, para una distribución dada de ingresos, traza el porcentaje acumulado de la población (desplegado desde el más pobre hasta el más rico) frente a su participación en el ingreso total <span class="citation">Osier (<a href="#ref-osier2009variance">2009</a>)</span>. El área entre la curva de Lorenz y la línea de 45 grados se conoce como el área de Lorenz y el índice de Gini es igual al doble del área de Lorenz. Una población con la curva de Lorenz más cerca de la línea de 45 grados tiene una distribución de ingresos más equitativa. Si todos los ingresos son iguales, la curva de Lorenz degenera a la línea de 45 grados.</p>
+<p>Para realizar la curva de Lorenz en <code>R</code> se utiliza la función <code>svylorenz</code>. A continuación, se muestran los códigos computacionales para realizar la curva de Lorenz para los ingresos:</p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="estimación-puntual.html#cb129-1" tabindex="-1"></a><span class="fu">library</span>(convey)</span>
+<span id="cb129-2"><a href="estimación-puntual.html#cb129-2" tabindex="-1"></a><span class="fu">svylorenz</span>(</span>
+<span id="cb129-3"><a href="estimación-puntual.html#cb129-3" tabindex="-1"></a>  <span class="at">formula =</span> <span class="sc">~</span> Income,</span>
+<span id="cb129-4"><a href="estimación-puntual.html#cb129-4" tabindex="-1"></a>  <span class="at">design =</span> diseno_gini,</span>
+<span id="cb129-5"><a href="estimación-puntual.html#cb129-5" tabindex="-1"></a>  <span class="at">quantiles =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, .<span class="dv">1</span>),</span>
+<span id="cb129-6"><a href="estimación-puntual.html#cb129-6" tabindex="-1"></a>  <span class="at">alpha =</span> .<span class="dv">01</span></span>
+<span id="cb129-7"><a href="estimación-puntual.html#cb129-7" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="04-Continuas_files/figure-html/unnamed-chunk-23-1.svg" width="70%" style="display: block; margin: auto;" /></p>
+<pre><code>## $quantiles
+##        0        0.1        0.2        0.3       0.4       0.5       0.6
+## Income 0 0.01759645 0.04922299 0.09258712 0.1469261 0.2158231 0.3027002
+##              0.7       0.8       0.9 1
+## Income 0.4096304 0.5398749 0.7042464 1
+## 
+## $CIs
+## , , Income
+## 
+##        0        0.1        0.2        0.3       0.4       0.5       0.6
+## (lower 0 0.01644571 0.04643347 0.08770299 0.1396359 0.2056539 0.2898807
+## upper) 0 0.01874718 0.05201251 0.09747124 0.1542163 0.2259923 0.3155197
+##              0.7       0.8       0.9 1
+## (lower 0.3943025 0.5227820 0.6835287 1
+## upper) 0.4249582 0.5569677 0.7249642 1</code></pre>
+<p>Los argumentos que requiere la función son, inicialmente, los ingresos de los hogares y el diseño muestral complejo. Adicionalmente, se definen una secuencia de probabilidades que define la suma de los cuantiles a calcular (quantiles) y por último, un número que especifica el nivel de confianza para el gráfico (alpha).</p>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-binder1995estimating" class="csl-entry">
+Binder, David A., y Milojica S. Kovacevic. 1995. <span>«Estimating some measures of income inequality from survey data: An application of the estimating equations approach»</span>. <em>Survey Methodology</em> 21 (2): 137-45.
+</div>
+<div id="ref-Gutierrez_2016" class="csl-entry">
+———. 2016. <em>Estrategias de muestreo: diseño de encuestas y estimación de parámetros</em>. Segunda edición. Ediciones de la U.
+</div>
+<div id="ref-Heeringa_West_Berglund_2017" class="csl-entry">
+Heeringa, Steven G., Brady T. West, y Patricia A. Berglund. 2017. <em>Applied survey data analysis</em>. Chapman y Hall CRC statistics en the social y behavioral sciences series. CRC Press.
+</div>
+<div id="ref-kovar1988bootstrap" class="csl-entry">
+Kovar, J. G., J. N. K. Rao, y C. F. J. Wu. 1988. <span>«Bootstrap and other methods to measure errors in survey estimates»</span>. <em>Canadian Journal of Statistics</em> 16 (Suppl.): 25-45.
+</div>
+<div id="ref-Langel_Tille_2013" class="csl-entry">
+Langel, Matti, y Yves Tillé. 2013. <span>«Variance estimation of the Gini index: revisiting a result several times published: Variance Estimation of the Gini Index»</span>. <em>Journal of the Royal Statistical Society: Series A (Statistics in Society)</em> 176 (2): 521-40. <a href="https://doi.org/10.1111/j.1467-985X.2012.01048.x">https://doi.org/10.1111/j.1467-985X.2012.01048.x</a>.
+</div>
+<div id="ref-osier2009variance" class="csl-entry">
+Osier, Guillaume. 2009. <span>«Variance Estimation for Complex Indicators of Poverty and Inequality»</span>. <em>Journal of the European Survey Research Association</em> 3 (3): 167-95. <a href="http://ojs.ub.uni-konstanz.de/srm/article/view/369">http://ojs.ub.uni-konstanz.de/srm/article/view/369</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="definición-del-diseño-de-muestreo.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="relación-entre-varias-variables.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/2021ASDA/04-Continuas.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Análisis de encuestas de hogares con R.pdf", "Análisis de encuestas de hogares con R.epub", "Análisis de encuestas de hogares con R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

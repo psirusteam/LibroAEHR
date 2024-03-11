@@ -1,0 +1,42 @@
+book_filename: "Análisis de encuestas de hogares con R"
+delete_merged_file: true
+output_dir: "docs"
+new_session: yes
+
+rmd_files: [
+  "index.Rmd",
+  "01-Intro.Rmd",
+  "02-RyBasesDeDatos.Rmd",
+  "03-Conceptos.Rmd",
+  "04-Continuas.Rmd",
+  "05-Categóricas.Rmd",
+  "06-Gráficas.Rmd",
+  "07-Regresión.Rmd",
+  "08-Generalizados.Rmd",
+  "09-Multinivel.Rmd",
+  "10-Imputación.Rmd",
+  "A-MPL.Rmd"  
+  ]
+
+language:
+  label:
+    fig: 'Figura '
+    tab: 'Tabla '
+    eq: 'Equación '
+    thm: 'Teorema '
+    lem: 'Lema '
+    cor: 'Corolario '
+    prp: 'Resultado '
+    cnj: 'Conjectura '
+    def: 'Definición '
+    exm: 'Ejemplo '
+    exr: 'Ejercicio '
+    hyp: 'Hipótesis '
+    proof: 'Prueba. '
+    remark: 'Comentario. '
+    solution: 'Solución. '
+  ui:
+    edit: Edit
+    chapter_name: 'Capítulo '
+    appendix_name: 'Apéndice '
+    refs_names: 'Referencias '

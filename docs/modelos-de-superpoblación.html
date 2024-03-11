@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>11.2 Modelos de superpoblación | Análisis de encuestas de hogares con R</title>
+  <meta name="description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="11.2 Modelos de superpoblación | Análisis de encuestas de hogares con R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  <meta name="github-repo" content="psirusteam/HHS-Handbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="11.2 Modelos de superpoblación | Análisis de encuestas de hogares con R" />
+  
+  <meta name="twitter:description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  
+
+<meta name="author" content="Andrés Gutiérrez, Cristian Téllez, Stalyn Guerrero" />
+
+
+<meta name="date" content="2024-03-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="acerca-de-las-muestras-aleatorias-y-su-análisis.html"/>
+<link rel="next" href="método-de-máxima-verosimilitud.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Análisis de encuestas con R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="introducción.html"><a href="introducción.html"><i class="fa fa-check"></i><b>1</b> Introducción</a></li>
+<li class="chapter" data-level="2" data-path="manejando-una-base-de-encuestas-de-hogares-con-r.html"><a href="manejando-una-base-de-encuestas-de-hogares-con-r.html"><i class="fa fa-check"></i><b>2</b> Manejando una base de encuestas de hogares con <code>R</code></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentos-básicos-de-r-y-rstudio.html"><a href="fundamentos-básicos-de-r-y-rstudio.html"><i class="fa fa-check"></i><b>2.1</b> Fundamentos básicos de <code>R</code> y <code>Rstudio</code></a></li>
+<li class="chapter" data-level="2.2" data-path="creación-de-proyectos-en-r.html"><a href="creación-de-proyectos-en-r.html"><i class="fa fa-check"></i><b>2.2</b> Creación de proyectos en <code>R</code></a></li>
+<li class="chapter" data-level="2.3" data-path="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html"><a href="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html"><i class="fa fa-check"></i><b>2.3</b> Lectura de las bases de datos y procesamientos básicos</a></li>
+<li class="chapter" data-level="2.4" data-path="el-operador-pipeline.html"><a href="el-operador-pipeline.html"><i class="fa fa-check"></i><b>2.4</b> El operador <code>pipeline</code> (%&gt;%)</a></li>
+<li class="chapter" data-level="2.5" data-path="creación-de-variables-y-resumen-de-conteos.html"><a href="creación-de-variables-y-resumen-de-conteos.html"><i class="fa fa-check"></i><b>2.5</b> Creación de variables y resumen de conteos</a></li>
+<li class="chapter" data-level="2.6" data-path="algunas-estadísticas-descriptivas-sobre-la-base-de-datos.html"><a href="algunas-estadísticas-descriptivas-sobre-la-base-de-datos.html"><i class="fa fa-check"></i><b>2.6</b> Algunas estadísticas descriptivas sobre la base de datos</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="conceptos-básicos-en-encuestas-de-hogares.html"><a href="conceptos-básicos-en-encuestas-de-hogares.html"><i class="fa fa-check"></i><b>3</b> Conceptos básicos en encuestas de hogares</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="unidades-y-marcos-de-muestreo.html"><a href="unidades-y-marcos-de-muestreo.html"><i class="fa fa-check"></i><b>3.1</b> Unidades y marcos de muestreo</a></li>
+<li class="chapter" data-level="3.2" data-path="la-base-de-datos-bigcity.html"><a href="la-base-de-datos-bigcity.html"><i class="fa fa-check"></i><b>3.2</b> La base de datos BigCity</a></li>
+<li class="chapter" data-level="3.3" data-path="un-esquema-de-muestreo-para-bigcity.html"><a href="un-esquema-de-muestreo-para-bigcity.html"><i class="fa fa-check"></i><b>3.3</b> Un esquema de muestreo para BigCity</a></li>
+<li class="chapter" data-level="3.4" data-path="calibración-de-los-factores-de-expansión.html"><a href="calibración-de-los-factores-de-expansión.html"><i class="fa fa-check"></i><b>3.4</b> Calibración de los factores de expansión</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="análisis-de-variables-continuas.html"><a href="análisis-de-variables-continuas.html"><i class="fa fa-check"></i><b>4</b> Análisis de variables continuas</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="definición-del-diseño-de-muestreo.html"><a href="definición-del-diseño-de-muestreo.html"><i class="fa fa-check"></i><b>4.1</b> Definición del diseño de muestreo</a></li>
+<li class="chapter" data-level="4.2" data-path="estimación-puntual.html"><a href="estimación-puntual.html"><i class="fa fa-check"></i><b>4.2</b> Estimación puntual</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-totales"><i class="fa fa-check"></i><b>4.2.1</b> Estimación de totales</a></li>
+<li class="chapter" data-level="4.2.2" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-promedios"><i class="fa fa-check"></i><b>4.2.2</b> Estimación de promedios</a></li>
+<li class="chapter" data-level="4.2.3" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-medidas-de-dispersión-y-localización"><i class="fa fa-check"></i><b>4.2.3</b> Estimación de medidas de dispersión y localización</a></li>
+<li class="chapter" data-level="4.2.4" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-del-coeficiente-de-gini"><i class="fa fa-check"></i><b>4.2.4</b> Estimación del coeficiente de Gini</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html"><i class="fa fa-check"></i><b>4.3</b> Relación entre varias variables</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#estimación-de-razones"><i class="fa fa-check"></i><b>4.3.1</b> Estimación de razones</a></li>
+<li class="chapter" data-level="4.3.2" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#prueba-de-hipótesis-para-la-diferencia-de-medias"><i class="fa fa-check"></i><b>4.3.2</b> Prueba de hipótesis para la diferencia de medias</a></li>
+<li class="chapter" data-level="4.3.3" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#contrastes"><i class="fa fa-check"></i><b>4.3.3</b> Contrastes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="análisis-de-variables-categóricas.html"><a href="análisis-de-variables-categóricas.html"><i class="fa fa-check"></i><b>5</b> Análisis de variables categóricas</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="definición-del-diseño-de-muestreo-1.html"><a href="definición-del-diseño-de-muestreo-1.html"><i class="fa fa-check"></i><b>5.1</b> Definición del diseño de muestreo</a></li>
+<li class="chapter" data-level="5.2" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html"><i class="fa fa-check"></i><b>5.2</b> Estimación puntual</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html#estimaciones-de-tamaños"><i class="fa fa-check"></i><b>5.2.1</b> Estimaciones de tamaños</a></li>
+<li class="chapter" data-level="5.2.2" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html#estimación-de-proporciones"><i class="fa fa-check"></i><b>5.2.2</b> Estimación de proporciones</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html"><i class="fa fa-check"></i><b>5.3</b> Relación entre varias variables</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#tablas"><i class="fa fa-check"></i><b>5.3.1</b> Tablas</a></li>
+<li class="chapter" data-level="5.3.2" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#pruebas-de-independencia"><i class="fa fa-check"></i><b>5.3.2</b> Pruebas de independencia</a></li>
+<li class="chapter" data-level="5.3.3" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#diferencia-de-proporciones-y-contrastes"><i class="fa fa-check"></i><b>5.3.3</b> Diferencia de proporciones y contrastes</a></li>
+<li class="chapter" data-level="5.3.4" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#razones-de-odds"><i class="fa fa-check"></i><b>5.3.4</b> Razones de odds</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="análisis-gráfico.html"><a href="análisis-gráfico.html"><i class="fa fa-check"></i><b>6</b> Análisis gráfico</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="análisis-gráfico-con-la-librería-survey.html"><a href="análisis-gráfico-con-la-librería-survey.html"><i class="fa fa-check"></i><b>6.1</b> Análisis gráfico con la librería <code>survey</code></a></li>
+<li class="chapter" data-level="6.2" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html"><i class="fa fa-check"></i><b>6.2</b> Análisis gráfico con la librería <code>ggplot2</code></a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#definición-del-tema"><i class="fa fa-check"></i><b>6.2.1</b> Definición del tema</a></li>
+<li class="chapter" data-level="6.2.2" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#histogramas"><i class="fa fa-check"></i><b>6.2.2</b> Histogramas</a></li>
+<li class="chapter" data-level="6.2.3" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#densidades"><i class="fa fa-check"></i><b>6.2.3</b> Densidades</a></li>
+<li class="chapter" data-level="6.2.4" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-caja"><i class="fa fa-check"></i><b>6.2.4</b> Diagramas de caja</a></li>
+<li class="chapter" data-level="6.2.5" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-dispersión"><i class="fa fa-check"></i><b>6.2.5</b> Diagramas de dispersión</a></li>
+<li class="chapter" data-level="6.2.6" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagrama-de-barras"><i class="fa fa-check"></i><b>6.2.6</b> Diagrama de barras</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="mapas.html"><a href="mapas.html"><i class="fa fa-check"></i><b>6.3</b> Mapas</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="modelos-de-regresión.html"><a href="modelos-de-regresión.html"><i class="fa fa-check"></i><b>7</b> Modelos de regresión</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="definiciones-básicas.html"><a href="definiciones-básicas.html"><i class="fa fa-check"></i><b>7.1</b> Definiciones básicas</a></li>
+<li class="chapter" data-level="7.2" data-path="estimación-de-los-parámetros-en-un-modelo-de-regresión-con-muestras-complejas..html"><a href="estimación-de-los-parámetros-en-un-modelo-de-regresión-con-muestras-complejas..html"><i class="fa fa-check"></i><b>7.2</b> Estimación de los parámetros en un modelo de regresión con muestras complejas.</a></li>
+<li class="chapter" data-level="7.3" data-path="la-ponderación-de-pfeffermann.html"><a href="la-ponderación-de-pfeffermann.html"><i class="fa fa-check"></i><b>7.3</b> La ponderación de Pfeffermann</a></li>
+<li class="chapter" data-level="7.4" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html"><i class="fa fa-check"></i><b>7.4</b> Diagnóstico del modelo</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#coeficientes-de-determinación"><i class="fa fa-check"></i><b>7.4.1</b> Coeficientes de determinación</a></li>
+<li class="chapter" data-level="7.4.2" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#residuales-estandarizados"><i class="fa fa-check"></i><b>7.4.2</b> Residuales estandarizados</a></li>
+<li class="chapter" data-level="7.4.3" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#observaciones-influyentes"><i class="fa fa-check"></i><b>7.4.3</b> Observaciones influyentes</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="inferencia-sobre-los-parámetros-del-modelo.html"><a href="inferencia-sobre-los-parámetros-del-modelo.html"><i class="fa fa-check"></i><b>7.5</b> Inferencia sobre los parámetros del Modelo</a></li>
+<li class="chapter" data-level="7.6" data-path="estimación-y-predicción.html"><a href="estimación-y-predicción.html"><i class="fa fa-check"></i><b>7.6</b> Estimación y predicción</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="modelos-lineales-generalizados.html"><a href="modelos-lineales-generalizados.html"><i class="fa fa-check"></i><b>8</b> Modelos lineales generalizados</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="modelo-de-regresión-logistica-para-proporciones.html"><a href="modelo-de-regresión-logistica-para-proporciones.html"><i class="fa fa-check"></i><b>8.1</b> Modelo de regresión logistica para proporciones</a></li>
+<li class="chapter" data-level="8.2" data-path="modelo-log-lineal-para-tablas-de-contingencia.html"><a href="modelo-log-lineal-para-tablas-de-contingencia.html"><i class="fa fa-check"></i><b>8.2</b> Modelo log-lineal para tablas de contingencia</a></li>
+<li class="chapter" data-level="8.3" data-path="modelo-multinomial-para-variables-con-múltiples-categorías.html"><a href="modelo-multinomial-para-variables-con-múltiples-categorías.html"><i class="fa fa-check"></i><b>8.3</b> Modelo multinomial para variables con múltiples categorías</a></li>
+<li class="chapter" data-level="8.4" data-path="modelo-gamma-para-variables-continuas-positivas.html"><a href="modelo-gamma-para-variables-continuas-positivas.html"><i class="fa fa-check"></i><b>8.4</b> Modelo Gamma para variables continuas positivas</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="modelos-multinivel.html"><a href="modelos-multinivel.html"><i class="fa fa-check"></i><b>9</b> Modelos multinivel</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="modelo-con-intercepto-aleatorio.html"><a href="modelo-con-intercepto-aleatorio.html"><i class="fa fa-check"></i><b>9.1</b> Modelo con intercepto aleatorio</a></li>
+<li class="chapter" data-level="9.2" data-path="modelo-con-pendiente-aleatoria.html"><a href="modelo-con-pendiente-aleatoria.html"><i class="fa fa-check"></i><b>9.2</b> Modelo con pendiente aleatoria</a></li>
+<li class="chapter" data-level="9.3" data-path="modelo-con-intercepto-y-pendiente-aleatoria.html"><a href="modelo-con-intercepto-y-pendiente-aleatoria.html"><i class="fa fa-check"></i><b>9.3</b> Modelo con intercepto y pendiente aleatoria</a></li>
+<li class="chapter" data-level="9.4" data-path="modelo-logístico-multinivel..html"><a href="modelo-logístico-multinivel..html"><i class="fa fa-check"></i><b>9.4</b> Modelo logístico multinivel.</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="imputación-múltiple-en-encuestas-de-hogares.html"><a href="imputación-múltiple-en-encuestas-de-hogares.html"><i class="fa fa-check"></i><b>10</b> Imputación múltiple en encuestas de hogares</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tres-patrones-para-la-ausencia-de-respuesta.html"><a href="tres-patrones-para-la-ausencia-de-respuesta.html"><i class="fa fa-check"></i><b>10.1</b> Tres patrones para la ausencia de respuesta</a></li>
+<li class="chapter" data-level="10.2" data-path="imputación-por-la-media-no-condicional..html"><a href="imputación-por-la-media-no-condicional..html"><i class="fa fa-check"></i><b>10.2</b> Imputación por la media no condicional.</a></li>
+<li class="chapter" data-level="10.3" data-path="imputación-por-la-media-condicional.html"><a href="imputación-por-la-media-condicional.html"><i class="fa fa-check"></i><b>10.3</b> Imputación por la media condicional</a></li>
+<li class="chapter" data-level="10.4" data-path="imputación-por-hot-deck.html"><a href="imputación-por-hot-deck.html"><i class="fa fa-check"></i><b>10.4</b> Imputación por <em>Hot-Deck</em></a></li>
+<li class="chapter" data-level="10.5" data-path="imputación-por-regresión.html"><a href="imputación-por-regresión.html"><i class="fa fa-check"></i><b>10.5</b> Imputación por regresión</a></li>
+<li class="chapter" data-level="10.6" data-path="imputación-por-el-vecino-más-cercano.html"><a href="imputación-por-el-vecino-más-cercano.html"><i class="fa fa-check"></i><b>10.6</b> Imputación por el vecino más cercano</a></li>
+<li class="chapter" data-level="10.7" data-path="imputación-por-el-vecino-más-cercano-con-regresión.html"><a href="imputación-por-el-vecino-más-cercano-con-regresión.html"><i class="fa fa-check"></i><b>10.7</b> Imputación por el vecino más cercano con regresión</a></li>
+<li class="chapter" data-level="10.8" data-path="imputación-múltiple..html"><a href="imputación-múltiple..html"><i class="fa fa-check"></i><b>10.8</b> Imputación múltiple.</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="estimación-de-parámetros-para-modelos-en-encuestas-complejas.html"><a href="estimación-de-parámetros-para-modelos-en-encuestas-complejas.html"><i class="fa fa-check"></i><b>11</b> Estimación de parámetros para modelos en encuestas complejas</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="acerca-de-las-muestras-aleatorias-y-su-análisis.html"><a href="acerca-de-las-muestras-aleatorias-y-su-análisis.html"><i class="fa fa-check"></i><b>11.1</b> Acerca de las muestras aleatorias y su análisis</a></li>
+<li class="chapter" data-level="11.2" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html"><i class="fa fa-check"></i><b>11.2</b> Modelos de superpoblación</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#primer-proceso-inferencial-el-modelo"><i class="fa fa-check"></i><b>11.2.1</b> Primer proceso inferencial: el modelo</a></li>
+<li class="chapter" data-level="11.2.2" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#segundo-proceso-inferencial-el-muestreo"><i class="fa fa-check"></i><b>11.2.2</b> Segundo proceso inferencial: el muestreo</a></li>
+<li class="chapter" data-level="11.2.3" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#inferencia-doble-los-modelos-y-el-muestreo"><i class="fa fa-check"></i><b>11.2.3</b> Inferencia doble: los modelos y el muestreo</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html"><i class="fa fa-check"></i><b>11.3</b> Método de Máxima Verosimilitud</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-distribución-bernoulli"><i class="fa fa-check"></i><b>11.3.1</b> MV para una distribución Bernoulli</a></li>
+<li class="chapter" data-level="11.3.2" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-distribución-normal"><i class="fa fa-check"></i><b>11.3.2</b> MV para una distribución normal</a></li>
+<li class="chapter" data-level="11.3.3" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-regresión-lineal-múltiple"><i class="fa fa-check"></i><b>11.3.3</b> MV para una regresión lineal múltiple</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html"><i class="fa fa-check"></i><b>11.4</b> Método de Máxima Pseudo-Verosimilitud</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-distribución-bernoulli"><i class="fa fa-check"></i><b>11.4.1</b> MPV para una distribución Bernoulli</a></li>
+<li class="chapter" data-level="11.4.2" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-distribución-normal"><i class="fa fa-check"></i><b>11.4.2</b> MPV para una distribución normal</a></li>
+<li class="chapter" data-level="11.4.3" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-regresión-múltiple"><i class="fa fa-check"></i><b>11.4.3</b> MPV para una regresión múltiple</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a Análisis de encuestas con R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis de encuestas de hogares con R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="modelos-de-superpoblación" class="section level2 hasAnchor" number="11.2">
+<h2><span class="header-section-number">11.2</span> Modelos de superpoblación<a href="modelos-de-superpoblación.html#modelos-de-superpoblación" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Suponga que la estimación de máxima verosimilitud es apropiada para muestras aleatorias simples. Por ejemplo, modelos de regresión simple, múltiple, regresión logística, entre otros. Bajo este esquema, se asume que la función de densidad poblacional es <span class="math inline">\(f(y | \theta)\)</span> donde <span class="math inline">\(\theta\)</span> es el parámetro de interés. Con una réplica del ejemplo que David Binder utiliza en un artículo del año 2011 (una excelente lectura para quienes ha seguido el trabajo de Ken Brewer), se introducen algunos conceptos que son de utilidad. Finalmente, todos los resultados se van a plasmar en simulaciones de Monte Carlo, algunas veces anidadas.</p>
+<p>Suponga que se generaron <span class="math inline">\(N=100\)</span> realizaciones de variables aleatorias independientes distribuidas Bernoulli con parámetro de interés <span class="math inline">\(\theta=0.3\)</span>. Los datos que se obtienen se muestran a continuación:</p>
+<p>1 1 0 1 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 1 0
+0 1 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 1 1 0 1 0 0 0 1 1 0 0 0 1 1 0
+0 1 0 0 0 1 0 0 1 1 1 0 0 0 0 0 1 0 1 0 1 0 0 0 0 0 0 0 0 0 1 0 1 0</p>
+<p>En esta población finita, que fue generada a partir de un modelo probabilístico (llamado modelo de superpoblación), hay 28 éxitos.</p>
+<div id="primer-proceso-inferencial-el-modelo" class="section level3 hasAnchor" number="11.2.1">
+<h3><span class="header-section-number">11.2.1</span> Primer proceso inferencial: el modelo<a href="modelos-de-superpoblación.html#primer-proceso-inferencial-el-modelo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En este apartado, es notable que la medida de probabilidad que rige la inferencia hasta el momento sea la inducida por la distribución binomial con parámetro 0.3. De esta manera, el estimador insesgado de mínima varianza (todas estas propiedades obtenidas con base en la distribución binomial) está dado por el promedio poblacional. Nótese que la inferencia utiliza todos los datos de la población. Ahora, para reproducirlo computacionalmente, basta con simular muchas poblaciones de 100 variables aleatorias independientes distribuidas Bernoulli con parámetro desconocido <span class="math inline">\(\theta\)</span>=0.3.</p>
+<p>Como es bien sabido, bajo la perspectiva de los modelos poblacionales y la inferencia estadística clásica, el estimador <span class="math inline">\(\bar{y}_U = \frac{\sum_U y_k}{N}\)</span> es insesgado. Para corroborarlo, es posible introducir la siguiente simulación de Monte Carlo.</p>
+<div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb479-1"><a href="modelos-de-superpoblación.html#cb479-1" tabindex="-1"></a>N <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb479-2"><a href="modelos-de-superpoblación.html#cb479-2" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fl">0.3</span></span>
+<span id="cb479-3"><a href="modelos-de-superpoblación.html#cb479-3" tabindex="-1"></a>nsim1 <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb479-4"><a href="modelos-de-superpoblación.html#cb479-4" tabindex="-1"></a>Est0<span class="ot">=</span><span class="fu">rep</span>(<span class="cn">NA</span>,nsim1)</span>
+<span id="cb479-5"><a href="modelos-de-superpoblación.html#cb479-5" tabindex="-1"></a></span>
+<span id="cb479-6"><a href="modelos-de-superpoblación.html#cb479-6" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsim1){</span>
+<span id="cb479-7"><a href="modelos-de-superpoblación.html#cb479-7" tabindex="-1"></a>y<span class="ot">=</span><span class="fu">rbinom</span>(N, <span class="dv">1</span>, theta)</span>
+<span id="cb479-8"><a href="modelos-de-superpoblación.html#cb479-8" tabindex="-1"></a>Est0[i]<span class="ot">=</span><span class="fu">mean</span>(y)</span>
+<span id="cb479-9"><a href="modelos-de-superpoblación.html#cb479-9" tabindex="-1"></a>}</span>
+<span id="cb479-10"><a href="modelos-de-superpoblación.html#cb479-10" tabindex="-1"></a></span>
+<span id="cb479-11"><a href="modelos-de-superpoblación.html#cb479-11" tabindex="-1"></a>Esp0 <span class="ot">=</span> <span class="fu">mean</span>(Est0)</span>
+<span id="cb479-12"><a href="modelos-de-superpoblación.html#cb479-12" tabindex="-1"></a></span>
+<span id="cb479-13"><a href="modelos-de-superpoblación.html#cb479-13" tabindex="-1"></a><span class="fu">cbind</span>(theta, Esp0)  </span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+theta
+</th>
+<th style="text-align:right;">
+Esp0
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0.29742
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="segundo-proceso-inferencial-el-muestreo" class="section level3 hasAnchor" number="11.2.2">
+<h3><span class="header-section-number">11.2.2</span> Segundo proceso inferencial: el muestreo<a href="modelos-de-superpoblación.html#segundo-proceso-inferencial-el-muestreo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En el primer proceso inferencial, se asume que las variables de estudio son realizaciones de variables aleatorias gobernadas por un modelo probabilístico. Sin embargo, un razonamiento muy válido es que en cualquier población finita en particular, los valores de la medición son fijos aunque desconocidos y no siguen ningún modelo probabilístico;
+es decir, no corresponden a realizaciones de variables aleatorias. Por ejemplo, suponga que para esa misma población del ejemplo anterior el dato uno corresponde a un individuo desempleado y el dato cero corresponde a un individuo empleado.</p>
+<p>Por otra parte, asuma que la población está subdividida en conglomerados, que pueden ser llamados hogares. De esta forma, nuestra población finita toma la siguiente caracterización, mediante una partición de <span class="math inline">\(N_{I}=27\)</span> hogares:</p>
+<p>(1 1 0) (1 0) (0 0 0 0 0 0 1) (1 0) (0 0 0 0 0 0 1) (0 0
+1) (0 0 0 0 0 0 0 1) (0 0 1) (0 0 0 1) (0 0 0 0 1) (0 0
+0 0 0 0 0 1) (1 0) (1 0) (0 0 1) (1 0) (0 0 1) (1 0) (0 1)
+(0 0 0 1) (0 0 1) (1 1 0) (0 0 0 0 1) (0 1) (0 1) (0 0 0 0
+0 0 0 0 0 1) (0 1) (0)</p>
+<p>El proceso de aglomeración en hogares es obviamente artificioso en este ejemplo, pero ilustra que en la vida real las poblaciones finitas siempre están aglomeradas. Suponga por otra parte que tomamos una muestra <span class="math inline">\(S_{I}\)</span> de <span class="math inline">\(n_{I}\)</span> hogares y en cada hogar seleccionado realizamos un censo; además la selección de los hogares se hará aleatoriamente, sin reemplazo y con probabilidades de inclusión <span class="math inline">\(\pi_{Ii}\)</span> proporcionales
+al tamaño del hogar <span class="math inline">\(N_{i}\)</span>. Siendo la característica de interés <span class="math inline">\(y_{k}\)</span>, el estado del individuo en la fuerza laboral (1, si está desempleado y 0, en otro caso); entonces es bien sabido que bajo este esquema de muestreo un estimador insesgado para la proporción de desempleados <span class="math inline">\(\bar{y}_{U}\)</span> es el siguiente:</p>
+<p><span class="math display">\[
+\bar{y}_{\pi S}=\sum_{i\in S_{I}}\frac{t_{y_{i}}}{\pi_{Ii}}=\frac{\sum_{i\in S_{I}}\bar{y}_{i}}{n_{I}}
+\]</span>
+En donde <span class="math inline">\(\bar{y}_{i}=\frac{t_{y_{i}}}{N_{i}}\)</span> es la proporción de desempleados en el hogar <span class="math inline">\(i\)</span>-ésimo, <span class="math inline">\(t_{y_{i}}\)</span> es el total de desempleados en el hogar <span class="math inline">\(i\)</span>-ésimo, <span class="math inline">\(N_{i}\)</span> es el número de individuos en el hogar y <span class="math inline">\(n_{I}\)</span> es el número de hogares seleccionados. Por otro lado, un estimador ingenuo, correspondiente a la proporción de desempleados
+en la muestra, que asume que el agrupamiento de los valores no interfiere
+en el proceso de inferencia e ignora el diseño de muestreo es el siguiente:</p>
+<p><span class="math display">\[
+\bar{y}_{S}=\frac{\sum_{i\in S_{I}}t_{y_{i}}}{\sum_{i\in S_{I}}N_{i}}
+\]</span></p>
+<p>En términos generales el siguiente esquema trata de reproducir gráficamente este proceso de inferencia, en donde un gran número de muestras podrían haber sido extraídas siguiendo el diseño de muestreo. Con la siguiente simulación de Monte Carlo se comprueba fácilmente que es insesgado, mientras que es sesgado:</p>
+<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb480-1"><a href="modelos-de-superpoblación.html#cb480-1" tabindex="-1"></a><span class="fu">library</span>(TeachingSampling)</span>
+<span id="cb480-2"><a href="modelos-de-superpoblación.html#cb480-2" tabindex="-1"></a>N<span class="ot">=</span><span class="dv">100</span></span>
+<span id="cb480-3"><a href="modelos-de-superpoblación.html#cb480-3" tabindex="-1"></a>theta<span class="ot">=</span><span class="fl">0.3</span></span>
+<span id="cb480-4"><a href="modelos-de-superpoblación.html#cb480-4" tabindex="-1"></a>y<span class="ot">=</span><span class="fu">rbinom</span>(N, <span class="dv">1</span>, theta)</span>
+<span id="cb480-5"><a href="modelos-de-superpoblación.html#cb480-5" tabindex="-1"></a>theta_N<span class="ot">=</span><span class="fu">mean</span>(y)</span>
+<span id="cb480-6"><a href="modelos-de-superpoblación.html#cb480-6" tabindex="-1"></a>nsim2<span class="ot">=</span><span class="dv">1000</span></span>
+<span id="cb480-7"><a href="modelos-de-superpoblación.html#cb480-7" tabindex="-1"></a>Est1<span class="ot">=</span>Est2<span class="ot">=</span><span class="fu">rep</span>(<span class="cn">NA</span>,nsim2)</span>
+<span id="cb480-8"><a href="modelos-de-superpoblación.html#cb480-8" tabindex="-1"></a></span>
+<span id="cb480-9"><a href="modelos-de-superpoblación.html#cb480-9" tabindex="-1"></a><span class="co">#-----Creación de los clusters---------</span></span>
+<span id="cb480-10"><a href="modelos-de-superpoblación.html#cb480-10" tabindex="-1"></a></span>
+<span id="cb480-11"><a href="modelos-de-superpoblación.html#cb480-11" tabindex="-1"></a>clus<span class="ot">=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">which</span>((y[<span class="sc">-</span>N]<span class="sc">-</span>y[<span class="sc">-</span><span class="dv">1</span>])<span class="sc">!=</span><span class="dv">0</span>)<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb480-12"><a href="modelos-de-superpoblación.html#cb480-12" tabindex="-1"></a>NI<span class="ot">=</span>(<span class="fu">length</span>(clus)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb480-13"><a href="modelos-de-superpoblación.html#cb480-13" tabindex="-1"></a>Ind<span class="ot">=</span><span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow=</span>N, <span class="at">ncol=</span>NI)</span>
+<span id="cb480-14"><a href="modelos-de-superpoblación.html#cb480-14" tabindex="-1"></a>Tamaños<span class="ot">=</span>clus[<span class="sc">-</span><span class="dv">1</span>]<span class="sc">-</span>clus[<span class="sc">-</span>(<span class="fu">length</span>(clus))]</span>
+<span id="cb480-15"><a href="modelos-de-superpoblación.html#cb480-15" tabindex="-1"></a></span>
+<span id="cb480-16"><a href="modelos-de-superpoblación.html#cb480-16" tabindex="-1"></a><span class="cf">for</span>(l <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(clus)<span class="sc">-</span><span class="dv">1</span>)){</span>
+<span id="cb480-17"><a href="modelos-de-superpoblación.html#cb480-17" tabindex="-1"></a>a<span class="ot">=</span>(clus[l]<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>clus[l<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb480-18"><a href="modelos-de-superpoblación.html#cb480-18" tabindex="-1"></a>Ind[a,l]<span class="ot">=</span>a</span>
+<span id="cb480-19"><a href="modelos-de-superpoblación.html#cb480-19" tabindex="-1"></a>}</span>
+<span id="cb480-20"><a href="modelos-de-superpoblación.html#cb480-20" tabindex="-1"></a></span>
+<span id="cb480-21"><a href="modelos-de-superpoblación.html#cb480-21" tabindex="-1"></a><span class="co">#Tamaños</span></span>
+<span id="cb480-22"><a href="modelos-de-superpoblación.html#cb480-22" tabindex="-1"></a></span>
+<span id="cb480-23"><a href="modelos-de-superpoblación.html#cb480-23" tabindex="-1"></a>nsim2<span class="ot">=</span><span class="dv">1000</span></span>
+<span id="cb480-24"><a href="modelos-de-superpoblación.html#cb480-24" tabindex="-1"></a>nI<span class="ot">=</span><span class="fu">floor</span>(NI<span class="sc">*</span><span class="fl">0.3</span>)</span>
+<span id="cb480-25"><a href="modelos-de-superpoblación.html#cb480-25" tabindex="-1"></a></span>
+<span id="cb480-26"><a href="modelos-de-superpoblación.html#cb480-26" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsim2){</span>
+<span id="cb480-27"><a href="modelos-de-superpoblación.html#cb480-27" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">S.piPS</span>(nI,Tamaños)</span>
+<span id="cb480-28"><a href="modelos-de-superpoblación.html#cb480-28" tabindex="-1"></a>sam <span class="ot">&lt;-</span> res[,<span class="dv">1</span>] </span>
+<span id="cb480-29"><a href="modelos-de-superpoblación.html#cb480-29" tabindex="-1"></a>Ind.sam<span class="ot">=</span>Ind[,sam]</span>
+<span id="cb480-30"><a href="modelos-de-superpoblación.html#cb480-30" tabindex="-1"></a>Tamaños.sam<span class="ot">=</span>Tamaños[sam]</span>
+<span id="cb480-31"><a href="modelos-de-superpoblación.html#cb480-31" tabindex="-1"></a><span class="co">#-------Espacio para las medias</span></span>
+<span id="cb480-32"><a href="modelos-de-superpoblación.html#cb480-32" tabindex="-1"></a>medias<span class="ot">=</span><span class="fu">matrix</span>(<span class="cn">NA</span>)</span>
+<span id="cb480-33"><a href="modelos-de-superpoblación.html#cb480-33" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(Ind.sam)){</span>
+<span id="cb480-34"><a href="modelos-de-superpoblación.html#cb480-34" tabindex="-1"></a>medias[k]<span class="ot">=</span><span class="fu">mean</span>(y[Ind.sam[,k]])</span>
+<span id="cb480-35"><a href="modelos-de-superpoblación.html#cb480-35" tabindex="-1"></a>}</span>
+<span id="cb480-36"><a href="modelos-de-superpoblación.html#cb480-36" tabindex="-1"></a><span class="co">#-------</span></span>
+<span id="cb480-37"><a href="modelos-de-superpoblación.html#cb480-37" tabindex="-1"></a>Est1[j]<span class="ot">=</span><span class="fu">mean</span>(medias)</span>
+<span id="cb480-38"><a href="modelos-de-superpoblación.html#cb480-38" tabindex="-1"></a>Est2[j]<span class="ot">=</span><span class="fu">sum</span>(Tamaños.sam<span class="sc">*</span>medias)<span class="sc">/</span><span class="fu">sum</span>(Tamaños)</span>
+<span id="cb480-39"><a href="modelos-de-superpoblación.html#cb480-39" tabindex="-1"></a>}</span>
+<span id="cb480-40"><a href="modelos-de-superpoblación.html#cb480-40" tabindex="-1"></a></span>
+<span id="cb480-41"><a href="modelos-de-superpoblación.html#cb480-41" tabindex="-1"></a>Esp1<span class="ot">=</span><span class="fu">mean</span>(Est1)</span>
+<span id="cb480-42"><a href="modelos-de-superpoblación.html#cb480-42" tabindex="-1"></a>Esp2<span class="ot">=</span><span class="fu">mean</span>(Est2)</span>
+<span id="cb480-43"><a href="modelos-de-superpoblación.html#cb480-43" tabindex="-1"></a></span>
+<span id="cb480-44"><a href="modelos-de-superpoblación.html#cb480-44" tabindex="-1"></a><span class="fu">cbind</span>(theta_N, Esp1, Esp2)</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+theta_N
+</th>
+<th style="text-align:right;">
+Esp1
+</th>
+<th style="text-align:right;">
+Esp2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.29
+</td>
+<td style="text-align:right;">
+0.2928711
+</td>
+<td style="text-align:right;">
+0.11186
+</td>
+</tr>
+</tbody>
+</table>
+<p>Nótese que el primer estimador es insesgado (su esperanza equivale al parámetro de la población finita) porque es función del inverso de la probabilidad de inclusión de los elementos que son inducidas por la medida de probabilidad definida por el plan de muestreo. El segundo estimador es sesgado porque no tiene en cuenta el diseño de muestreo.</p>
+</div>
+<div id="inferencia-doble-los-modelos-y-el-muestreo" class="section level3 hasAnchor" number="11.2.3">
+<h3><span class="header-section-number">11.2.3</span> Inferencia doble: los modelos y el muestreo<a href="modelos-de-superpoblación.html#inferencia-doble-los-modelos-y-el-muestreo" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En último lugar, suponga que los valores de las variables de interés sí constituyen realizaciones de variables aleatorias que siguen un modelo probabilístico. Como una población finita está constituida por la realización particular de las variables aleatorias, condicionado a la realización de una población finita, se extrae una muestra aleatoria de elementos, mediante un diseño de muestreo complejo. Nótese que, en este tercer proceso inferencial, tanto el modelo como el diseño de muestreo como la medida de probabilidad que da origen a las superpoblaciones, constituyen dos medidas de probabilidad distintas que deben regir la inferencia del parámetro de interés.</p>
+<p>Al respecto, nótese que, dado que el diseño de muestreo es complejo, no es viable utilizar técnicas clásicas, como el método de máxima verosimilitud, puesto que los datos finales no constituyen una muestra aleatoria de variables independientes ni idénticamente distribuidas. Por lo anterior, la forma final de la función de verosimilitud, definida como la densidad conjunta de las variables en la muestra, será muy compleja, intratable e insoluble. Una solución a este problema de estimación es la técnica de máxima pseudo-verosimilitud, la cual induce estimadores que tienen en cuenta las ponderaciones del diseño de muestreo complejo. Para el ejemplo de las proporciones, el estimador <span class="math inline">\(\bar{y}_{\pi S}\)</span> cumple la siguiente relación:</p>
+<p><span class="math display">\[
+E_{\xi p}(\bar{y}_{\pi S})=E_{\xi}E_{p}(\bar{y}_{\pi S}|Y)=E_{\xi}(\bar{y}_{U})=\theta=0.3
+\]</span>
+Con la siguiente simulación de Monte Carlo se comprueba fácilmente que <span class="math inline">\(\bar{y}_{\pi S}\)</span> es insesgado, mientras que es <span class="math inline">\(\bar{y}_{S}\)</span> sesgado:</p>
+<div class="sourceCode" id="cb481"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb481-1"><a href="modelos-de-superpoblación.html#cb481-1" tabindex="-1"></a><span class="fu">library</span>(TeachingSampling)</span>
+<span id="cb481-2"><a href="modelos-de-superpoblación.html#cb481-2" tabindex="-1"></a></span>
+<span id="cb481-3"><a href="modelos-de-superpoblación.html#cb481-3" tabindex="-1"></a>N<span class="ot">=</span><span class="dv">100</span></span>
+<span id="cb481-4"><a href="modelos-de-superpoblación.html#cb481-4" tabindex="-1"></a>theta<span class="ot">=</span><span class="fl">0.3</span></span>
+<span id="cb481-5"><a href="modelos-de-superpoblación.html#cb481-5" tabindex="-1"></a>nsim1<span class="ot">=</span><span class="dv">100</span></span>
+<span id="cb481-6"><a href="modelos-de-superpoblación.html#cb481-6" tabindex="-1"></a>Esp1<span class="ot">=</span>Esp2<span class="ot">=</span><span class="fu">rep</span>(<span class="cn">NA</span>,nsim1)</span>
+<span id="cb481-7"><a href="modelos-de-superpoblación.html#cb481-7" tabindex="-1"></a></span>
+<span id="cb481-8"><a href="modelos-de-superpoblación.html#cb481-8" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsim1){</span>
+<span id="cb481-9"><a href="modelos-de-superpoblación.html#cb481-9" tabindex="-1"></a>y<span class="ot">=</span><span class="fu">rbinom</span>(N, <span class="dv">1</span>, theta)</span>
+<span id="cb481-10"><a href="modelos-de-superpoblación.html#cb481-10" tabindex="-1"></a><span class="co">#-----Creación de los clusters---------</span></span>
+<span id="cb481-11"><a href="modelos-de-superpoblación.html#cb481-11" tabindex="-1"></a>clus<span class="ot">=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">which</span>((y[<span class="sc">-</span>N]<span class="sc">-</span>y[<span class="sc">-</span><span class="dv">1</span>])<span class="sc">!=</span><span class="dv">0</span>)<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb481-12"><a href="modelos-de-superpoblación.html#cb481-12" tabindex="-1"></a>NI<span class="ot">=</span>(<span class="fu">length</span>(clus)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb481-13"><a href="modelos-de-superpoblación.html#cb481-13" tabindex="-1"></a>Ind<span class="ot">=</span><span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow=</span>N, <span class="at">ncol=</span>NI)</span>
+<span id="cb481-14"><a href="modelos-de-superpoblación.html#cb481-14" tabindex="-1"></a>Tamaños<span class="ot">=</span>clus[<span class="sc">-</span><span class="dv">1</span>]<span class="sc">-</span>clus[<span class="sc">-</span>(<span class="fu">length</span>(clus))]</span>
+<span id="cb481-15"><a href="modelos-de-superpoblación.html#cb481-15" tabindex="-1"></a></span>
+<span id="cb481-16"><a href="modelos-de-superpoblación.html#cb481-16" tabindex="-1"></a><span class="cf">for</span>(l <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(clus)<span class="sc">-</span><span class="dv">1</span>)){</span>
+<span id="cb481-17"><a href="modelos-de-superpoblación.html#cb481-17" tabindex="-1"></a>a<span class="ot">=</span>(clus[l]<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>clus[l<span class="sc">+</span><span class="dv">1</span>]</span>
+<span id="cb481-18"><a href="modelos-de-superpoblación.html#cb481-18" tabindex="-1"></a>Ind[a,l]<span class="ot">=</span>a</span>
+<span id="cb481-19"><a href="modelos-de-superpoblación.html#cb481-19" tabindex="-1"></a>}</span>
+<span id="cb481-20"><a href="modelos-de-superpoblación.html#cb481-20" tabindex="-1"></a></span>
+<span id="cb481-21"><a href="modelos-de-superpoblación.html#cb481-21" tabindex="-1"></a>Ind</span>
+<span id="cb481-22"><a href="modelos-de-superpoblación.html#cb481-22" tabindex="-1"></a>Tamaños</span>
+<span id="cb481-23"><a href="modelos-de-superpoblación.html#cb481-23" tabindex="-1"></a></span>
+<span id="cb481-24"><a href="modelos-de-superpoblación.html#cb481-24" tabindex="-1"></a>nsim2<span class="ot">=</span><span class="dv">100</span></span>
+<span id="cb481-25"><a href="modelos-de-superpoblación.html#cb481-25" tabindex="-1"></a>nI<span class="ot">=</span><span class="fu">floor</span>(NI<span class="sc">*</span><span class="fl">0.3</span>)</span>
+<span id="cb481-26"><a href="modelos-de-superpoblación.html#cb481-26" tabindex="-1"></a>Est1<span class="ot">=</span>Est2<span class="ot">=</span><span class="fu">rep</span>(<span class="cn">NA</span>,nsim2)</span>
+<span id="cb481-27"><a href="modelos-de-superpoblación.html#cb481-27" tabindex="-1"></a></span>
+<span id="cb481-28"><a href="modelos-de-superpoblación.html#cb481-28" tabindex="-1"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsim2){</span>
+<span id="cb481-29"><a href="modelos-de-superpoblación.html#cb481-29" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">S.piPS</span>(nI,Tamaños)</span>
+<span id="cb481-30"><a href="modelos-de-superpoblación.html#cb481-30" tabindex="-1"></a>sam <span class="ot">&lt;-</span> res[,<span class="dv">1</span>] </span>
+<span id="cb481-31"><a href="modelos-de-superpoblación.html#cb481-31" tabindex="-1"></a>sam</span>
+<span id="cb481-32"><a href="modelos-de-superpoblación.html#cb481-32" tabindex="-1"></a>Ind.sam<span class="ot">=</span>Ind[,sam]</span>
+<span id="cb481-33"><a href="modelos-de-superpoblación.html#cb481-33" tabindex="-1"></a>Tamaños.sam<span class="ot">=</span>Tamaños[sam]</span>
+<span id="cb481-34"><a href="modelos-de-superpoblación.html#cb481-34" tabindex="-1"></a><span class="co">#-------Espacio para las medias</span></span>
+<span id="cb481-35"><a href="modelos-de-superpoblación.html#cb481-35" tabindex="-1"></a>medias<span class="ot">=</span><span class="fu">matrix</span>(<span class="dv">0</span>)</span>
+<span id="cb481-36"><a href="modelos-de-superpoblación.html#cb481-36" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(Ind.sam)){</span>
+<span id="cb481-37"><a href="modelos-de-superpoblación.html#cb481-37" tabindex="-1"></a>medias[k]<span class="ot">=</span><span class="fu">mean</span>(y[Ind.sam[,k]])</span>
+<span id="cb481-38"><a href="modelos-de-superpoblación.html#cb481-38" tabindex="-1"></a>}</span>
+<span id="cb481-39"><a href="modelos-de-superpoblación.html#cb481-39" tabindex="-1"></a></span>
+<span id="cb481-40"><a href="modelos-de-superpoblación.html#cb481-40" tabindex="-1"></a>Est1[j]<span class="ot">=</span><span class="fu">mean</span>(medias)</span>
+<span id="cb481-41"><a href="modelos-de-superpoblación.html#cb481-41" tabindex="-1"></a>Est2[j]<span class="ot">=</span><span class="fu">sum</span>(Tamaños.sam<span class="sc">*</span>medias)<span class="sc">/</span><span class="fu">sum</span>(Tamaños)</span>
+<span id="cb481-42"><a href="modelos-de-superpoblación.html#cb481-42" tabindex="-1"></a>}</span>
+<span id="cb481-43"><a href="modelos-de-superpoblación.html#cb481-43" tabindex="-1"></a></span>
+<span id="cb481-44"><a href="modelos-de-superpoblación.html#cb481-44" tabindex="-1"></a>Esp1[i]<span class="ot">=</span><span class="fu">mean</span>(Est1)</span>
+<span id="cb481-45"><a href="modelos-de-superpoblación.html#cb481-45" tabindex="-1"></a>Esp2[i]<span class="ot">=</span><span class="fu">mean</span>(Est2)</span>
+<span id="cb481-46"><a href="modelos-de-superpoblación.html#cb481-46" tabindex="-1"></a></span>
+<span id="cb481-47"><a href="modelos-de-superpoblación.html#cb481-47" tabindex="-1"></a>}</span>
+<span id="cb481-48"><a href="modelos-de-superpoblación.html#cb481-48" tabindex="-1"></a></span>
+<span id="cb481-49"><a href="modelos-de-superpoblación.html#cb481-49" tabindex="-1"></a><span class="fu">cbind</span>(theta, <span class="fu">mean</span>(Esp1), <span class="fu">mean</span>(Esp2))</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+theta
+</th>
+<th style="text-align:right;">
+</th>
+<th style="text-align:right;">
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0.3120952
+</td>
+<td style="text-align:right;">
+0.1156181
+</td>
+</tr>
+</tbody>
+</table>
+<p>Por supuesto que, dado que el proceso de inferencia es doble, entonces este ejercicio de Monte Carlo debe ser anidado. Es decir, muchas simulaciones dentro de una simulación. Nótese que en primer lugar se debe generar todas las poblaciones finitas y para cada una de ellas se debe generar las posibles muestras.</p>
+<p>Los métodos que se explicarán en este capítulo serán la estimación por Máxima Verosimilitud (MV) y Máxima Pseudo Verosimilitud (MPV) para modelos de regresión. El primer método se basa en estimar un parámetro desconocido suponiendo que las variables de interés constituyen una muestra aleatoria de variables independiente e idénticamente distribuidas (IID) para poder hacer inferencia sobre la población de interés. Por otra parte el método de Máxima Pseudo Verosimilitud sigue un razonamiento parecido, pero con la gran diferencia de que la variable de interés se rige por un diseño muestral específico, lo cual induce una probabilidad de inclusión del individuo que debe ser tenida en cuenta al momento de realizar cualquier tipo de inferencia.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="acerca-de-las-muestras-aleatorias-y-su-análisis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="método-de-máxima-verosimilitud.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/2021ASDA/A-MPL.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Análisis de encuestas de hogares con R.pdf", "Análisis de encuestas de hogares con R.epub", "Análisis de encuestas de hogares con R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

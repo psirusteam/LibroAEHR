@@ -1,0 +1,708 @@
+
+
+# Análisis gráfico
+
+En todo análisis de encuestas, el componente gráfico es fundamental para revisar tendencias en algunas variables de interés. La visualización gráfica es una herramienta que permite lograr una representación visual clara de la distribución de los datos; por ejemplo con gráficos de barras, histogramas o gráficos de dispersión, lo cual facilita la comprensión de la forma, la localización y la dispersión de la distribución de las variables. Además, permite identificar patrones, tendencias y datos atípicos que pueden no ser evidentes al examinar únicamente las estimaciones directas.
+
+Es posible, además, visualizar diferencias entre variables o comparar la distribución de una variable en diferentes subgrupos de la población finita, por ejemplo, para la identificación de brechas. Las imágenes son poderosas para comunicar resultados a audiencias diversas que no necesariamente están en conocimiento de los pormenores técnicos que conlleva la estimación puntual de las estadísticas directas. Los gráficos son más accesibles y comprensibles para un público general en comparación con tablas de datos complejas, lo que facilita la comunicación de los resultados del análisis.
+
+La visualización gráfica no solo mejora la comprensión de los datos, sino que también facilita la interpretación y comunicación de los resultados, haciendo que el análisis de encuestas de hogares sea más efectivo y accesible. Además, son muy necesarias las gráficas cuando el objetivo es corroborar algunos supuestos en el ajustes de modelos estadísticas, por ejemplo, varianzas constantes en los errores, normalidad, etc.
+
+Las librerías especializadas en el manejo de datos de encuestas también tienen algunas opciones para la realización de gráficas. Sin embargo, uno de los paquetes más usados para representar de forma visual los resultados de las encuestas en `R` es `ggplot2` [@ggplot22016], el cual representa una opción potente y flexible para producir gráficos elegantes. Sin embargo, 
+
+Como es de costumbre, se inicia este capítulo cargando las librerías y bases de datos.
+
+
+
+```r
+options(digits = 4)
+library(survey)
+library(srvyr)
+library(convey)
+library(TeachingSampling)
+library(printr)
+library(ggplot2)
+library(patchwork)
+
+data(BigCity, package = "TeachingSampling")
+encuesta <- readRDS("Data/encuesta.rds")
+```
+
+A continuación, se define el diseño de muestreo de la encuesta y, para efectos de los ejemplos, se definen las siguientes variables:
+
+
+```r
+diseno <- encuesta %>%
+  as_survey_design(
+    strata = Stratum,
+    ids = PSU,
+    weights = wk,
+    nest = T
+  ) %>% mutate(
+    pobreza = ifelse(Poverty != "NotPoor", 1, 0),
+    desempleo = ifelse(Employment == "Unemployed", 1, 0),
+    edad_18 = case_when(Age < 18 ~ "< 18 anios",
+                        TRUE ~ ">= 18 anios")
+  )
+```
+
+Como se mostró en capítulos anteriores, se divide la muestra en subgrupos para ejemplificar los conceptos que se mostrarán en este capítulo:
+
+
+```r
+sub_Urbano <- diseno %>% filter(Zone == "Urban")
+sub_Rural <- diseno %>% filter(Zone == "Rural")
+sub_Mujer <- diseno %>% filter(Sex == "Female")
+sub_Hombre <- diseno %>% filter(Sex == "Male")
+```
+
+## Análisis gráfico con la librería `survey`
+
+Una vez cargada la base de datos que contiene la muestra en `R` y definido el diseño muestral del cual proviene, se pueden hacer los primeros análisis visuales. Como recomendación, se inicia con análisis gráficos que, gracias al principio de representatividad, reflejaran el comportamiento de las variables continuas, no en la muestra obtenida, sino en la población de estudio, a través de la muestra expandida con los pesos de muestreo. 
+
+Como ejemplo, a continuación, se muestran los códigos computacionales con los cuales se pueden realizar histogramas en `R` para la variable ingresos teniendo en cuenta el diseño muestral y los factores de expansión haciendo uso la función `svyhist` de la librería `survey`.
+
+
+
+```r
+svyhist(
+  ~ Income ,
+  diseno,
+  main = "Ingreso poblacional",
+  col = "grey80",
+  xlab = "Ingreso",
+  probability = FALSE
+)
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-4-1.svg" width="672" />
+
+Como se puede observar en el código anterior, para generar este histograma, se usó la función `svyhist`. En primer lugar, se definió la variable que se quiere visualizar, que para nuestro caso es `Income`. Seguido, se define el diseño muestral utilizado en la encuesta. Luego, los argumentos relacionados con la estética del gráfico como lo son: el título principal (`main`), el color (`col`) y el título horizontal (`xlab`). Finalmente, se establece si el histograma es de frecuencias o probabilidades con el argumento `probability`. Para este ejemplo, se tomó la opción `probability = False` indicando que es un histograma de frecuencias.
+
+Por otro lado, uno de los análisis gráficos más comunes que se realizan en encuestas de hogares están relacionados con subgrupos geográficos como lo pueden ser las zonas (urbano - rural) o también realizar desagregaciones temáticas por sexo (hombre mujer). A continuación, se muestra la sintaxis en `R` de cómo se realizan histogramas para hombres y mujeres mayores de 18 años:
+
+
+
+```r
+sub_Mujer  <- diseno %>%  filter(Sex == "Female")
+sub_Hombre <- diseno %>%  filter(Sex == "Male")
+
+par(mfrow = c(1, 2))
+
+svyhist(
+  ~ Income ,
+  design = subset(sub_Mujer, Age >= 18),
+  main = "Mujer",
+  breaks = 30,
+  col = "grey80",
+  xlab = "Ingreso"
+)
+
+svyhist(
+  ~ Income ,
+  design = subset(sub_Hombre, Age >= 18),
+  main = "Hombre",
+  breaks = 30,
+  col = "grey80",
+  xlab = "Ingreso"
+)
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-5-1.svg" width="672" />
+
+Como se puede observar, los argumentos utilizando para realizar los gráficos son los mismos que se utilizaron y ejemplificaron anteriormente. Cabe notar que la función `subset` permite hacer un subconjunto de la población, que para nuestro caso son aquellos hombres y mujeres con edad mayor o igual a 18 años.
+
+Si el objetivo ahora es realizar un análisis gráfico de localización y variabilidad, es posible plantear un diagrama de cajas (boxplot), teniendo en cuenta los factores de expansión. A continuación, se muestra las sintaxis de cómo realizarlo en `R`, para ambas zonas: urbana y rural.
+
+
+
+```r
+sub_Urbano <- diseno %>%  filter(Zone == "Urban")
+sub_Rural  <- diseno %>%  filter(Zone == "Rural")
+
+par(mfrow = c(1, 2))
+svyboxplot(
+  Income ~ 1 ,
+  sub_Urbano,
+  col = "grey80",
+  ylab = "Ingreso",
+  xlab = "Urbano"
+)
+
+svyboxplot(
+  Income ~ 1 ,
+  sub_Rural,
+  col = "grey80",
+  ylab = "Ingreso",
+  xlab = "Rural"
+)
+```
+
+<img src="06-Gráficas_files/figure-html/box1-1.svg" width="672" />
+
+Los argumentos usados en la función `svyboxplot` para generar el gráfico son muy similares a los usados en la función `svyhist`. Algo que se debe recalcar en los argumentos de esta función es que la sintaxis `Income ~ 1` hace referencia a que todas las personas pertenecen a un solo grupo que puede ser urbano o rural, dependiendo del caso, y por eso se requiere indicarle a `R` esa restricción; esto se hace con el símbolo `~ 1`.
+
+
+## Análisis gráfico con la librería `ggplot2`
+
+La librería `ggplot2` es una herramienta destacada para la visualización de datos en `R`. Es ampliament econocida y usada por los investigadores alrededor del mundo y es conocida por su sintaxis declarativa y flexibilidad. Al adoptar un enfoque basado en capas, permite a los usuarios crear visualizaciones complejas de manera intuitiva. 
+
+### Definición del tema
+
+En el ámbito de encuestas de hogares, `ggplot2` se convierte en una herramienta valiosa para representar visualmente tendencias en el tiempo, distribuciones de variables continuas y otros patrones relevantes. De hecho, su capacidad para trabajar con datos complejos facilita la exploración de este tipo de bases de datos, proporcionando una visión clara y efectiva de la realidad social que reflejan las encuestas de hogares. 
+
+Para crear las gráficas de este documento es posible se utilizará por defecto un tema específico, que define la apariencia visual de los gráficos. El tema incluye aspectos como colores, fuentes, márgenes y otros elementos estéticos que permiten personalizar la presentación de un gráfico de acuerdo con las preferencias del usuario. La librería ggplot2 proporciona una variedad de temas predefinidos que pueden aplicarse a los gráficos para cambiar su apariencia de manera rápida y sencilla. El siguiente código define el tema que se usará en los gráficos del docuemnto.
+
+
+
+```r
+theme_cepal <- function(...) {
+  theme_light(10) +
+    theme(
+      axis.text.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank(),
+      legend.position = "bottom",
+      legend.justification = "left",
+      legend.direction = "horizontal",
+      plot.title = element_text(size = 10, hjust = 0.5),
+      ...
+    )
+}
+```
+
+Basado en lo anterior, los argumentos dentro de la función `theme()` en `ggplot2` se utilizan para personalizar la apariencia de diferentes elementos en un gráfico. en particular:
+
+- `axis.text.x` y `axis.ticks.x` controlan la apariencia de las etiquetas y marcas en el eje x. En este caso, se establece `element_blank()` para ocultar tanto las etiquetas como las marcas en el eje x.
+- `axis.text.y` y `axis.ticks.y` controlan la apariencia de las etiquetas y marcas en el eje y. Aquí también se establece `element_blank()` para ocultar ambas.
+- `legend.position` define la posición de la leyenda en el gráfico. En este caso, se establece en `bottom`, lo que significa que la leyenda se situará en la parte inferior del gráfico.
+- `legend.justification` y `legend.direction` define la alineación y dirección de la leyenda. En este caso, la leyenda se justifica a la izquierda ("left") y se presenta en dirección horizontal.
+- `plot.title` controla la apariencia del título del gráfico. Se establece `element_text(size = 20, hjust = 0.5)` para especificar que el tamaño del texto del título sea 20 y que esté centrado horizontalmente (`hjust = 0.5`).
+
+### Histogramas
+
+Un histograma es una representación gráfica de los datos de una variable empleando rectángulos (barras) cuya altura es proporcional a la frecuencia de los valores representados y su ancho proporcional a la amplitud de los intervalos de la clase. A continuación, se presenta cómo realizar un histograma para la variable ingresos utilizando los factores de expansión de la encuesta. EN primera instancia se define la fuente de información (`data`), luego se definen la variable que se desea graficar (`x`) y los pesos de muestreo (`weight`). Una vez definidos los parámetros generales, se define el tipo de gráfico, que para el caso de los histogramas es `geom_histogram`. Además, se definen los títulos que se quiere que tenga el histograma y por último, se aplica el tema de la CEPAL.
+
+
+```r
+HistInc <- ggplot(data = encuesta,
+                  aes(x = Income, weight = wk)) +
+  geom_histogram(aes(y = ..density..)) +
+  ylab("") +
+  ggtitle("Histograma ponderado del ingreso") +
+  theme_cepal()
+HistInc
+```
+
+<img src="06-Gráficas_files/figure-html/hist1-1.svg" width="672" />
+
+Por otro lado, repetimos ahora la secuencia de gráficos pero en este caso para la variable `Expenditure`:
+
+
+```r
+ggplot(data =  encuesta,
+       aes(x = Expenditure, weight = wk)) +
+  geom_histogram(aes(y = ..density..)) +
+  ylab("") +
+  ggtitle("Histograma ponderado del gasto") +
+  theme_cepal()
+```
+
+<img src="06-Gráficas_files/figure-html/hist2-1.svg" width="672" />
+
+Cuando el interés es realizar comparaciones entre dos o más agrupaciones, es posible hacer uso del parámetro `fill`, el cual rellena las barras del histograma con diferentes colores según el subgrupo poblacional. El siguiente ejemplo proporciona el código para realizar la comparación de la distribución de los ingresos poblacionales por zonas:   
+
+
+```r
+ggplot(encuesta,
+       aes(x = Income, weight = wk)) +
+  geom_histogram(aes(y = ..density.., fill = Zone),
+                 alpha = 0.5,
+                 position = "identity") +
+  ylab("") +
+  ggtitle("Histogramas ponderados del ingreso por zona") +
+  theme_cepal()
+```
+
+<img src="06-Gráficas_files/figure-html/hist3-1.svg" width="672" />
+
+Como se pudo observar en la generación del histograma, se utilizó el parámetro `position`, el cual permite que las barras del gráfico sean distinguibles. Ahora, repetimos la secuencia de gráficos para la variable `Expenditure`.
+
+
+```r
+ggplot(encuesta,
+       aes(x = Expenditure, weight = wk)) +
+  geom_histogram(aes(y = ..density.., fill = Zone),
+                 alpha = 0.5,
+                 position = "identity") +
+  ylab("") +
+  ggtitle("Histogramas ponderados del gasto por zona") +
+  theme_cepal()
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-7-1.svg" width="672" />
+
+Si quisieramos hacer una desagregación de la distribución del ingreso y del gasto por sexo, se debería usar el siguiente código que hace uso de la librería `patchworks` para posiconarlos de forma paralela.
+
+
+```r
+HistIncSex <- ggplot(encuesta,
+                     aes(x = Income, weight = wk)) +
+  geom_histogram(aes(y = ..density.., fill = Sex),
+                 alpha = 0.5,
+                 position = "identity") +
+  ylab("") +
+  ggtitle("Histogramas del ingreso por sexo") +
+  theme_cepal()
+
+HistExpSex <- ggplot(encuesta,
+                     aes(x = Expenditure, weight = wk)) +
+  geom_histogram(aes(y = ..density.., fill = Sex),
+                 alpha = 0.5,
+                 position = "identity") +
+  ylab("") +
+  ggtitle("Histogramas del gasto por sexo") +
+  theme_cepal()
+
+HistIncSex | HistExpSex
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-8-1.svg" width="672" />
+
+
+
+### Densidades 
+
+Dadas las cualidades de la librería `ggplot2`, se pueden agregar nuevas capas a los gráficos; particularmente, a los histogramas antes realizados. La densidad se agrega con el argumento `geom_density` y se incorpora el parámetro `alpha` que regula la transparencia del relleno. Esta capa de densidad es útil cuando se trabaja con variables continuas, ya que proporciona una estimación suavizada de la función de densidad de probabilidad de los datos. Esta función utiliza un kernel de suavizamiento para construir una curva suave que se ajusta a los datos, ayudando a obtener una representación visual más clara de la forma general de la distribución. A continuación, se muestra cómo se agregan las densidades:
+
+
+
+```r
+HistInc + geom_density(fill = "yellow", alpha = 0.8) 
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-9-1.svg" width="60%" style="display: block; margin: auto;" />
+
+Ahora bien, al aplicar el argumento `aes(fill = Zone)` permite que la densidad sea agregada para cada una de las agrupaciones como se muestra a continuación.
+
+
+```r
+HistIncSex + geom_density(aes(fill = Sex)) 
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-10-1.svg" width="672" />
+
+
+### Diagramas de caja
+ 
+Los diagramas de caja (*boxplot*) son gráficos de resumen ampliamente utilizados en la práctica estadística. Este tipo de diagramas permite visualizar de forma general un conjunto de datos empleando la estimación directa de cinco cantidades: el mínimo, el máximo y los cuartiles Q1, Q2 y Q3. La forma generada por este gráfico compuesto por un rectángulo y dos brazos suministra información sobre la relación entre estas cantidades y permite verificar la existencia de valores atípicos.
+
+Para realizar este gráfico en `ggplot2` se utiliza la función `geom_boxplot`. A continuación, se presentan los Boxplot para las variables ingresos y gastos respectivamente:
+
+
+```r
+BoxInc <- ggplot(encuesta,
+                 aes(x = Income, weight = wk)) +
+  geom_boxplot() +
+  ggtitle("Boxplot ponderado de los ingresos") +
+  coord_flip() +
+  theme_cepal()
+
+
+BoxExp <- ggplot(encuesta,
+                 aes(x = Expenditure, weight = wk)) +
+  geom_boxplot() +
+  ggtitle("Boxplot ponderado de los gastos") +
+  coord_flip() +
+  theme_cepal()
+
+BoxInc | BoxExp
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-11-1.svg" width="672" />
+
+En los gráficos anteriores se puede observar que la variable ingresos tiene más variabilidad que la variable gastos. En ambos gráficos se observan datos atípicos. Ahora bien, esta clase de diagramas también permiten la comparación  entre dos o más niveles de agrupamiento, por ejemplo, por zonas para las variables ingresos y gastos como se muestra a continuación.
+
+
+```r
+BoxIncZone <- ggplot(encuesta,
+                     aes(x = Income, weight = wk)) +
+  geom_boxplot(aes(fill = Zone)) +
+  ggtitle("Boxplot de los ingresos por zona") +
+  coord_flip() +
+  theme_cepal()
+
+BoxExpZone <- ggplot(encuesta,
+                     aes(x = Expenditure, weight = wk)) +
+  geom_boxplot(aes(fill = Zone)) +
+  ggtitle("Boxplot de los gastos por zona") +
+  coord_flip() +
+  theme_cepal()
+
+BoxIncZone | BoxExpZone
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-12-1.svg" width="672" />
+
+Observándose, entre otros que, para la variable gasto en la zona rural es donde más datos atípicos hay. Ahora, si se desea personalizar los colores del relleno, es posible hacer uso de la función `scale_fill_manual`como se muestra a continuación: 
+
+
+```r
+colorZona <- c(Urban = "#48C9B0", Rural = "#117864")
+
+BoxIncZone + scale_fill_manual(values = colorZona) |
+  BoxExpZone + scale_fill_manual(values = colorZona)
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-13-1.svg" width="60%" style="display: block; margin: auto;" />
+
+Realizando la comparación para más de dos categorías, por ejemplo región, se procede como: 
+
+
+```r
+BoxIncReg <- ggplot(
+  data = encuesta,
+  aes(x = Income, weight = wk)) +
+  geom_boxplot(aes(fill = Region)) +
+  ggtitle("Boxplot de los ingresos por región") +
+  coord_flip() +
+  theme_cepal()
+
+BoxExpReg <- ggplot(
+  data = encuesta,
+  aes(x = Expenditure, weight = wk)) +
+  geom_boxplot(aes(fill = Region)) +
+  ggtitle("Boxplot de los gastos por región") +
+  coord_flip() +
+  theme_cepal()
+
+BoxIncReg | BoxExpReg
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-14-1.svg" width="672" />
+
+Una ventaja de este tipo de visualizaciones es que se pueden extender las comparaciones a variables que tienen más de dos categorías, creándose así una sinergia de posibles conclusiones sobre la distribución de las variables.
+
+
+```r
+ggplot(data = encuesta,
+       aes(x = Income, y = Sex, weight = wk)) +
+  geom_boxplot(aes(fill = Region)) +
+  ggtitle("Boxplot de los ingresos por región y sexo") +
+  coord_flip()
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-15-1.svg" width="672" />
+
+### Diagramas de dispersión
+
+Un diagrama de dispersión (*scaterplot*) representa cada observación como un punto, posicionado según el valor de dos variables continuas. Además de una posición horizontal y vertical, cada punto también puede tener un tamaño, un color y una forma. Estos atributos se denominan estética y son las propiedades que se pueden percibir en el gráfico. Cada estética puede asignarse a una variable o establecerse en un valor constante. 
+
+Para visualizar estas relaciones en encuestas que provienen de un diseño de muestreo complejo que podría asignar diferentes factores de expansión a cada hogar, es posible realizar un diagrama de dispersión ponderado. Este es una representación gráfica de los datos que incorpora los pesos de muestreo finales para resaltar la importancia relativa de cada unidad observada en la población. En un diagrama de dispersión convencional, cada punto tiene el mismo peso en la visualización, lo que significa que todos los puntos se tratan de manera igualitaria. En cambio, uno ponderado asigna pesos específicos a cada punto, reflejando su relevancia o contribución a la representación global.
+
+La ponderación generalmente se logra mediante el uso de un tercer conjunto de datos que proporciona los pesos correspondientes a cada observación. Para realizar este tipo de gráfico se usará la función `geom_point`, como se muestra a continuación:   
+
+
+```r
+ggplot(data = encuesta,
+       aes(y = Income,
+           x = Expenditure,
+           weight = wk)) +
+  geom_point() +
+  ggtitle("Scatterplot ponderado entre los ingresos y los gastos") +
+  theme_cepal()
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-16-1.svg" width="672" />
+
+Note que, en este caso, el parámetro `weight` no está aportando información visual al gráfico. Luego, el parámetro `alpha` se puede usar para controlar el tamaño de los puntos, para tener un mejor panorama del comportamiento de la muestra y su expansión. 
+
+
+```r
+ggplot(data = encuesta,
+       aes(y = Income, x = Expenditure)) +
+  geom_point(aes(size = wk), alpha = 0.1) +
+  ggtitle("Scatterplot ponderado entre los ingresos y los gastos") +
+  theme_cepal()
+```
+
+<img src="06-Gráficas_files/figure-html/hist14-1.svg" width="672" />
+
+Otra forma de usar la variable `wk`, es asignar la intensidad del color según el valor de los factores de expansión. 
+
+
+```r
+ggplot(data = encuesta,
+       aes(y = Income, x = Expenditure)) +
+  geom_point(aes(col = wk), alpha = 0.3) +
+  ggtitle("Scatterplot ponderado entre los ingresos y los gastos") +
+  theme_cepal()
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-17-1.svg" width="672" />
+
+Se puede extender las bondades de los gráficos de `ggplot2` para obtener mayor información de las muestra. Por ejemplo, agrupar los datos por Zona. Para lograr esto se introduce el parámetro `shape`. 
+
+
+```r
+ggplot(
+  data = encuesta,
+    aes(y = Income, 
+        x = Expenditure,
+        shape = Zone)) + 
+  geom_point(aes(size = wk, color = Zone), alpha = 0.3) +
+  labs(size = "Peso") + 
+    ggtitle("Scatterplot por zona entre los ingresos y los gastos") +
+  theme_cepal()
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-18-1.svg" width="672" />
+
+### Diagrama de barras 
+
+Un diagrama de barras es una representación gráfica que utiliza barras rectangulares para mostrar la relación entre distintas categorías. Cada barra representa la frecuencia, proporción o cantidad asociada a una categoría específica, y la longitud de la barra es proporcional al valor que está representando. Estos diagramas son efectivos para visualizar datos discretos y comparar cantidades entre diferentes categorías de manera clara y sencilla. Sin embargo, en encuestas de hogares, la altura de las barras siempre va a representar una estimación que, a su vez, está sujeta al error de muestreo. Incorporar esta incertidumbre en los gráficos es una manera rápida y correcta de plantear hipótesis en la comparación de subgrupos poblacionales. 
+
+Para realizar estos gráficos, en primer lugar, se deben realizar las estimaciones puntuales de los valores que se van a graficar. En el siguiente ejemplo, se estima la cantidad de personas en la zona urbana y la rural, junto con sus respectivos errores estándar.
+
+
+```r
+tamano_zona <- diseno %>%
+  group_by(Zone) %>%
+  summarise( Nd = survey_total(vartype = c("se", "ci")))
+tamano_zona 
+```
+
+
+
+|Zone  |    Nd| Nd_se| Nd_low| Nd_upp|
+|:-----|-----:|-----:|------:|------:|
+|Rural | 72102|  3062|  66039|  78165|
+|Urban | 78164|  2847|  72526|  83802|
+
+Para realizar este tipo de gráficos se requerirá de dos funciones, la primera `geom_bar`, que se utiliza para crear la capa de las barras que representarán la estimación del tamaño de cada zona; la altura de la barra es proporcional al valor que representa. La segunda función es `geom_errorbar` que se utiliza para agregar barras de error a un gráfico, que es útil porque precisamente queremos representar la variabilidad asociada con los valores estimados en la barra. El siguiente código permite reproducir este tipo de gráficos. Note que, los valores `ymax` y `ymin` se utilizan para definir los extremos superior e inferior de las barras de error, los cuales corresponden a los límites superior e inferior de los intervalos de confianza de la tabal anterior.
+
+
+```r
+ggplot(data = tamano_zona,
+       aes(
+         x = Zone,
+         y = Nd,
+         ymax = Nd_upp,
+         ymin = Nd_low,
+         fill = Zone
+       )) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_errorbar(position = position_dodge(width = 0.9),
+                width = 0.3) +
+  theme_bw()
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-20-1.svg" width="672" />
+
+Como se ha visto en los gráficos anteriores, este tipo de gráficos se pueden extender también a variables con más de dos categorías. Primero se realiza la estimación puntual junto con sus errores estándar asociados. 
+
+
+```r
+tamano_pobreza <- diseno %>%
+  group_by(Poverty) %>%
+  summarise(Nd = survey_total(vartype = c("se", "ci")))
+tamano_pobreza
+```
+
+
+
+|Poverty  |    Nd| Nd_se| Nd_low| Nd_upp|
+|:--------|-----:|-----:|------:|------:|
+|NotPoor  | 91398|  4395|  82696| 100101|
+|Extreme  | 21519|  4949|  11719|  31319|
+|Relative | 37349|  3695|  30032|  44666|
+
+El gráfico asociado a las anteriores estimaciones se obtiene con una sintaxis homologa a la anterior.
+
+
+```r
+ggplot(data = tamano_pobreza,
+       aes(
+         x = Poverty,
+         y = Nd,
+         ymax = Nd_upp,
+         ymin = Nd_low,
+         fill = Poverty
+       )) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_errorbar(position = position_dodge(width = 0.9),
+                width = 0.3) +
+  theme_bw()
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-22-1.svg" width="672" />
+
+De forma similar a los gráficos Boxplot, es posible realizar comparaciones entre más de dos variables. A continuación, se obtienen las estimaciones puntuales y los errores estándar para los tamaños absolutos de los cruces entre las dos categorías de desempleo y las tres categorías de pobreza.
+
+
+```r
+tamano_ocupacion_pobreza <- diseno %>%
+  filter(!is.na(desempleo)) %>% 
+  group_by(desempleo, Poverty) %>%
+  summarise(Nd = survey_total(vartype = c("se", "ci"))) %>% 
+  as.data.frame() 
+tamano_ocupacion_pobreza
+```
+
+
+
+| desempleo|Poverty  |    Nd|  Nd_se|  Nd_low| Nd_upp|
+|---------:|:--------|-----:|------:|-------:|------:|
+|         0|NotPoor  | 68946| 3676.3| 61666.8|  76226|
+|         0|Extreme  | 11549| 2208.8|  7175.8|  15923|
+|         0|Relative | 22847| 2558.5| 17780.5|  27913|
+|         1|NotPoor  |  1768|  405.4|   965.7|   2571|
+|         1|Extreme  |  1169|  348.1|   479.9|   1859|
+|         1|Relative |  1697|  457.8|   790.7|   2604|
+El gráfico para la tabla anterior queda de ejemplificado de la siguiente manera.
+
+
+```r
+ggplot(data = tamano_ocupacion_pobreza,
+       aes(
+         x = Poverty,
+         y = Nd,
+         ymax = Nd_upp,
+         ymin = Nd_low,
+         fill = as.factor(desempleo)
+       )) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_errorbar(position = position_dodge(width = 0.9),
+                width = 0.3) +
+  theme_bw()
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-24-1.svg" width="672" />
+
+En estos gráficos también se pueden presentar proporciones estimadas, o frecuencias relativas, como se muestra a continuación para la estimación de la proporción de personas en las tres categorías de pobreza cruzada con la zona. 
+
+
+```r
+prop_ZonaH_Pobreza <- sub_Hombre %>%
+  group_by(Zone, Poverty) %>%
+  summarise(prop = survey_prop(vartype = c("se", "ci")))
+prop_ZonaH_Pobreza
+```
+
+```
+## # A tibble: 6 × 6
+## # Groups:   Zone [2]
+##   Zone  Poverty   prop prop_se prop_low prop_upp
+##   <chr> <fct>    <dbl>   <dbl>    <dbl>    <dbl>
+## 1 Rural NotPoor  0.549  0.0626   0.424     0.668
+## 2 Rural Extreme  0.198  0.0675   0.0958    0.364
+## 3 Rural Relative 0.254  0.0372   0.187     0.334
+## 4 Urban NotPoor  0.660  0.0366   0.584     0.728
+## 5 Urban Extreme  0.113  0.0245   0.0726    0.171
+## 6 Urban Relative 0.227  0.0260   0.180     0.283
+```
+
+Después de obtener la tabla con los valores que se quieren presentar en el gráfico, los códigos computacionales para realizar un diagrama de barras es el siguiente:
+
+
+```r
+ggplot(data = prop_ZonaH_Pobreza,
+       aes(
+         x = Poverty,
+         y = prop,
+         ymax = prop_upp,
+         ymin = prop_low,
+         fill = Zone
+       )) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_errorbar(position = position_dodge(width = 0.9),
+                width = 0.3) + scale_fill_manual(values = colorZona) +
+  theme_bw()
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-26-1.svg" width="672" />
+
+
+## Mapas 
+
+Los mapas son una herramienta gráfica poderosa para la visualización de datos. Particularmente, para indicadores socio-demográficos, estos proporcionan una referencia visual para desagregaciones de interés como región, departamento, provincia, distrito, municipio, comuna, etc. `R` posee un sin fin de métodos de programación para representar mapas. 
+
+En una primera instacia, para realizar mapas es necesario contar con un tipo especial de información geoespacial; esto es, datos que contienen las coordenadas o delimitaciones geográficas de determinado país o región.  Sitios web como http://www.diva-gis.org/gdata ofrecen de manera gratuita bases de datos geoespaciales que contienen los vectores asociados a las geografías correspondientes. El formato de este tipo de datos se conoce como *shapefile* y continene observaciones sobre la longitud y latitud, que permiten localizar un conjunto de puntos cuya unión en el gráfico formarán las formas de los polígonos que definen las áreas geográficas. 
+
+Entre las distintas librería para realizar mapas en `R` están `tmap` y `ggplot2`. A continuación, se ilustra cómo se generan mapas, inicalmente con la librería `tmap`. Inicialmente, para realizar el mapa hay que contar con el archivo de *shapefile* el cual se carga de la siguiente manera.
+
+
+```r
+library(sf)
+library(tmap)
+
+shapeBigCity <- read_sf("Data/shapeBigCity/BigCity.shp")
+```
+
+Una vez cargado el *shapefile*, el mapa se genera usando las funciones `tm_shape` y la información que se desea graficar en el mapa se incluye con la función `tm_polygons.` Para este ejemplo inicial, solo se visualizarán las regiones en el mapa:
+
+
+```r
+tm_shape(shapeBigCity) + 
+  tm_polygons(col = "Region") 
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-28-1.svg" width="672" />
+
+A modo de otro ejemplo, suponga que se desea visualizar la estimación de los ingresos medios a nivel de región. En primer lugar se debe obtener la tabla de estimaciones. 
+
+
+```r
+prom_region <- svyby(~Income, ~Region, diseno,
+  svymean,
+  na.rm = T, covmat = TRUE,
+  vartype = c("cv"))
+prom_region
+```
+
+
+
+|          |Region    | Income|     cv|
+|:---------|:---------|------:|------:|
+|Norte     |Norte     |  552.4| 0.1002|
+|Sur       |Sur       |  625.8| 0.0997|
+|Centro    |Centro    |  650.8| 0.0945|
+|Occidente |Occidente |  517.0| 0.0894|
+|Oriente   |Oriente   |  541.8| 0.1323|
+
+El siguiente código representa áreas geográficas coloreadas según la estimación del promedio de la variable `Income`. El comando `brks` crea un vector que especifica los puntos de corte para clasificar los valores de la estimación en rangos. En este caso, hay tres rangos: [0, 550), [550, 600), [600, 1000]. Estos rangos se utilizarán para asignar colores a las áreas geográficas en el mapa. Luego, se crea un objeto `tm_shape` que contiene la información geométrica y de atributos de las áreas geográficas. También se realiza una operación de `left_join` para unir la información adicional de contenida en el dataframe `prom_region` al dataframe `shapeBigCity`. 
+
+
+```r
+brks <- c(0, 550, 600, 1000)
+shape_temp <- tm_shape(shapeBigCity %>%
+                         left_join(prom_region,
+                                   by = "Region"))
+
+shape_temp + tm_polygons("Income",
+                         breaks = brks,
+                         title = "Income",) + tm_layout(asp = 0)
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-30-1.svg" width="672" />
+
+Ahora, es posible realizar el mismo ejercicio anterior pero con la estimacion de la proporción de personas en condición de pobreza por zona y sexo. El código computacional apropiado se muestra a continuación.
+
+
+```r
+pob_region_Sex <- diseno %>%
+  group_by(Region, Zone, Sex, pobreza) %>%
+  summarise(prop = survey_mean(vartype = "cv")) %>%
+  filter(pobreza == 1, Zone == "Rural", Sex == "Female")
+
+shape_temp <- tm_shape(shapeBigCity %>%
+                         left_join(pob_region_Sex,
+                                   by = "Region"))
+
+shape_temp + tm_polygons("prop",
+                         title = "Pobreza",) + tm_layout(asp = 0)
+```
+
+<img src="06-Gráficas_files/figure-html/unnamed-chunk-31-1.svg" width="672" />
+

@@ -1,0 +1,125 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      cache = TRUE)
+```
+
+# Referencias 
+
+-   Asparouhov, T., & Muthen, B. (2006, August). Multilevel modeling of complex survey data. In Proceedings of the joint statistical meeting in Seattle (pp. 2718-2726).
+
+-   Asparouhov, T. (2006). General multi-level modeling with sampling weights. Communications in Statistics—Theory and Methods, 35(3), 439-460.
+
+-   Pfeffermann, D., Skinner, C. J., Holmes, D. J., Goldstein, H., & Rasbash, J. (1998). Weighting for unequal selection probabilities in multilevel models. Journal of the Royal Statistical Society: series B (statistical methodology), 60(1), 23-40.
+
+-   Cai, T. (2013). Investigation of ways to handle sampling weights for multilevel model analyses. Sociological Methodology, 43(1), 178-219.
+
+-   Finch, W. H., Bolin, J. E., & Kelley, K. (2019). Multilevel modeling using R. Crc Press.
+
+-   Merlo, J., Chaix, B., Ohlsson, H., Beckman, A., Johnell, K., Hjerpe, P., ... & Larsen, K. (2006). A brief conceptual tutorial of multilevel analysis in social epidemiology: using measures of clustering in multilevel logistic regression to investigate contextual phenomena. Journal of Epidemiology & Community Health, 60(4), 290-297.
+
+-   Sarndal, C., Swensson, B. &Wretman, J. (1992), Model Assisted Survey Sampling, Springer, New York.
+
+-   Rojas, H. A. G. (2016). Estrategias de muestreo: diseño de encuestas y estimación de parámetros. Ediciones de la U.
+
+-   Santana Sepúlveda, S., & Mateos Farfán, E. (2014). El arte de programar en R: un lenguaje para la estadística.
+
+- Lumley, T. (2011). Complex surveys: a guide to analysis using R. John Wiley & Sons.
+
+- Bache, S. M., Wickham, H., Henry, L., & Henry, M. L. (2022). Package ‘magrittr’.
+
+-   Tellez Piñerez, C. F., & Lemus Polanía, D. F. (2015). Estadística Descriptiva y Probabilidad con aplicaciones en R. Fundación Universitaria Los Libertadore.
+
+-   Groves, R. M., Fowler Jr, F. J., Couper, M. P., Lepkowski, J. M., Singer, E., & Tourangeau, R. (2011). Survey methodology. John Wiley & Sons.
+
+-   Tille, Y. & Ardilly, P. (2006), Sampling Methods: Exercises and Solutions, Springer.
+
+-   Gambino, J. G., & do Nascimento Silva, P. L. (2009). Sampling and estimation in household surveys. In Handbook of Statistics (Vol. 29, pp. 407-439). Elsevier.
+
+-   Cochran, W. G. (1977) *Sampling Techniques*. John Wiley and Sons. 
+
+-   Gutiérrez, H. A. (2017)  `TeachingSampling`. *R package*.
+
+-   Wickham, H., Chang, W., & Wickham, M. H. (2016). Package ‘ggplot2’. Create elegant data visualisations using the grammar of graphics. Version, 2(1), 1-189.
+
+-   Lumley, T. (2020). Package ‘survey’. Available at the following link: https://cran. r-project. org.
+
+-   Hansen, M. H., & Steinberg, J. (1956). Control of errors in surveys. Biometrics, 12(4), 462-474.
+
+- Heeringa, S. G., West, B. T., & Berglund, P. A. (2017). Applied survey data analysis. chapman and hall/CRC.
+
+-   Valliant, R., Dever, J.A., and Kreuter, F., Practical Tools for Designing and Weighting Survey Samples, Springer, New York, 2013.
+
+-   Valliant, R., Dorfman, A.H., and Royall, R.M., Finite Population Sampling and Inference: A Prediction Approach, John Wiley & Sons, New York, 2000.
+
+-   Loomis, D., Richardson, D.B., and Elliott, L., Poisson regression analysis of ungrouped data, Occupational and Environmental Medicine, 62, 325–329, 2005.
+
+-   Kovar, J.G., Rao, J.N.K., and Wu, C.F.J., Bootstrap and other methods to measure errors in survey estimates, Canadian Journal of Statistics, 16(Suppl.), 25–45, 1988.
+
+-   Binder, D.A. and Kovacevic, M.S., Estimating some measures of income inequality from survey data: An application of the estimating equations approach, Survey Methodology, 21(2), 137–145, 1995.
+
+-   Kovacevic, M. S., & Binder, D. A. (1997). Variance estimation for measures of income inequality and polarization-the estimating equations approach. Journal of Official Statistics, 13(1), 41.
+
+-   Bautista, J. (1998), Diseños de muestreo estadístico, Universidad Nacional de Colombia.
+
+-   Monroy, L. G. D., Rivera, M. A. M., & Dávila, L. R. L. (2018). Análisis estadístico de datos categóricos. Universidad Nacional de Colombia.
+
+-   Kish, L. and Frankel, M.R., Inference from complex samples, Journal of the Royal Statistical Society, Series B, 36, 1–37, 1974.
+
+-   Fuller, W.A., Regression analysis for sample survey, Sankyha, Series C, 37, 117–132, 1975.
+
+-   Shah, B.V., Holt, M.M., and Folsom, R.F., Inference about regression models from sample survey data, Bulletin of the International Statistical Institute, 41(3), 43–57, 1977.
+
+-   Skinner, C.J., Holt, D., and Smith, T.M.F., Analysis of Complex Surveys, John Wiley & Sons, New York, 1989.
+
+-   Binder, D.A., On the variances of asymptotically normal estimators from complex surveys, International Statistical Review, 51, 279–292, 1983.
+
+-   Fuller, W.A., Regression estimation for survey samples (with discussion), Survey Methodology, 28(1), 5–23, 2002.
+
+-   Pfeffermann, D., Modelling of complex survey data: Why model? Why is it a problem? How can we approach it? Survey Methodology, 37(2), 115–136, 2011.
+
+-   Wolter, K.M., Introduction to Variance Estimation (2nd ed.), Springer-Verlag, New York, 2007.
+
+-   Tellez, C. F., & Morales, M. A. (2016). Modelos Estadísticos lineales con aplicaciones en R. Ediciones de la U.
+
+- Fay, R.E., On adjusting the Pearson Chi-square statistic for cluster sampling, In Proceedings of the Social Statistics Section, American Statistical Association, Washington, DC, 402–405, 1979.
+
+- Fay, R.E., A jack-knifed chi-squared test for complex samples, Journal of the American Statistical Association, 80, 148–157, 1985.
+
+- Fellegi, I.P., Approximate tests of independence and goodness of fit based on stratified multistage samples, Journal of the American Statistical Association, 75, 261–268, 1980.
+
+- Thomas, D.R. and Rao, J.N.K., Small-sample comparisons of level and power for simple goodness-of-fit statistics under cluster sampling, Journal of the American Statistical Association, 82, 630–636, 1987.
+
+- Rao, J.N.K. and Scott, A.J., On chi-squared test for multiway contingency tables with cell proportions estimated from survey data, The Annals of Statistics, 12, 46–60, 1984.
+
+- Van Buuren, S., Flexible Imputation of Missing Data, Chapman & Hall, Boca Raton, FL, 2012.
+
+- Carpenter, J.R. and Kenward, M.G., Multiple Imputation and Its Application, John Wiley & Sons, Chichester, West Sussex, UK, 2013.
+
+- Berglund, P.A. and Heeringa, S.G., Multiple Imputation of Missing Data Using SAS®, SAS Institute Inc., Cary, NC, 2014.
+
+- Chambers, R.L., Steel, D.G., Wang, S., and Welsh, A.H., Maximum Likelihood Estimation for Sample Surveys, Chapman & Hall, Boca Raton, FL, 2012.
+
+- Zhou, H., Elliott, M.R., and Raghunathan, T.E., Multiple imputation in two-stage cluster samples using the weighted finite population Bayesian Bootstrap, Journal of Survey Statistics and Methodology, 4, 139–170, 2016a.
+
+- Zhou, H., Elliott, M.R., and Raghunathan, T.E., Synthetic multiple-imputation procedure for multistage complex samples, Journal of Official Statistics, 32(1), 231–256, 2016b.
+
+- Kim, J.K. and Shao, J., Statistical Methods for Handling Incomplete Data, Chapman & Hall, Boca Raton, FL, 2014.
+
+- Kim, J.K. and Fuller, W.A., Fractional Hotdeck imputation, Biometrika, 89, 470–477, 2004.
+
+- StataCorp., Release 14, P Manual, STATA Survey Data Manual, Stata Press, College Station, TX, 2015.
+
+- Raghunathan, T.E., Missing Data Analysis in Practice, Chapman & Hall/CRC Interdisciplinary Statistics, Boca Raton, FL, 2016.
+
+- Rubin, D. B. (1987). Multiple imputation for survey nonresponse.
+
+- Goldstein, H. (2011). Multilevel statistical models (Vol. 922). John Wiley & Sons.
+
+- Data analysis using regression and multilevel/hierarchical models" de Andrew Gelman y Jennifer Hill (2006)
+
+-   Sophia, R. H., & Skrondal, A. (2012). Multilevel and longitudinal modeling using Stata. STATA press.
+
+-   Browne, W. J., & Draper, D. (2006). A comparison of Bayesian and likelihood-based methods for fitting multilevel models.
+
+

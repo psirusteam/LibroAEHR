@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es" xml:lang="es">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>7.4 Diagnóstico del modelo | Análisis de encuestas de hogares con R</title>
+  <meta name="description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="7.4 Diagnóstico del modelo | Análisis de encuestas de hogares con R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  <meta name="github-repo" content="psirusteam/HHS-Handbook" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="7.4 Diagnóstico del modelo | Análisis de encuestas de hogares con R" />
+  
+  <meta name="twitter:description" content="Este es el repositorio del libro Análisis de encuestas con R." />
+  
+
+<meta name="author" content="Andrés Gutiérrez, Cristian Téllez, Stalyn Guerrero" />
+
+
+<meta name="date" content="2024-03-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="la-ponderación-de-pfeffermann.html"/>
+<link rel="next" href="inferencia-sobre-los-parámetros-del-modelo.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Análisis de encuestas con R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prefacio</a></li>
+<li class="chapter" data-level="1" data-path="introducción.html"><a href="introducción.html"><i class="fa fa-check"></i><b>1</b> Introducción</a></li>
+<li class="chapter" data-level="2" data-path="manejando-una-base-de-encuestas-de-hogares-con-r.html"><a href="manejando-una-base-de-encuestas-de-hogares-con-r.html"><i class="fa fa-check"></i><b>2</b> Manejando una base de encuestas de hogares con <code>R</code></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="fundamentos-básicos-de-r-y-rstudio.html"><a href="fundamentos-básicos-de-r-y-rstudio.html"><i class="fa fa-check"></i><b>2.1</b> Fundamentos básicos de <code>R</code> y <code>Rstudio</code></a></li>
+<li class="chapter" data-level="2.2" data-path="creación-de-proyectos-en-r.html"><a href="creación-de-proyectos-en-r.html"><i class="fa fa-check"></i><b>2.2</b> Creación de proyectos en <code>R</code></a></li>
+<li class="chapter" data-level="2.3" data-path="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html"><a href="lectura-de-las-bases-de-datos-y-procesamientos-básicos.html"><i class="fa fa-check"></i><b>2.3</b> Lectura de las bases de datos y procesamientos básicos</a></li>
+<li class="chapter" data-level="2.4" data-path="el-operador-pipeline.html"><a href="el-operador-pipeline.html"><i class="fa fa-check"></i><b>2.4</b> El operador <code>pipeline</code> (%&gt;%)</a></li>
+<li class="chapter" data-level="2.5" data-path="creación-de-variables-y-resumen-de-conteos.html"><a href="creación-de-variables-y-resumen-de-conteos.html"><i class="fa fa-check"></i><b>2.5</b> Creación de variables y resumen de conteos</a></li>
+<li class="chapter" data-level="2.6" data-path="algunas-estadísticas-descriptivas-sobre-la-base-de-datos.html"><a href="algunas-estadísticas-descriptivas-sobre-la-base-de-datos.html"><i class="fa fa-check"></i><b>2.6</b> Algunas estadísticas descriptivas sobre la base de datos</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="conceptos-básicos-en-encuestas-de-hogares.html"><a href="conceptos-básicos-en-encuestas-de-hogares.html"><i class="fa fa-check"></i><b>3</b> Conceptos básicos en encuestas de hogares</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="unidades-y-marcos-de-muestreo.html"><a href="unidades-y-marcos-de-muestreo.html"><i class="fa fa-check"></i><b>3.1</b> Unidades y marcos de muestreo</a></li>
+<li class="chapter" data-level="3.2" data-path="la-base-de-datos-bigcity.html"><a href="la-base-de-datos-bigcity.html"><i class="fa fa-check"></i><b>3.2</b> La base de datos BigCity</a></li>
+<li class="chapter" data-level="3.3" data-path="un-esquema-de-muestreo-para-bigcity.html"><a href="un-esquema-de-muestreo-para-bigcity.html"><i class="fa fa-check"></i><b>3.3</b> Un esquema de muestreo para BigCity</a></li>
+<li class="chapter" data-level="3.4" data-path="calibración-de-los-factores-de-expansión.html"><a href="calibración-de-los-factores-de-expansión.html"><i class="fa fa-check"></i><b>3.4</b> Calibración de los factores de expansión</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="análisis-de-variables-continuas.html"><a href="análisis-de-variables-continuas.html"><i class="fa fa-check"></i><b>4</b> Análisis de variables continuas</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="definición-del-diseño-de-muestreo.html"><a href="definición-del-diseño-de-muestreo.html"><i class="fa fa-check"></i><b>4.1</b> Definición del diseño de muestreo</a></li>
+<li class="chapter" data-level="4.2" data-path="estimación-puntual.html"><a href="estimación-puntual.html"><i class="fa fa-check"></i><b>4.2</b> Estimación puntual</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-totales"><i class="fa fa-check"></i><b>4.2.1</b> Estimación de totales</a></li>
+<li class="chapter" data-level="4.2.2" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-promedios"><i class="fa fa-check"></i><b>4.2.2</b> Estimación de promedios</a></li>
+<li class="chapter" data-level="4.2.3" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-de-medidas-de-dispersión-y-localización"><i class="fa fa-check"></i><b>4.2.3</b> Estimación de medidas de dispersión y localización</a></li>
+<li class="chapter" data-level="4.2.4" data-path="estimación-puntual.html"><a href="estimación-puntual.html#estimación-del-coeficiente-de-gini"><i class="fa fa-check"></i><b>4.2.4</b> Estimación del coeficiente de Gini</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html"><i class="fa fa-check"></i><b>4.3</b> Relación entre varias variables</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#estimación-de-razones"><i class="fa fa-check"></i><b>4.3.1</b> Estimación de razones</a></li>
+<li class="chapter" data-level="4.3.2" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#prueba-de-hipótesis-para-la-diferencia-de-medias"><i class="fa fa-check"></i><b>4.3.2</b> Prueba de hipótesis para la diferencia de medias</a></li>
+<li class="chapter" data-level="4.3.3" data-path="relación-entre-varias-variables.html"><a href="relación-entre-varias-variables.html#contrastes"><i class="fa fa-check"></i><b>4.3.3</b> Contrastes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="análisis-de-variables-categóricas.html"><a href="análisis-de-variables-categóricas.html"><i class="fa fa-check"></i><b>5</b> Análisis de variables categóricas</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="definición-del-diseño-de-muestreo-1.html"><a href="definición-del-diseño-de-muestreo-1.html"><i class="fa fa-check"></i><b>5.1</b> Definición del diseño de muestreo</a></li>
+<li class="chapter" data-level="5.2" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html"><i class="fa fa-check"></i><b>5.2</b> Estimación puntual</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html#estimaciones-de-tamaños"><i class="fa fa-check"></i><b>5.2.1</b> Estimaciones de tamaños</a></li>
+<li class="chapter" data-level="5.2.2" data-path="estimación-puntual-1.html"><a href="estimación-puntual-1.html#estimación-de-proporciones"><i class="fa fa-check"></i><b>5.2.2</b> Estimación de proporciones</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html"><i class="fa fa-check"></i><b>5.3</b> Relación entre varias variables</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#tablas"><i class="fa fa-check"></i><b>5.3.1</b> Tablas</a></li>
+<li class="chapter" data-level="5.3.2" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#pruebas-de-independencia"><i class="fa fa-check"></i><b>5.3.2</b> Pruebas de independencia</a></li>
+<li class="chapter" data-level="5.3.3" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#diferencia-de-proporciones-y-contrastes"><i class="fa fa-check"></i><b>5.3.3</b> Diferencia de proporciones y contrastes</a></li>
+<li class="chapter" data-level="5.3.4" data-path="relación-entre-varias-variables-1.html"><a href="relación-entre-varias-variables-1.html#razones-de-odds"><i class="fa fa-check"></i><b>5.3.4</b> Razones de odds</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="análisis-gráfico.html"><a href="análisis-gráfico.html"><i class="fa fa-check"></i><b>6</b> Análisis gráfico</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="análisis-gráfico-con-la-librería-survey.html"><a href="análisis-gráfico-con-la-librería-survey.html"><i class="fa fa-check"></i><b>6.1</b> Análisis gráfico con la librería <code>survey</code></a></li>
+<li class="chapter" data-level="6.2" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html"><i class="fa fa-check"></i><b>6.2</b> Análisis gráfico con la librería <code>ggplot2</code></a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#definición-del-tema"><i class="fa fa-check"></i><b>6.2.1</b> Definición del tema</a></li>
+<li class="chapter" data-level="6.2.2" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#histogramas"><i class="fa fa-check"></i><b>6.2.2</b> Histogramas</a></li>
+<li class="chapter" data-level="6.2.3" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#densidades"><i class="fa fa-check"></i><b>6.2.3</b> Densidades</a></li>
+<li class="chapter" data-level="6.2.4" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-caja"><i class="fa fa-check"></i><b>6.2.4</b> Diagramas de caja</a></li>
+<li class="chapter" data-level="6.2.5" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagramas-de-dispersión"><i class="fa fa-check"></i><b>6.2.5</b> Diagramas de dispersión</a></li>
+<li class="chapter" data-level="6.2.6" data-path="análisis-gráfico-con-la-librería-ggplot2.html"><a href="análisis-gráfico-con-la-librería-ggplot2.html#diagrama-de-barras"><i class="fa fa-check"></i><b>6.2.6</b> Diagrama de barras</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="mapas.html"><a href="mapas.html"><i class="fa fa-check"></i><b>6.3</b> Mapas</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="modelos-de-regresión.html"><a href="modelos-de-regresión.html"><i class="fa fa-check"></i><b>7</b> Modelos de regresión</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="definiciones-básicas.html"><a href="definiciones-básicas.html"><i class="fa fa-check"></i><b>7.1</b> Definiciones básicas</a></li>
+<li class="chapter" data-level="7.2" data-path="estimación-de-los-parámetros-en-un-modelo-de-regresión-con-muestras-complejas..html"><a href="estimación-de-los-parámetros-en-un-modelo-de-regresión-con-muestras-complejas..html"><i class="fa fa-check"></i><b>7.2</b> Estimación de los parámetros en un modelo de regresión con muestras complejas.</a></li>
+<li class="chapter" data-level="7.3" data-path="la-ponderación-de-pfeffermann.html"><a href="la-ponderación-de-pfeffermann.html"><i class="fa fa-check"></i><b>7.3</b> La ponderación de Pfeffermann</a></li>
+<li class="chapter" data-level="7.4" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html"><i class="fa fa-check"></i><b>7.4</b> Diagnóstico del modelo</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#coeficientes-de-determinación"><i class="fa fa-check"></i><b>7.4.1</b> Coeficientes de determinación</a></li>
+<li class="chapter" data-level="7.4.2" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#residuales-estandarizados"><i class="fa fa-check"></i><b>7.4.2</b> Residuales estandarizados</a></li>
+<li class="chapter" data-level="7.4.3" data-path="diagnóstico-del-modelo.html"><a href="diagnóstico-del-modelo.html#observaciones-influyentes"><i class="fa fa-check"></i><b>7.4.3</b> Observaciones influyentes</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="inferencia-sobre-los-parámetros-del-modelo.html"><a href="inferencia-sobre-los-parámetros-del-modelo.html"><i class="fa fa-check"></i><b>7.5</b> Inferencia sobre los parámetros del Modelo</a></li>
+<li class="chapter" data-level="7.6" data-path="estimación-y-predicción.html"><a href="estimación-y-predicción.html"><i class="fa fa-check"></i><b>7.6</b> Estimación y predicción</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="modelos-lineales-generalizados.html"><a href="modelos-lineales-generalizados.html"><i class="fa fa-check"></i><b>8</b> Modelos lineales generalizados</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="modelo-de-regresión-logistica-para-proporciones.html"><a href="modelo-de-regresión-logistica-para-proporciones.html"><i class="fa fa-check"></i><b>8.1</b> Modelo de regresión logistica para proporciones</a></li>
+<li class="chapter" data-level="8.2" data-path="modelo-log-lineal-para-tablas-de-contingencia.html"><a href="modelo-log-lineal-para-tablas-de-contingencia.html"><i class="fa fa-check"></i><b>8.2</b> Modelo log-lineal para tablas de contingencia</a></li>
+<li class="chapter" data-level="8.3" data-path="modelo-multinomial-para-variables-con-múltiples-categorías.html"><a href="modelo-multinomial-para-variables-con-múltiples-categorías.html"><i class="fa fa-check"></i><b>8.3</b> Modelo multinomial para variables con múltiples categorías</a></li>
+<li class="chapter" data-level="8.4" data-path="modelo-gamma-para-variables-continuas-positivas.html"><a href="modelo-gamma-para-variables-continuas-positivas.html"><i class="fa fa-check"></i><b>8.4</b> Modelo Gamma para variables continuas positivas</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="modelos-multinivel.html"><a href="modelos-multinivel.html"><i class="fa fa-check"></i><b>9</b> Modelos multinivel</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="modelo-con-intercepto-aleatorio.html"><a href="modelo-con-intercepto-aleatorio.html"><i class="fa fa-check"></i><b>9.1</b> Modelo con intercepto aleatorio</a></li>
+<li class="chapter" data-level="9.2" data-path="modelo-con-pendiente-aleatoria.html"><a href="modelo-con-pendiente-aleatoria.html"><i class="fa fa-check"></i><b>9.2</b> Modelo con pendiente aleatoria</a></li>
+<li class="chapter" data-level="9.3" data-path="modelo-con-intercepto-y-pendiente-aleatoria.html"><a href="modelo-con-intercepto-y-pendiente-aleatoria.html"><i class="fa fa-check"></i><b>9.3</b> Modelo con intercepto y pendiente aleatoria</a></li>
+<li class="chapter" data-level="9.4" data-path="modelo-logístico-multinivel..html"><a href="modelo-logístico-multinivel..html"><i class="fa fa-check"></i><b>9.4</b> Modelo logístico multinivel.</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="imputación-múltiple-en-encuestas-de-hogares.html"><a href="imputación-múltiple-en-encuestas-de-hogares.html"><i class="fa fa-check"></i><b>10</b> Imputación múltiple en encuestas de hogares</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="tres-patrones-para-la-ausencia-de-respuesta.html"><a href="tres-patrones-para-la-ausencia-de-respuesta.html"><i class="fa fa-check"></i><b>10.1</b> Tres patrones para la ausencia de respuesta</a></li>
+<li class="chapter" data-level="10.2" data-path="imputación-por-la-media-no-condicional..html"><a href="imputación-por-la-media-no-condicional..html"><i class="fa fa-check"></i><b>10.2</b> Imputación por la media no condicional.</a></li>
+<li class="chapter" data-level="10.3" data-path="imputación-por-la-media-condicional.html"><a href="imputación-por-la-media-condicional.html"><i class="fa fa-check"></i><b>10.3</b> Imputación por la media condicional</a></li>
+<li class="chapter" data-level="10.4" data-path="imputación-por-hot-deck.html"><a href="imputación-por-hot-deck.html"><i class="fa fa-check"></i><b>10.4</b> Imputación por <em>Hot-Deck</em></a></li>
+<li class="chapter" data-level="10.5" data-path="imputación-por-regresión.html"><a href="imputación-por-regresión.html"><i class="fa fa-check"></i><b>10.5</b> Imputación por regresión</a></li>
+<li class="chapter" data-level="10.6" data-path="imputación-por-el-vecino-más-cercano.html"><a href="imputación-por-el-vecino-más-cercano.html"><i class="fa fa-check"></i><b>10.6</b> Imputación por el vecino más cercano</a></li>
+<li class="chapter" data-level="10.7" data-path="imputación-por-el-vecino-más-cercano-con-regresión.html"><a href="imputación-por-el-vecino-más-cercano-con-regresión.html"><i class="fa fa-check"></i><b>10.7</b> Imputación por el vecino más cercano con regresión</a></li>
+<li class="chapter" data-level="10.8" data-path="imputación-múltiple..html"><a href="imputación-múltiple..html"><i class="fa fa-check"></i><b>10.8</b> Imputación múltiple.</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="estimación-de-parámetros-para-modelos-en-encuestas-complejas.html"><a href="estimación-de-parámetros-para-modelos-en-encuestas-complejas.html"><i class="fa fa-check"></i><b>11</b> Estimación de parámetros para modelos en encuestas complejas</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="acerca-de-las-muestras-aleatorias-y-su-análisis.html"><a href="acerca-de-las-muestras-aleatorias-y-su-análisis.html"><i class="fa fa-check"></i><b>11.1</b> Acerca de las muestras aleatorias y su análisis</a></li>
+<li class="chapter" data-level="11.2" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html"><i class="fa fa-check"></i><b>11.2</b> Modelos de superpoblación</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#primer-proceso-inferencial-el-modelo"><i class="fa fa-check"></i><b>11.2.1</b> Primer proceso inferencial: el modelo</a></li>
+<li class="chapter" data-level="11.2.2" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#segundo-proceso-inferencial-el-muestreo"><i class="fa fa-check"></i><b>11.2.2</b> Segundo proceso inferencial: el muestreo</a></li>
+<li class="chapter" data-level="11.2.3" data-path="modelos-de-superpoblación.html"><a href="modelos-de-superpoblación.html#inferencia-doble-los-modelos-y-el-muestreo"><i class="fa fa-check"></i><b>11.2.3</b> Inferencia doble: los modelos y el muestreo</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html"><i class="fa fa-check"></i><b>11.3</b> Método de Máxima Verosimilitud</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-distribución-bernoulli"><i class="fa fa-check"></i><b>11.3.1</b> MV para una distribución Bernoulli</a></li>
+<li class="chapter" data-level="11.3.2" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-distribución-normal"><i class="fa fa-check"></i><b>11.3.2</b> MV para una distribución normal</a></li>
+<li class="chapter" data-level="11.3.3" data-path="método-de-máxima-verosimilitud.html"><a href="método-de-máxima-verosimilitud.html#mv-para-una-regresión-lineal-múltiple"><i class="fa fa-check"></i><b>11.3.3</b> MV para una regresión lineal múltiple</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html"><i class="fa fa-check"></i><b>11.4</b> Método de Máxima Pseudo-Verosimilitud</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-distribución-bernoulli"><i class="fa fa-check"></i><b>11.4.1</b> MPV para una distribución Bernoulli</a></li>
+<li class="chapter" data-level="11.4.2" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-distribución-normal"><i class="fa fa-check"></i><b>11.4.2</b> MPV para una distribución normal</a></li>
+<li class="chapter" data-level="11.4.3" data-path="método-de-máxima-pseudo-verosimilitud.html"><a href="método-de-máxima-pseudo-verosimilitud.html#mpv-para-una-regresión-múltiple"><i class="fa fa-check"></i><b>11.4.3</b> MPV para una regresión múltiple</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a Análisis de encuestas con R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis de encuestas de hogares con R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="diagnóstico-del-modelo" class="section level2 hasAnchor" number="7.4">
+<h2><span class="header-section-number">7.4</span> Diagnóstico del modelo<a href="diagnóstico-del-modelo.html#diagnóstico-del-modelo" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>En el análisis de las encuestas de hogares cuando se ajusten modelos estadísticos es importante realizar verificaciones de calidad y con esto tener certezas de las conclusiones que se obtienen. La mayoría de textos académicos dan un panorama bastante detallado de los supuestos y consideraciones que se deben tener en cuenta para tener un modelo correctamente definido. A continuación, se enlistan algunas de ellas:</p>
+<ul>
+<li>Determinar si el modelo proporciona un adecuado ajuste a los datos.</li>
+<li>Examinar si los errores están normalmente distribuidos.</li>
+<li>Examinar si los errores tienen varianza constante.</li>
+<li>Verificar si los errores se pueden asumir no correlacionados.</li>
+<li>Determinar si alguno de los datos tiene valores con un efecto inusualmente grande sobre el modelo de regresión estimado, estos se conocen
+como datos influyentes.</li>
+<li>Determinar si algún punto no sigue la tendencia de la mayoría de los
+datos cuando se toma en cuenta el modelo, estos puntos se conocen como outliers.</li>
+</ul>
+<p>En este capítulo se abordarán alguno de los supuestos que se deben tener en cuenta al momento de ajustar un modelo de regresión lineal.</p>
+<div id="coeficientes-de-determinación" class="section level3 hasAnchor" number="7.4.1">
+<h3><span class="header-section-number">7.4.1</span> Coeficientes de determinación<a href="diagnóstico-del-modelo.html#coeficientes-de-determinación" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Una medida de la bondad del ajuste en un modelo de regresión es el coeficiente de determinación o coeficiente de correlación múltiple (<span class="math inline">\(R^{2})\)</span>). Dicho parámetro estima la proporción de la varianza de la población explicada por la regresión y oscila entre cero y uno. Entre más cercano esté de uno significa que mayor variabilidad explica y lo contrario ocurrirá si está cerca de cero. Lo anterior, en ocasiones es muy ambiguo puesto que, por ejemplo, en algunas disciplinas es posible obtener <span class="math inline">\(R^{2}\)</span> con valores muy altos, mientras que en otras se obtienen <span class="math inline">\(R^{2}\)</span> bajos. El cálculo de este parámetro a nivel poblacional se lleva a cabo de la siguiente manera:</p>
+<p><span class="math display">\[
+R^{2} =  1-\frac{SSE}{SST}
+\]</span></p>
+<p>Donde, <span class="math inline">\(SST= \sum_{i=1}^N (y_i - \bar{y})^2\)</span> es la suma de cuadrados totales, que representa la variabilidad total en la variable dependiente, y <span class="math inline">\(SSE= \sum_{i=1}^N (y_i - x_i \beta)^2\)</span> es la suma de cuadrados del error, que representa la variabilidad no explicada por el modelo de regresión. El estimador de este parámetro usando muestras complejas está dado por:</p>
+<p><span class="math display">\[
+\widehat{R}_{\omega}^{2} = 1-\frac{\widehat{SSE}_{\omega}}{\widehat{SST}_{\omega}}
+\]</span></p>
+<p>En donde <span class="math inline">\(\widehat{SSE}_{\omega}\)</span> es la suma de cuadrados del error estimada, dada por:</p>
+<p><span class="math display">\[
+\widehat{SSE}_{\omega}  =  \sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}\left(y_{h\alpha i}-x_{h\alpha i}\hat{\beta}\right)^{2}
+\]</span></p>
+<p>Para continuar con los modelos ajustados en la sección anterior, se procede a estimar los <span class="math inline">\(R^{2}\)</span> utilizando <code>R</code>. Inicialmente, se procede a estimar los parámetros del modelo utilizando la función <code>svyglm</code> de <code>survey</code> como se mostró anteriormente y también, se ajusta un modelo solo con el intercepto para obtener la estimación de la SST:</p>
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="diagnóstico-del-modelo.html#cb313-1" tabindex="-1"></a>modNul <span class="ot">&lt;-</span> <span class="fu">svyglm</span>(Income <span class="sc">~</span> <span class="dv">1</span>, <span class="at">design =</span> diseno_qwgt)</span>
+<span id="cb313-2"><a href="diagnóstico-del-modelo.html#cb313-2" tabindex="-1"></a></span>
+<span id="cb313-3"><a href="diagnóstico-del-modelo.html#cb313-3" tabindex="-1"></a>s1 <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit_svy)</span>
+<span id="cb313-4"><a href="diagnóstico-del-modelo.html#cb313-4" tabindex="-1"></a>s0 <span class="ot">&lt;-</span> <span class="fu">summary</span>(modNul)</span>
+<span id="cb313-5"><a href="diagnóstico-del-modelo.html#cb313-5" tabindex="-1"></a></span>
+<span id="cb313-6"><a href="diagnóstico-del-modelo.html#cb313-6" tabindex="-1"></a>wSST <span class="ot">&lt;-</span> s0<span class="sc">$</span>dispersion</span>
+<span id="cb313-7"><a href="diagnóstico-del-modelo.html#cb313-7" tabindex="-1"></a>wSSE <span class="ot">&lt;-</span> s1<span class="sc">$</span>dispersion</span></code></pre></div>
+<p>Por tanto, la estimación del <span class="math inline">\(R^{2}\)</span> es:</p>
+<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb314-1"><a href="diagnóstico-del-modelo.html#cb314-1" tabindex="-1"></a>R2 <span class="ot">=</span> <span class="dv">1</span><span class="sc">-</span> wSSE<span class="sc">/</span>wSST</span>
+<span id="cb314-2"><a href="diagnóstico-del-modelo.html#cb314-2" tabindex="-1"></a>R2</span></code></pre></div>
+<pre><code>##      variance    SE
+## [1,]    0.513 20579</code></pre>
+</div>
+<div id="residuales-estandarizados" class="section level3 hasAnchor" number="7.4.2">
+<h3><span class="header-section-number">7.4.2</span> Residuales estandarizados<a href="diagnóstico-del-modelo.html#residuales-estandarizados" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>En el diagnóstico de los modelos, es crucial el análisis de los residuales. Estos análisis proporcionan, bajo el supuesto que el modelo ajustado es
+adecuado, una estimación de los errores. Por tanto, un estudio cuidadoso
+de los residuales deberá ayudar al investigador a concluir si el procedimiento de ajuste no ha violado los supuestos o si, por el contrario, uno o varios de los supuestos no se verifican y hay necesidad de revisar el procedimiento de ajuste.</p>
+<p>Para realizar el análisis de los residuales, en primera instancia, se definen los residuales de Pearson <span class="citation">(<a href="#ref-Heeringa_West_Berglund_2017">Heeringa, West, y Berglund 2017</a>)</span> como sigue:</p>
+<p><span class="math display">\[
+r_{p_{i}}  =  \left(y_{i}-\mu_{i}\left(\hat{\beta}_{\omega}\right)\right)\sqrt{\frac{\omega_{i}}{V\left(\hat{\mu}_{i}\right)}}
+\]</span></p>
+<p>Donde, <span class="math inline">\(\mu_{i}\)</span> es el valor esperado de <span class="math inline">\(y_{i}\)</span>, <span class="math inline">\(w_{i}\)</span> es la ponderación de la encuesta para el i-ésimo individuo del diseño muestral complejo, Por último, <span class="math inline">\(V(\mu_{i})\)</span> es la función de varianza del resultado. Sobre estos residuales se realizan los análisis de normalidad y varianza constante.</p>
+<p>Si el supuesto de varianza constante no se cumple, los estimadores siguen siendo insesgados y consistentes, pero dejan de ser eficientes, es decir, dejan de ser los mejores en cuanto a que ya no tienen la menor varianza entre todos los estimadores insesgados. Una de las formas de analizar el supuesto de varianzas constantes en los errores es hacerlo de manera gráfica. Para ello, se grafica los residuos del modelo contra <span class="math inline">\(\hat{y}\)</span> o los residuos del modelo contra <span class="math inline">\(X_{i}\)</span>. Si al realizar estos gráficos se logra evidenciar cualquier patrón que no sea una nube de puntos constante, se puede concluir que la varianza de los errores no es constante.</p>
+<p>A manera de ejemplificar los conceptos vistos, se van a utilizar los modelos previamente ajustados. En primero instancia, el análisis del modelo se centrará en los supuestos de normalidad y varianza constante en los errores. La librería <code>svydiags</code> está pensada en ayudar en el diagnostico de modelos de regresión lineal, siendo una extensión más para complementar el paquete <code>survey</code>. Con las librerías <code>svydiags</code> se extraen los residuales estandarizados como sigue:</p>
+<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb316-1"><a href="diagnóstico-del-modelo.html#cb316-1" tabindex="-1"></a><span class="fu">library</span>(svydiags)</span>
+<span id="cb316-2"><a href="diagnóstico-del-modelo.html#cb316-2" tabindex="-1"></a>stdresids <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">svystdres</span>(fit_svy)<span class="sc">$</span>stdresids)</span>
+<span id="cb316-3"><a href="diagnóstico-del-modelo.html#cb316-3" tabindex="-1"></a>diseno_qwgt<span class="sc">$</span>variables <span class="sc">%&lt;&gt;%</span> <span class="fu">mutate</span>(<span class="at">stdresids =</span> stdresids)</span></code></pre></div>
+<p>Una forma muy común para hacer la evaluación de la normalidad de los residuales es realizar un gráfico cuantil-cuantil normal o QQplot. El QQplot es una gráfica de cuantiles para los residuos observados frente a los calculados a partir de una distribución normal teórica que tiene la misma media y varianza que la distribución de los residuos observados. Por lo tanto, una línea recta de 45° en este gráfico sugeriría que la normalidad es una suposición razonable para los errores aleatorios en el modelo.</p>
+<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="diagnóstico-del-modelo.html#cb317-1" tabindex="-1"></a><span class="fu">qqnorm</span>(stdresids)</span>
+<span id="cb317-2"><a href="diagnóstico-del-modelo.html#cb317-2" tabindex="-1"></a><span class="fu">qqline</span>(stdresids, <span class="at">col =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="07-Regresi%C3%B3n_files/figure-html/unnamed-chunk-9-1.svg" width="672" /></p>
+<p>También podemos hacer el análisis de normalidad por medio del histograma de los residuales estandarizados con el siguiente código, en cuya salida se puede observar que el histograma de los residuales estandarizados (barras y línea azul) no necesariamente sigue el comportamiento de una distribución normal (línea roja).</p>
+<div class="sourceCode" id="cb318"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb318-1"><a href="diagnóstico-del-modelo.html#cb318-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> diseno_qwgt<span class="sc">$</span>variables,</span>
+<span id="cb318-2"><a href="diagnóstico-del-modelo.html#cb318-2" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> stdresids)) <span class="sc">+</span></span>
+<span id="cb318-3"><a href="diagnóstico-del-modelo.html#cb318-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(</span>
+<span id="cb318-4"><a href="diagnóstico-del-modelo.html#cb318-4" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">y =</span> ..density..),</span>
+<span id="cb318-5"><a href="diagnóstico-del-modelo.html#cb318-5" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb318-6"><a href="diagnóstico-del-modelo.html#cb318-6" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb318-7"><a href="diagnóstico-del-modelo.html#cb318-7" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.3</span></span>
+<span id="cb318-8"><a href="diagnóstico-del-modelo.html#cb318-8" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb318-9"><a href="diagnóstico-del-modelo.html#cb318-9" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">colour =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb318-10"><a href="diagnóstico-del-modelo.html#cb318-10" tabindex="-1"></a>  <span class="fu">geom_function</span>(<span class="at">fun =</span> dnorm,</span>
+<span id="cb318-11"><a href="diagnóstico-del-modelo.html#cb318-11" tabindex="-1"></a>                <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb318-12"><a href="diagnóstico-del-modelo.html#cb318-12" tabindex="-1"></a>                <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb318-13"><a href="diagnóstico-del-modelo.html#cb318-13" tabindex="-1"></a>  <span class="fu">theme_cepal</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="07-Regresi%C3%B3n_files/figure-html/unnamed-chunk-10-1.svg" width="672" /></p>
+<p>Como se puedo observar en el QQplot, hay evidencia gráfica de que los errores no se distribuyen según una distribución normal. Por otro lado, un análisis que se realiza de manera gráfica es la verificación de que las varianzas de los residuales sean constantes, condicionadas a los valores de las covariables. Esto se puede observar a través de diagramas de dispersión de los residuales estandarizados contra las covariables usadas en el modelo. Primero, se agregan las predicciones a la base de datos para poder realizar las gráficas.</p>
+<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="diagnóstico-del-modelo.html#cb319-1" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb319-2"><a href="diagnóstico-del-modelo.html#cb319-2" tabindex="-1"></a>diseno_qwgt<span class="sc">$</span>variables <span class="sc">%&lt;&gt;%</span></span>
+<span id="cb319-3"><a href="diagnóstico-del-modelo.html#cb319-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(fit_svy))</span>
+<span id="cb319-4"><a href="diagnóstico-del-modelo.html#cb319-4" tabindex="-1"></a></span>
+<span id="cb319-5"><a href="diagnóstico-del-modelo.html#cb319-5" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> diseno_qwgt<span class="sc">$</span>variables,</span>
+<span id="cb319-6"><a href="diagnóstico-del-modelo.html#cb319-6" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> Expenditure, <span class="at">y =</span> stdresids)) <span class="sc">+</span></span>
+<span id="cb319-7"><a href="diagnóstico-del-modelo.html#cb319-7" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb319-8"><a href="diagnóstico-del-modelo.html#cb319-8" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">theme_cepal</span>()</span>
+<span id="cb319-9"><a href="diagnóstico-del-modelo.html#cb319-9" tabindex="-1"></a></span>
+<span id="cb319-10"><a href="diagnóstico-del-modelo.html#cb319-10" tabindex="-1"></a>g3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> diseno_qwgt<span class="sc">$</span>variables,</span>
+<span id="cb319-11"><a href="diagnóstico-del-modelo.html#cb319-11" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> Age2, <span class="at">y =</span> stdresids)) <span class="sc">+</span></span>
+<span id="cb319-12"><a href="diagnóstico-del-modelo.html#cb319-12" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb319-13"><a href="diagnóstico-del-modelo.html#cb319-13" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">theme_cepal</span>()</span>
+<span id="cb319-14"><a href="diagnóstico-del-modelo.html#cb319-14" tabindex="-1"></a></span>
+<span id="cb319-15"><a href="diagnóstico-del-modelo.html#cb319-15" tabindex="-1"></a>g4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> diseno_qwgt<span class="sc">$</span>variables,</span>
+<span id="cb319-16"><a href="diagnóstico-del-modelo.html#cb319-16" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> Zone, <span class="at">y =</span> stdresids)) <span class="sc">+</span></span>
+<span id="cb319-17"><a href="diagnóstico-del-modelo.html#cb319-17" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb319-18"><a href="diagnóstico-del-modelo.html#cb319-18" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>) <span class="sc">+</span> <span class="fu">theme_cepal</span>()</span>
+<span id="cb319-19"><a href="diagnóstico-del-modelo.html#cb319-19" tabindex="-1"></a>g5 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> diseno_qwgt<span class="sc">$</span>variables,</span>
+<span id="cb319-20"><a href="diagnóstico-del-modelo.html#cb319-20" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> Sex, <span class="at">y =</span> stdresids)) <span class="sc">+</span></span>
+<span id="cb319-21"><a href="diagnóstico-del-modelo.html#cb319-21" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb319-22"><a href="diagnóstico-del-modelo.html#cb319-22" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span>
+<span id="cb319-23"><a href="diagnóstico-del-modelo.html#cb319-23" tabindex="-1"></a></span>
+<span id="cb319-24"><a href="diagnóstico-del-modelo.html#cb319-24" tabindex="-1"></a>(g2 <span class="sc">|</span> g3) <span class="sc">/</span> (g4 <span class="sc">|</span> g5)</span></code></pre></div>
+<p><img src="07-Regresi%C3%B3n_files/figure-html/unnamed-chunk-11-1.svg" width="672" /></p>
+<p>Como se puede observar en las gráficas de gastos y edad al cuadrado, ambas muestran que las varianzas no son constantes, puesto que la dispersión crece o decrece a medida que cambia el valor de estas covariables.</p>
+</div>
+<div id="observaciones-influyentes" class="section level3 hasAnchor" number="7.4.3">
+<h3><span class="header-section-number">7.4.3</span> Observaciones influyentes<a href="diagnóstico-del-modelo.html#observaciones-influyentes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Otras técnicas utilizadas también para el análisis de los modelos consisten en el análisis de observaciones influyentes. Una observación se denomina influyente si al removerla de la nube de puntos esta causa un cambio grande en el ajuste del modelo. Es importante resaltar que un punto influyente podría o no ser un dato atípico. Para detectar observaciones influyentes es necesario tener claro qué tipo de influencia se quiere detectar. Lo anterior puesto que, por ejemplo, una observación puede ser influyente sobre la estimación de los parámetros, pero no para la estimación de la varianza del error. A continuación, se presentan las distintas técnicas estadísticas para la detección de datos influyentes:</p>
+<ol style="list-style-type: decimal">
+<li>Distancia de Cook: diagnostica si la i-ésima observación es influyente
+en la estimación del modelo, por estar lejos del centro de masa de los
+datos. En general, distintos autores consideran que las observaciones son influyentes cuando esta cantidad es mayor que 2 o 3.</li>
+<li>Estadístico <span class="math inline">\(D_fBeta_{(i)}\)</span>: este estadístico mide el cambio en la estimación
+del vector de coeficientes de regresión cuando la observación
+es eliminada. Se determina que la i-ésima observación es influyente para <span class="math inline">\(B_j\)</span> si <span class="math inline">\(\mid D_{f}Betas_{\left(i\right)j}\mid\geq\frac{z}{\sqrt{n}}\)</span> con <span class="math inline">\(z = 2\)</span>. Como alternativa, se puede usar <span class="math inline">\(t_{0.025,n-p}/\sqrt(n)\)</span> donde <span class="math inline">\(t_{0.025,n-p}\)</span> es el percentil <span class="math inline">\(97.5\)</span></li>
+<li>Estadístico <span class="math inline">\(D_{f}Fits_{\left(i\right)}\)</span>*: este estadístico mide el cambio en el ajuste del modelo cuando se elimina una observación particular. En esta instancia, la <span class="math inline">\(i\)</span>-ésima observación se considera influyente en el ajuste del modelo si
+<span class="math inline">\(\mid DfFits\left(i\right)\mid\geq z\sqrt{\frac{p}{n}}\)</span> con <span class="math inline">\(z = 2\)</span>.</li>
+</ol>
+<p>Para ejemplificar los conceptos definidos, se seguirá con los modelos ajustados en la sección anterior. Una vez ajustados estos modelos y verificados los supuestos, se procede a hacer el cálculo de la distancia de Cook usando la función <code>svyCooksD</code> del paquete <code>svydiags</code> como sigue:</p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb320-1"><a href="diagnóstico-del-modelo.html#cb320-1" tabindex="-1"></a><span class="fu">library</span>(svydiags)</span>
+<span id="cb320-2"><a href="diagnóstico-del-modelo.html#cb320-2" tabindex="-1"></a></span>
+<span id="cb320-3"><a href="diagnóstico-del-modelo.html#cb320-3" tabindex="-1"></a>d_cook <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">cook =</span> <span class="fu">svyCooksD</span>(fit_svy),</span>
+<span id="cb320-4"><a href="diagnóstico-del-modelo.html#cb320-4" tabindex="-1"></a>                    <span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">svyCooksD</span>(fit_svy)))</span>
+<span id="cb320-5"><a href="diagnóstico-del-modelo.html#cb320-5" tabindex="-1"></a></span>
+<span id="cb320-6"><a href="diagnóstico-del-modelo.html#cb320-6" tabindex="-1"></a><span class="fu">ggplot</span>(d_cook, <span class="fu">aes</span>(<span class="at">y =</span> cook, <span class="at">x =</span> id)) <span class="sc">+</span></span>
+<span id="cb320-7"><a href="diagnóstico-del-modelo.html#cb320-7" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb320-8"><a href="diagnóstico-del-modelo.html#cb320-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="dv">20</span>)</span></code></pre></div>
+<p>Como se puede observar, ninguna de las distancias de Cook’s es mayor a 3; por ende podemos afirmar que no existen observaciones influyentes. Ahora bien, si se desea corroborar que no hay observaciones influyentes utilizando el estadístico <span class="math inline">\(D_{f}Betas_{\left(i\right)j}\)</span>, esto se puede realizar con la función <code>svydfbetas</code> como se muestra a continuación:</p>
+<div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="diagnóstico-del-modelo.html#cb321-1" tabindex="-1"></a>d_dfbetas <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">t</span>(<span class="fu">svydfbetas</span>(fit_svy)<span class="sc">$</span>Dfbetas))</span>
+<span id="cb321-2"><a href="diagnóstico-del-modelo.html#cb321-2" tabindex="-1"></a><span class="fu">colnames</span>(d_dfbetas) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;Beta_&quot;</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">4</span>)</span>
+<span id="cb321-3"><a href="diagnóstico-del-modelo.html#cb321-3" tabindex="-1"></a>d_dfbetas <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Beta_0</th>
+<th align="right">Beta_1</th>
+<th align="right">Beta_2</th>
+<th align="right">Beta_3</th>
+<th align="right">Beta_4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0.0005</td>
+<td align="right">-2e-04</td>
+<td align="right">0.0020</td>
+<td align="right">-0.0045</td>
+<td align="right">-0.0076</td>
+</tr>
+<tr class="even">
+<td align="right">-0.0005</td>
+<td align="right">-1e-04</td>
+<td align="right">0.0013</td>
+<td align="right">0.0026</td>
+<td align="right">-0.0031</td>
+</tr>
+<tr class="odd">
+<td align="right">-0.0008</td>
+<td align="right">-1e-04</td>
+<td align="right">0.0008</td>
+<td align="right">0.0022</td>
+<td align="right">0.0008</td>
+</tr>
+<tr class="even">
+<td align="right">-0.0004</td>
+<td align="right">-1e-04</td>
+<td align="right">0.0011</td>
+<td align="right">-0.0031</td>
+<td align="right">0.0007</td>
+</tr>
+<tr class="odd">
+<td align="right">-0.0008</td>
+<td align="right">0e+00</td>
+<td align="right">0.0008</td>
+<td align="right">0.0021</td>
+<td align="right">0.0014</td>
+</tr>
+<tr class="even">
+<td align="right">0.0009</td>
+<td align="right">5e-04</td>
+<td align="right">-0.0037</td>
+<td align="right">-0.0066</td>
+<td align="right">0.0103</td>
+</tr>
+<tr class="odd">
+<td align="right">0.0027</td>
+<td align="right">4e-04</td>
+<td align="right">-0.0032</td>
+<td align="right">-0.0080</td>
+<td align="right">-0.0029</td>
+</tr>
+<tr class="even">
+<td align="right">0.0011</td>
+<td align="right">3e-04</td>
+<td align="right">-0.0029</td>
+<td align="right">0.0081</td>
+<td align="right">-0.0045</td>
+</tr>
+<tr class="odd">
+<td align="right">0.0030</td>
+<td align="right">3e-04</td>
+<td align="right">-0.0031</td>
+<td align="right">-0.0082</td>
+<td align="right">-0.0054</td>
+</tr>
+<tr class="even">
+<td align="right">-0.0003</td>
+<td align="right">4e-04</td>
+<td align="right">0.0012</td>
+<td align="right">-0.0039</td>
+<td align="right">-0.0042</td>
+</tr>
+</tbody>
+</table>
+<p>Una vez calculado los <span class="math inline">\(D_{f}Betas_{\left(i\right)j}\)</span> se procede a reacomodar la salida para verificar cuáles observaciones son influyentes. Para esto, de calcula el umbral (cutoff) para definir si es o no influyente la observación. Ese umbral es tomado de las salidas de la función <code>svydfbetas</code>. Por último, se genera una variable dicotómica que indique si la observación es o no influyente como se muestra a continuación:</p>
+<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="diagnóstico-del-modelo.html#cb322-1" tabindex="-1"></a>d_dfbetas<span class="sc">$</span>id <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(d_dfbetas)</span>
+<span id="cb322-2"><a href="diagnóstico-del-modelo.html#cb322-2" tabindex="-1"></a>d_dfbetas <span class="ot">&lt;-</span> reshape2<span class="sc">::</span><span class="fu">melt</span>(d_dfbetas, <span class="at">id.vars =</span> <span class="st">&quot;id&quot;</span>)</span>
+<span id="cb322-3"><a href="diagnóstico-del-modelo.html#cb322-3" tabindex="-1"></a>cutoff <span class="ot">&lt;-</span> <span class="fu">svydfbetas</span>(fit_svy)<span class="sc">$</span>cutoff</span>
+<span id="cb322-4"><a href="diagnóstico-del-modelo.html#cb322-4" tabindex="-1"></a>d_dfbetas <span class="sc">%&lt;&gt;%</span> <span class="fu">mutate</span>(<span class="at">Criterio =</span> <span class="fu">ifelse</span>(<span class="fu">abs</span>(value) <span class="sc">&gt;</span> cutoff, <span class="st">&quot;Si&quot;</span>, <span class="st">&quot;No&quot;</span>))</span>
+<span id="cb322-5"><a href="diagnóstico-del-modelo.html#cb322-5" tabindex="-1"></a></span>
+<span id="cb322-6"><a href="diagnóstico-del-modelo.html#cb322-6" tabindex="-1"></a>tex_label <span class="ot">&lt;-</span> d_dfbetas <span class="sc">%&gt;%</span></span>
+<span id="cb322-7"><a href="diagnóstico-del-modelo.html#cb322-7" tabindex="-1"></a>  <span class="fu">filter</span>(Criterio <span class="sc">==</span> <span class="st">&quot;Si&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb322-8"><a href="diagnóstico-del-modelo.html#cb322-8" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(<span class="fu">abs</span>(value))) <span class="sc">%&gt;%</span></span>
+<span id="cb322-9"><a href="diagnóstico-del-modelo.html#cb322-9" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span>10L)</span>
+<span id="cb322-10"><a href="diagnóstico-del-modelo.html#cb322-10" tabindex="-1"></a>tex_label</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">id</th>
+<th align="left">variable</th>
+<th align="right">value</th>
+<th align="left">Criterio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">889</td>
+<td align="left">Beta_0</td>
+<td align="right">0.3284</td>
+<td align="left">Si</td>
+</tr>
+<tr class="even">
+<td align="right">890</td>
+<td align="left">Beta_1</td>
+<td align="right">-0.3043</td>
+<td align="left">Si</td>
+</tr>
+<tr class="odd">
+<td align="right">891</td>
+<td align="left">Beta_0</td>
+<td align="right">0.3037</td>
+<td align="left">Si</td>
+</tr>
+<tr class="even">
+<td align="right">889</td>
+<td align="left">Beta_1</td>
+<td align="right">-0.2973</td>
+<td align="left">Si</td>
+</tr>
+<tr class="odd">
+<td align="right">891</td>
+<td align="left">Beta_1</td>
+<td align="right">-0.2934</td>
+<td align="left">Si</td>
+</tr>
+<tr class="even">
+<td align="right">890</td>
+<td align="left">Beta_0</td>
+<td align="right">0.2903</td>
+<td align="left">Si</td>
+</tr>
+<tr class="odd">
+<td align="right">889</td>
+<td align="left">Beta_4</td>
+<td align="right">-0.2526</td>
+<td align="left">Si</td>
+</tr>
+<tr class="even">
+<td align="right">890</td>
+<td align="left">Beta_4</td>
+<td align="right">-0.2270</td>
+<td align="left">Si</td>
+</tr>
+<tr class="odd">
+<td align="right">2311</td>
+<td align="left">Beta_4</td>
+<td align="right">0.2122</td>
+<td align="left">Si</td>
+</tr>
+<tr class="even">
+<td align="right">890</td>
+<td align="left">Beta_3</td>
+<td align="right">0.2029</td>
+<td align="left">Si</td>
+</tr>
+</tbody>
+</table>
+<p>Como se pudo observar en la salida anterior hay varias observaciones que resultan influyentes dado el criterio del <span class="math inline">\(D_{f}Betas_{\left(i\right)j}\)</span>. A continuación, y de manera ilustrativa, se grafican los <span class="math inline">\(D_{f}Betas_{\left(i\right)j}\)</span> y el umbral con el fin de ver de manera gráfica aquellas observaciones influyentes, teniendo en cuenta que, aquellos puntos rojos en la gráfica representan observaciones influyentes.</p>
+<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb323-1"><a href="diagnóstico-del-modelo.html#cb323-1" tabindex="-1"></a><span class="fu">ggplot</span>(d_dfbetas, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">abs</span>(value), <span class="at">x =</span> id)) <span class="sc">+</span></span>
+<span id="cb323-2"><a href="diagnóstico-del-modelo.html#cb323-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">col =</span> Criterio)) <span class="sc">+</span></span>
+<span id="cb323-3"><a href="diagnóstico-del-modelo.html#cb323-3" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> tex_label,</span>
+<span id="cb323-4"><a href="diagnóstico-del-modelo.html#cb323-4" tabindex="-1"></a>            <span class="at">angle =</span> <span class="dv">45</span>,</span>
+<span id="cb323-5"><a href="diagnóstico-del-modelo.html#cb323-5" tabindex="-1"></a>            <span class="at">vjust =</span> <span class="sc">-</span><span class="dv">1</span>,</span>
+<span id="cb323-6"><a href="diagnóstico-del-modelo.html#cb323-6" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">label =</span> id)) <span class="sc">+</span></span>
+<span id="cb323-7"><a href="diagnóstico-del-modelo.html#cb323-7" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept =</span> cutoff)) <span class="sc">+</span></span>
+<span id="cb323-8"><a href="diagnóstico-del-modelo.html#cb323-8" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(. <span class="sc">~</span> variable, <span class="at">nrow =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb323-9"><a href="diagnóstico-del-modelo.html#cb323-9" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;Si&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>, <span class="st">&quot;No&quot;</span> <span class="ot">=</span> <span class="st">&quot;black&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb323-10"><a href="diagnóstico-del-modelo.html#cb323-10" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span></code></pre></div>
+<p><img src="07-Regresi%C3%B3n_files/figure-html/unnamed-chunk-14-1.svg" width="672" /></p>
+<p>Si el objetivo es detectar observaciones influyentes pero considerando ahora la estadística <span class="math inline">\(D_{f}Fits_{\left(i\right)}\)</span>, se utiliza la función <code>svydffits</code> y se siguen los mismos pasos mostrados para el estadístico <span class="math inline">\(D_{f}Betas_{\left(i\right)j}\)</span>.A continuación se muestra el código computacional apropiado para realizarlo:</p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="diagnóstico-del-modelo.html#cb324-1" tabindex="-1"></a>d_dffits <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">dffits =</span> <span class="fu">svydffits</span>(fit_svy)<span class="sc">$</span>Dffits,</span>
+<span id="cb324-2"><a href="diagnóstico-del-modelo.html#cb324-2" tabindex="-1"></a>                      <span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">svydffits</span>(fit_svy)<span class="sc">$</span>Dffits))</span>
+<span id="cb324-3"><a href="diagnóstico-del-modelo.html#cb324-3" tabindex="-1"></a></span>
+<span id="cb324-4"><a href="diagnóstico-del-modelo.html#cb324-4" tabindex="-1"></a>cutoff <span class="ot">&lt;-</span> <span class="fu">svydffits</span>(fit_svy)<span class="sc">$</span>cutoff</span>
+<span id="cb324-5"><a href="diagnóstico-del-modelo.html#cb324-5" tabindex="-1"></a></span>
+<span id="cb324-6"><a href="diagnóstico-del-modelo.html#cb324-6" tabindex="-1"></a>d_dffits <span class="sc">%&lt;&gt;%</span> <span class="fu">mutate</span>(<span class="at">C_cutoff =</span> <span class="fu">ifelse</span>(<span class="fu">abs</span>(dffits) <span class="sc">&gt;</span> cutoff, <span class="st">&quot;Si&quot;</span>, <span class="st">&quot;No&quot;</span>))</span>
+<span id="cb324-7"><a href="diagnóstico-del-modelo.html#cb324-7" tabindex="-1"></a><span class="fu">ggplot</span>(d_dffits, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">abs</span>(dffits), <span class="at">x =</span> id)) <span class="sc">+</span></span>
+<span id="cb324-8"><a href="diagnóstico-del-modelo.html#cb324-8" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">col =</span> C_cutoff)) <span class="sc">+</span></span>
+<span id="cb324-9"><a href="diagnóstico-del-modelo.html#cb324-9" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> cutoff) <span class="sc">+</span></span>
+<span id="cb324-10"><a href="diagnóstico-del-modelo.html#cb324-10" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;Si&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>, <span class="st">&quot;No&quot;</span> <span class="ot">=</span> <span class="st">&quot;black&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb324-11"><a href="diagnóstico-del-modelo.html#cb324-11" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span></code></pre></div>
+<p>Como se puede observar en el gráfico anterior, también hay observaciones influyentes utilizando <span class="math inline">\(D_{f}Fits_{\left(i\right)}\)</span>, las cuales se muestran en rojo en el gráfico.</p>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Heeringa_West_Berglund_2017" class="csl-entry">
+Heeringa, Steven G., Brady T. West, y Patricia A. Berglund. 2017. <em>Applied survey data analysis</em>. Chapman y Hall CRC statistics en the social y behavioral sciences series. CRC Press.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="la-ponderación-de-pfeffermann.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="inferencia-sobre-los-parámetros-del-modelo.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/2021ASDA/07-Regresión.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Análisis de encuestas de hogares con R.pdf", "Análisis de encuestas de hogares con R.epub", "Análisis de encuestas de hogares con R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
