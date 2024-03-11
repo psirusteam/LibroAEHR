@@ -83,16 +83,15 @@ Después de realizar el análisis gráfico de las tendencias de las variables co
 
 Una vez definido el diseño muestral, lo cual se hizo en la sección anterior, se procede a realizar los procesos de estimación de los parámetros de interés. Para la estimación de totales con diseños muestrales complejos que incluyen estratificación $\left(h=1,2,...,H\right)$ y submuestreo en las UPM (que se suponen están dentro del estrato $h$) indexadas por $\alpha=1,2,...,a_{h}$, el estimador para el total se puede escribir como:
 
-\begin{eqnarray}
-\hat{y}_{\omega} & = & \sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}y_{h\alpha i}.
-\end{eqnarray}
+$$
+\hat{y}_{\omega}  =  \sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}y_{h\alpha i}
+$$
 
 En donde $n_{h\alpha}$ es el tamaño de muestra de hogares o personas en la UPM $\alpha$ del estrato $h$; $a_{h}$ es el tamaño de muestra de UPM dentro del estrato $h$; $H$ es el total de los estratos en el diseño de muestreo. Finalmente, $y_{h\alpha i}$ y $\omega_{h\alpha i}$ corresponden respectivamente con la observación de la variable de interés y el factor de expansión del elemento $i$ asociado a la UPM $\alpha$ dentro del estrato $h$. El estimador insesgado de la varianza para este estimador $\hat{y}_{\omega}$ es:
 
-\begin{eqnarray}
-\widehat{var}\left(\hat{y}_{\omega}\right) & = & \sum_{h=1}^{H}\frac{a_{h}}{\left(a_{h}-1\right)}\left[\sum_{\alpha=1}^{a_{h}}\left(\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}y_{h\alpha i}\right)^{2}-\frac{\left({ \sum_{\alpha=1}^{a_{h}}}\omega_{h\alpha i}y_{h\alpha i}\right)^{2}}{a_{h}}\right]
-\end{eqnarray}
-
+$$
+\widehat{var}\left(\hat{y}_{\omega}\right)  =  \sum_{h=1}^{H}\frac{a_{h}}{\left(a_{h}-1\right)}\left[\sum_{\alpha=1}^{a_{h}}\left(\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}y_{h\alpha i}\right)^{2}-\frac{\left({ \sum_{\alpha=1}^{a_{h}}}\omega_{h\alpha i}y_{h\alpha i}\right)^{2}}{a_{h}}\right]
+$$
 
 Como se puede observar, calcular la estimación del total y su varianza estimada es complejo. Sin embargo,  dichos cálculos se pueden hacer en `R` mediante la función `svytotal`. El intervalo de confianza está dado por la siguiente expresión:
 
@@ -382,10 +381,10 @@ En muchos análisis de variables relacionadas con encuestas de hogares no solo b
 
 Un caso particular de una función no lineal de totales es la razón poblacional. Esta se define como el cociente de dos totales poblacionales de características de interés de tipo continuo. En las encuestas de hogares, en ocasiones se requiere estimar este parámetro, por ejemplo, la razón entre los gastos y los ingresos, la cantidad de hombres por cada mujer o la cantidad de mascotas por cada hogar en un país determinado. Puesto que la razón es un cociente de totales, tanto en numerador como el denominador son cantidades desconocidas y por tanto requieren estimarse. El estimador puntual de una razón en muestreos complejos equivale al cociente de los estimadores de los totales como se define a continuación:
 
-\begin{eqnarray}
+$$
 \hat{R}_{\omega}  =  \frac{\hat{y}_{\omega}}{\hat{x}_{\omega}}
-  =  \frac{{ \sum_{h=1}^{H}\sum_{\alpha=1}^{\alpha_{h}}\sum_{i=1}^{nh\alpha}}\omega_{h\alpha i}y_{h\alpha i}}{{ \sum_{h=1}^{H}\sum_{\alpha=1}^{\alpha_{h}}\sum_{i=1}^{nh\alpha}}\omega_{h\alpha i}x_{h\alpha i}}
-\end{eqnarray}
+  =  \frac{{\sum_{h=1}^{H}\sum_{\alpha=1}^{\alpha_{h}}\sum_{i=1}^{nh\alpha}}\omega_{h\alpha i}y_{h\alpha i}}{{\sum_{h=1}^{H}\sum_{\alpha=1}^{\alpha_{h}}\sum_{i=1}^{nh\alpha}}\omega_{h\alpha i}x_{h\alpha i}}
+$$
 
 Sin embargo, dado que estimador de la razón es un cociente entre dos estimadores, es decir, un cociente de dos variables aleatorias, el cálculo de la estimación de la varianza no es sencillo de obtener. Para ellos, se debe aplicar linealización de Taylor como lo muestra @Gutierrez_2016. 
 

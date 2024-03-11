@@ -310,13 +310,13 @@ div.csl-indent {
 <div id="estimación-de-totales" class="section level3 hasAnchor" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Estimación de totales<a href="estimación-puntual.html#estimación-de-totales" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Una vez definido el diseño muestral, lo cual se hizo en la sección anterior, se procede a realizar los procesos de estimación de los parámetros de interés. Para la estimación de totales con diseños muestrales complejos que incluyen estratificación <span class="math inline">\(\left(h=1,2,...,H\right)\)</span> y submuestreo en las UPM (que se suponen están dentro del estrato <span class="math inline">\(h\)</span>) indexadas por <span class="math inline">\(\alpha=1,2,...,a_{h}\)</span>, el estimador para el total se puede escribir como:</p>
-<p><span class="math display">\[\begin{eqnarray}
-\hat{y}_{\omega} &amp; = &amp; \sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}y_{h\alpha i}.
-\end{eqnarray}\]</span></p>
+<p><span class="math display">\[
+\hat{y}_{\omega}  =  \sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}y_{h\alpha i}
+\]</span></p>
 <p>En donde <span class="math inline">\(n_{h\alpha}\)</span> es el tamaño de muestra de hogares o personas en la UPM <span class="math inline">\(\alpha\)</span> del estrato <span class="math inline">\(h\)</span>; <span class="math inline">\(a_{h}\)</span> es el tamaño de muestra de UPM dentro del estrato <span class="math inline">\(h\)</span>; <span class="math inline">\(H\)</span> es el total de los estratos en el diseño de muestreo. Finalmente, <span class="math inline">\(y_{h\alpha i}\)</span> y <span class="math inline">\(\omega_{h\alpha i}\)</span> corresponden respectivamente con la observación de la variable de interés y el factor de expansión del elemento <span class="math inline">\(i\)</span> asociado a la UPM <span class="math inline">\(\alpha\)</span> dentro del estrato <span class="math inline">\(h\)</span>. El estimador insesgado de la varianza para este estimador <span class="math inline">\(\hat{y}_{\omega}\)</span> es:</p>
-<p><span class="math display">\[\begin{eqnarray}
-\widehat{var}\left(\hat{y}_{\omega}\right) &amp; = &amp; \sum_{h=1}^{H}\frac{a_{h}}{\left(a_{h}-1\right)}\left[\sum_{\alpha=1}^{a_{h}}\left(\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}y_{h\alpha i}\right)^{2}-\frac{\left({ \sum_{\alpha=1}^{a_{h}}}\omega_{h\alpha i}y_{h\alpha i}\right)^{2}}{a_{h}}\right]
-\end{eqnarray}\]</span></p>
+<p><span class="math display">\[
+\widehat{var}\left(\hat{y}_{\omega}\right)  =  \sum_{h=1}^{H}\frac{a_{h}}{\left(a_{h}-1\right)}\left[\sum_{\alpha=1}^{a_{h}}\left(\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}y_{h\alpha i}\right)^{2}-\frac{\left({ \sum_{\alpha=1}^{a_{h}}}\omega_{h\alpha i}y_{h\alpha i}\right)^{2}}{a_{h}}\right]
+\]</span></p>
 <p>Como se puede observar, calcular la estimación del total y su varianza estimada es complejo. Sin embargo, dichos cálculos se pueden hacer en <code>R</code> mediante la función <code>svytotal</code>. El intervalo de confianza está dado por la siguiente expresión:</p>
 <p><span class="math display">\[\begin{eqnarray}
 \hat{y}_{\omega} \pm 1.96 * \sqrt{\widehat{var}\left(\hat{y}_{\omega}\right)}
