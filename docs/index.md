@@ -13,7 +13,7 @@ fontsize: 12pt
 geometry: margin = 3cm
 header-includes: \usepackage[spanish, spanishkw, onelanguage, linesnumbered]{algorithm2e}
 github-repo: psirusteam/HHS-Handbook
-description: "Este es el repositorio del libro *Análisis de encuestas con R*."
+description: "Este es el repositorio del libro *Análisis de encuestas de hogares con R*."
 knit: "bookdown::render_book"
 lang: es
 linkcolor: blue
@@ -42,4 +42,4 @@ output:
 
 La versión online de este libro está licenciada bajo una [Licencia Internacional de Creative Commons para compartir con atribución no comercial 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/). 
 
-Este libro es el resultado de un compendio de las experiencias internacionales prácticas adquiridas por el autor como Experto Regional en Estadísticas Sociales de la CEPAL.
+Este libro es el resultado de un compendio de las experiencias internacionales prácticas adquiridas por los autores y será usado como insumo principal en un documento de CEPAL. Se agradecen los comentarios que puedan surgir, escribiendo al correo electrónico del primer autor. 
