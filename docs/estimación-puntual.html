@@ -550,7 +550,7 @@ F (x)  =  \sum_{i=1}^{N} I(y_{i}\leq x)/N
 <h3><span class="header-section-number">4.2.4</span> Estimación del coeficiente de Gini<a href="estimación-puntual.html#estimación-del-coeficiente-de-gini" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>La desigualdad en todos los aspectos es un problema común en todos los países del mundo. Particularmente, la desigualdad económica atañe a muchas instituciones internacionales. Dado lo anterior, es de particular interés poder medir la desigualdad económica de los hogares en los países y para esto, el indicador más utilizado es el coeficiente de Gini (<span class="math inline">\(G\)</span>). El valor de este índice se encuentra entre 0 y 1. Un valor del coeficiente de Gini de <span class="math inline">\(G = 0\)</span> indica perfecta igualdad en la distribución de la riqueza, con valores más grandes significa una desigualdad cada vez mayor en la distribución de la riqueza. Siguiendo la ecuación de estimación de <span class="citation">David A. Binder y Kovacevic (<a href="#ref-binder1995estimating">1995</a>)</span>, un estimador del coeficiente de Gini es:</p>
 <p><span class="math display">\[
-\widehat{G}_{\omega}(y) = \frac{2 \times \sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}^{*}\hat{F}_{\omega}^{h\alpha i}y^{h\alpha i}-1}{\hat{\bar{y}}_{\omega}}
+\widehat{G}_{\omega}(y) = \left(2 \times \sum_{h=1}^{H}\sum_{\alpha=1}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}^{*}\hat{F}_{\omega}^{h\alpha i}y^{h\alpha i}-1\right)/(\hat{\bar{y}}_{\omega})
 \]</span></p>
 <p>En donde, <span class="math inline">\(\omega_{h\alpha i}^{*}\)</span> es una ponderación normalizada, dada por la siguiente expresión:</p>
 <p><span class="math display">\[
