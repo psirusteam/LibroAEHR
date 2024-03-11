@@ -12,7 +12,7 @@ lof: yes
 fontsize: 12pt
 geometry: margin = 3cm
 header-includes: \usepackage[spanish, spanishkw, onelanguage, linesnumbered]{algorithm2e}
-github-repo: psirusteam/HHS-Handbook
+github-repo: psirusteam/LibroAEHR
 description: "Este es el repositorio del libro *Análisis de encuestas de hogares con R*."
 knit: "bookdown::render_book"
 lang: es
