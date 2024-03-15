@@ -324,7 +324,7 @@ y_{i}  =  x_{i}\boldsymbol{\beta}+\varepsilon_{i}
 <p>El subíndice <span class="math inline">\(i\)</span> hace referencia al elemento muestral o respondiente
 en el conjunto de datos. <span class="citation">Heeringa, West, y Berglund (<a href="#ref-Heeringa_West_Berglund_2017">2017</a>)</span> presenta algunas consideraciones para los modelos de regresión, las cuales son descritas a continuación:</p>
 <ul>
-<li><span class="math inline">\(E(t(\varepsilon_{i}\mid x_{i})=0\)</span>, lo que significa que
+<li><span class="math inline">\(E(\varepsilon_{i}\mid x_{i})=0\)</span>, lo que significa que
 el valor esperado de los residuos condicionado al grupo de covariables
 es igual a cero.</li>
 <li><span class="math inline">\(Var(t(\varepsilon_{i}\mid x_{i})=\sigma_{y,x}^{2}\)</span> (homogenidad
@@ -336,10 +336,10 @@ al grupo de covariables siguen una distribución normal. Esta propiedad también
 <li><span class="math inline">\(cov(t(\varepsilon_{i},\,\varepsilon_{j}\mid x_{i},x_{j})\)</span>
 (independencia en los residuales) los residuales en diferentes unidades observadas no están correlacionados con los valores dados por sus variables predictoras.</li>
 </ul>
-<p>Una vez definido el modelo de regresión lineal y sus supuestos, se puede deducir que la mejor estimación lineal insesgada se define como el valor esperado de la variable dependiente condicionado a las variables independientes <span class="math inline">\(x\)</span> como, <span class="math inline">\(E(t(y\mid x)=\hat{\beta}_{0}+\hat{\beta_{1}}x_{1}+\hat{\beta}_{2}x_{2}+\cdots+\hat{\beta}_{p}x_{p}\)</span>.</p>
+<p>Una vez definido el modelo de regresión lineal y sus supuestos, se puede deducir que la mejor estimación lineal insesgada se define como el valor esperado de la variable dependiente condicionado a las variables independientes <span class="math inline">\(x\)</span> como, <span class="math inline">\(E(y\mid x)=\hat{\beta}_{0}+\hat{\beta_{1}}x_{1}+\hat{\beta}_{2}x_{2}+\cdots+\hat{\beta}_{p}x_{p}\)</span>.</p>
 <p><span class="math display">\[
-\hat{y}  =  E(t(y\mid x)
-=  E(t(\boldsymbol{x}\boldsymbol{\beta})+E(t(\varepsilon)
+\hat{y}  =  E(y\mid x)
+=  E(\boldsymbol{x}\boldsymbol{\beta})+E(\varepsilon)
 =  \boldsymbol{x}\boldsymbol{\beta}+0
 =  \beta_{0}+\beta_{1}x_{1}+\cdots+\beta_{p}x_{p}
 \]</span></p>

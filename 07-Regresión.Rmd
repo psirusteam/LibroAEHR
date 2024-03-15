@@ -39,7 +39,7 @@ En donde, $x_{i}=(t[1\,x_{1i}\,\ldots\,x_{pi}\right]$ y $\boldsymbol{\beta}^{T}=
 El subíndice $i$ hace referencia al elemento muestral o respondiente
 en el conjunto de datos. @Heeringa_West_Berglund_2017 presenta algunas consideraciones para los modelos de regresión, las cuales son descritas a continuación:
 
--   $E(t(\varepsilon_{i}\mid x_{i})=0$, lo que significa que
+-   $E(\varepsilon_{i}\mid x_{i})=0$, lo que significa que
 el valor esperado de los residuos condicionado al grupo de covariables
  es igual a cero.
 -   $Var(t(\varepsilon_{i}\mid x_{i})=\sigma_{y,x}^{2}$ (homogenidad
@@ -51,12 +51,12 @@ al grupo de covariables siguen una distribución normal. Esta propiedad también
 -   $cov(t(\varepsilon_{i},\,\varepsilon_{j}\mid x_{i},x_{j})$
 (independencia en los residuales) los residuales en diferentes unidades observadas no están correlacionados con los valores dados por sus variables predictoras.
 
-Una vez definido el modelo de regresión lineal y sus supuestos, se puede deducir que la mejor estimación lineal insesgada se define como el valor esperado de la variable dependiente condicionado a las variables independientes $x$ como, $E(t(y\mid x)=\hat{\beta}_{0}+\hat{\beta_{1}}x_{1}+\hat{\beta}_{2}x_{2}+\cdots+\hat{\beta}_{p}x_{p}$.
+Una vez definido el modelo de regresión lineal y sus supuestos, se puede deducir que la mejor estimación lineal insesgada se define como el valor esperado de la variable dependiente condicionado a las variables independientes $x$ como, $E(y\mid x)=\hat{\beta}_{0}+\hat{\beta_{1}}x_{1}+\hat{\beta}_{2}x_{2}+\cdots+\hat{\beta}_{p}x_{p}$.
 
 
 $$
-\hat{y}  =  E(t(y\mid x)
- =  E(t(\boldsymbol{x}\boldsymbol{\beta})+E(t(\varepsilon)
+\hat{y}  =  E(y\mid x)
+ =  E(\boldsymbol{x}\boldsymbol{\beta})+E(\varepsilon)
 =  \boldsymbol{x}\boldsymbol{\beta}+0
 =  \beta_{0}+\beta_{1}x_{1}+\cdots+\beta_{p}x_{p}
 $$
