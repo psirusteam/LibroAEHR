@@ -90,7 +90,7 @@ En este contexto, al ajustar modelos  de regresión con este tipo de conjuntos d
 Con fines ilustrativos, se mostrará la estimación del parámetro $\beta_{1}$ y su varianza para una regresión lineal simple. La extensión a la estimación de los parámetros de un modelo de regresión múltiple, algebraicamente es compleja y se sale del contexto de este libro. A continuación, se presenta la estimación de la pendiente y su varianza en un modelo de regresión lineal simple:
 
 $$
-\hat{\beta_{1}}=\dfrac{{\sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}(y_{h\alpha i}-\hat{\bar{y}}_{\omega})(x_{h\alpha i}-\hat{\bar{x}}_{\omega})}}{{ \sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}(x_{h\alpha i}-\hat{\bar{x}}_{\omega})^{2}}}
+\hat{\beta_{1}}={\sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}(y_{h\alpha i}-\hat{\bar{y}}_{\omega})(x_{h\alpha i}-\hat{\bar{x}}_{\omega})}/{ \sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}(x_{h\alpha i}-\hat{\bar{x}}_{\omega})^{2}}
 $$
 
 Como se puede observar en la ecuación anterior, el estimador del parámetro es un cociente de totales, por ende, su varianza está dada por:
