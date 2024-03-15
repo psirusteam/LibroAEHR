@@ -23,7 +23,7 @@
 <meta name="author" content="Andrés Gutiérrez, Cristian Téllez, Stalyn Guerrero" />
 
 
-<meta name="date" content="2024-03-11" />
+<meta name="date" content="2024-03-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -309,13 +309,13 @@ div.csl-indent {
 <p>Una vez evaluado el correcto ajuste del modelo utilizando las metodologías vistas anteriormente y corroborando las propiedades distribucionales de los errores y, por ende, de la variable respuesta <span class="math inline">\(y\)</span>, el paso siguiente es verificar si los parámetros estimados son significativos y si las covariables utilizadas para ajustar el modelo aportan valor en la explicación y/o predicción de la variable de estudio y el fenómeno de interés.</p>
 <p>Dadas las propiedades distribucionales de los estimadores de los coeficientes de regresión, un estadístico de prueba natural para evaluar la significación de dicho parámetro se basa en la distribución t-student y se describe a continuación:</p>
 <p><span class="math display">\[
-t = \frac{\hat{\beta}_{k}-\beta_{k}}{se\left(\hat{\beta}_{k}\right)}\sim t_{n-p}
+t = \frac{\hat{\beta}_{k}-\beta_{k}}{se(t(\hat{\beta}_{k})}\sim t_{n-p}
 \]</span></p>
 <p>Donde <span class="math inline">\(p\)</span> es el número de parámetros del modelo y <span class="math inline">\(n\)</span> el tamaño de la muestra de la encuesta. En este sentido, el estadístico de prueba anterior evalúa las hipótesis <span class="math inline">\(H_{0}:\beta_{k}=0\)</span> versus la alternativa <span class="math inline">\(H_{1}:\beta_{k}\neq0\)</span>. Asimismo, se puede construir un intervalo de confianza al <span class="math inline">\((1-\alpha)\times100\%\)</span> para <span class="math inline">\(\beta_{k}\)</span>, el cual está dado por:</p>
 <p><span class="math display">\[
-\hat{\beta}_{k}\pm t_{1-\frac{\alpha}{2},\,df}\,se\left(\hat{\beta}_{k}\right)
+\hat{\beta}_{k}\pm t_{1-\frac{\alpha}{2},\,df}\,se(t(\hat{\beta}_{k})
 \]</span></p>
-<p>Donde, los grados de libertad (<span class="math inline">\(df\)</span>) para el intervalo en una encuesta de hogares (muestras complejas) está dado por el número de conglomerados finales de la primera etapa menos el número de estratos de la etapa primaria <span class="math inline">\(\left(df=\sum_{h}a_{h}-H\right)\)</span>.</p>
+<p>Donde, los grados de libertad (<span class="math inline">\(df\)</span>) para el intervalo en una encuesta de hogares (muestras complejas) está dado por el número de conglomerados finales de la primera etapa menos el número de estratos de la etapa primaria <span class="math inline">\((t(df=\sum_{h}a_{h}-H)\)</span>.</p>
 <p>Para la aplicación de las temáticas vistas (juzgamiento de la prueba de hipótesis de significación y construcción de los intervalos de confianza para los parámetros) utilizaremos el modelo que se ha venido trabajando como ejemplo y aplicaremos las funciones <code>summary.svyglm</code> para las pruebas t y <code>confint.svyglm</code> para los intervalos de confianza como sigue:</p>
 <div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="inferencia-sobre-los-parámetros-del-modelo.html#cb325-1" tabindex="-1"></a>survey<span class="sc">:::</span><span class="fu">summary.svyglm</span>(fit_svy)</span></code></pre></div>
 <pre><code>## 

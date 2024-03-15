@@ -23,7 +23,7 @@
 <meta name="author" content="Andrés Gutiérrez, Cristian Téllez, Stalyn Guerrero" />
 
 
-<meta name="date" content="2024-03-11" />
+<meta name="date" content="2024-03-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -316,8 +316,8 @@ div.csl-indent {
 \]</span></p>
 <p>La varianza de la estimación se calcula de la siguiente manera:</p>
 <p><span class="math display">\[
-var\left(\hat{E}\left(y_{i}\mid x_{obs,i}\right)\right)
-=  x&#39;_{obs,i}cov\left(\hat{\beta}\right)x{}_{obs,i}
+var(t(\hat{E}(t(y_{i}\mid x_{obs,i}))
+=  x&#39;_{obs,i}cov(t(\hat{\beta})x{}_{obs,i}
 \]</span></p>
 <p>A continuación, se presenta cómo se realiza la estimación del valor esperado utilizando <code>R</code>. Por ende, primero se estiman los parámetros del modelo:</p>
 <table>
@@ -438,7 +438,7 @@ Para calcular la varianza de la estimación, primero se deben obtener las varian
 <pre><code>## [1] 1999</code></pre>
 <p>Si el objetivo ahora es calcular el intervalo de confianza para la predicción se utiliza la siguiente ecuación:</p>
 <p><span class="math display">\[
-\boldsymbol{x}_{obs,i}\hat{\beta}\pm t_{\left(1-\frac{\alpha}{2},n-p\right)}\sqrt{var\left(\hat{E}\left(y_{i}\mid\boldsymbol{x}_{obs,i}\right)\right)}
+\boldsymbol{x}_{obs,i}\hat{\beta}\pm t_{(t(1-\frac{\alpha}{2},n-p)}\sqrt{var(t(\hat{E}(t(y_{i}\mid\boldsymbol{x}_{obs,i}))}
 \]</span></p>
 <p>Para realizar los cálculos en <code>R</code>, se utiliza la función <code>confint</code> y <code>predict</code> como sigue:</p>
 <div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb331-1"><a href="estimación-y-predicción.html#cb331-1" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">predict</span>(fit_svy, <span class="at">type =</span> <span class="st">&quot;link&quot;</span>))</span>
@@ -460,7 +460,7 @@ Para calcular la varianza de la estimación, primero se deben obtener las varian
 <span id="cb332-12"><a href="estimación-y-predicción.html#cb332-12" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p>Por último, si el interés es hacer una predicción fuera del rango de valores que fue capturado en la muestra, se debe tener en cuenta que la expresión de la varianza cambia ligeramente. En ese caso, la varianza para la predicción se hace siguiendo la siguiente ecuación:</p>
 <p><span class="math display">\[
-var\left(\hat{E}\left(y_{i}\mid\boldsymbol{x}_{obs,i}\right)\right)=\boldsymbol{x}_{obs,i}^{t}cov\left(\boldsymbol{\beta}\right)\boldsymbol{x}_{obs,i} + \hat{\sigma}^2_{yx}
+var(t(\hat{E}(t(y_{i}\mid\boldsymbol{x}_{obs,i}))=\boldsymbol{x}_{obs,i}^{t}cov(t(\boldsymbol{\beta})\boldsymbol{x}_{obs,i} + \hat{\sigma}^2_{yx}
 \]</span></p>
 <p>Para ejemplificarlos en <code>R</code>, supongamos que se desea predecir el valor del ingreso para un gasto de 2600 (valor que no fue observado en la muestra). El primer paso es crear un conjunto de datos nuevos, así:</p>
 <div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb333-1"><a href="estimación-y-predicción.html#cb333-1" tabindex="-1"></a>datos_nuevos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -475,7 +475,7 @@ var\left(\hat{E}\left(y_{i}\mid\boldsymbol{x}_{obs,i}\right)\right)=\boldsymbol{
 <pre><code>## [1] 264.7</code></pre>
 <p>Por último, el intervalo de confianza sigue la siguiente ecuación:</p>
 <p><span class="math display">\[
-\boldsymbol{x}_{obs,i}\hat{\beta}\pm t_{\left(1-\frac{\alpha}{2},n-p\right)}\sqrt{var\left(\hat{E}\left(y_{i}\mid\boldsymbol{x}_{obs,i}\right)\right)+\hat{\sigma}_{yx}^{2}}
+\boldsymbol{x}_{obs,i}\hat{\beta}\pm t_{(t(1-\frac{\alpha}{2},n-p)}\sqrt{var(t(\hat{E}(t(y_{i}\mid\boldsymbol{x}_{obs,i}))+\hat{\sigma}_{yx}^{2}}
 \]</span></p>
 <p>En <code>R</code> la predicción se realiza usando la función <code>predict</code> sobre el objeto <code>fit_svy</code> de la siguiente manera. Esta salida provee la predicción puntual y su correspondiente error estándar, el cual es idéntico al calculado anteriormente.</p>
 <div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb336-1"><a href="estimación-y-predicción.html#cb336-1" tabindex="-1"></a><span class="fu">predict</span>(fit_svy, <span class="at">newdata =</span> datos_nuevos, <span class="at">type =</span>  <span class="st">&quot;link&quot;</span>)</span></code></pre></div>

@@ -23,7 +23,7 @@
 <meta name="author" content="Andrés Gutiérrez, Cristian Téllez, Stalyn Guerrero" />
 
 
-<meta name="date" content="2024-03-11" />
+<meta name="date" content="2024-03-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -314,19 +314,19 @@ div.csl-indent {
 <p>En este contexto, al ajustar modelos de regresión con este tipo de conjuntos de datos, el uso de estimadores convencionales que se pueden derivar por los m{etodos tradicionales (como máxima verosimilitud, por ejemplo) induciran sesgo puesto que, con estas metodología siempre se está asumiendo que los datos son independientes e idénticamente distribuidos y que provienen de alguna distribución de probabilidad (binomial, Poisson, exponencial, normal, etc.). En su lugar, según <span class="citation">Wolter (<a href="#ref-Wolter_2007">2007</a>)</span>, se emplean métodos no paramétricos robustos basados en linealización de Taylor o métodos de estimación de la varianza usando replicación (Jackknife, bootstrapping, etc) para eliminar el sesgo al incluir el diseño de muestreo en los análisis.</p>
 <p>Con fines ilustrativos, se mostrará la estimación del parámetro <span class="math inline">\(\beta_{1}\)</span> y su varianza para una regresión lineal simple. La extensión a la estimación de los parámetros de un modelo de regresión múltiple, algebraicamente es compleja y se sale del contexto de este libro. A continuación, se presenta la estimación de la pendiente y su varianza en un modelo de regresión lineal simple:</p>
 <p><span class="math display">\[
-\hat{\beta_{1}}  =  \frac{{\sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}\left(y_{h\alpha i}-\hat{\bar{y}}_{\omega}\right)\left(x_{h\alpha i}-\hat{\bar{x}}_{\omega}\right)}}{{ \sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}\left(x_{h\alpha i}-\hat{\bar{x}}_{\omega}\right)^{2}}}
+\hat{\beta_{1}}=\frac{{\sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}(y_{h\alpha i}-\hat{\bar{y}}_{\omega})(x_{h\alpha i}-\hat{\bar{x}}_{\omega})}}{{ \sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}(x_{h\alpha i}-\hat{\bar{x}}_{\omega})^{2}}}
 \]</span></p>
 <p>Como se puede observar en la ecuación anterior, el estimador del parámetro es un cociente de totales, por ende, su varianza está dada por:</p>
 <p><span class="math display">\[
-var\left(\hat{\beta_{1}}\right)  =  \frac{var\left(\hat{t}_{xy}\right)+\hat{\beta}_{1}^{2}var\left(\hat{t}_{x^{2}}\right)-2\hat{\beta}_{1}cov\left(\hat{t}_{xy},\hat{t}_{x^{2}}\right)}{\left(\hat{t}_{x^{2}}\right)^{2}}
+var(t(\hat{\beta_{1}})  =  \frac{var(t(\hat{t}_{xy})+\hat{\beta}_{1}^{2}var(t(\hat{t}_{x^{2}})-2\hat{\beta}_{1}cov(t(\hat{t}_{xy},\hat{t}_{x^{2}})}{(t(\hat{t}_{x^{2}})^{2}}
 \]</span></p>
 <p>A modo de generalización, según <span class="citation">Kish y Frankel (<a href="#ref-kish1974inference">1974</a>)</span>, la estimación de la varianza de los coeficientes en un modelo de regresión lineal múltiple, los métodos de aproximación requieren totales ponderados para los cuadrados y productos cruzados de todas las combinaciones <span class="math inline">\(y\)</span> y <span class="math inline">\(x = {1 x_{1} … x_{p}}\)</span>. A continuación, se presenta la estimación de estas varianzas:</p>
 <p><span class="math display">\[\begin{eqnarray*}
-var\left(\hat{\beta}\right)=\hat{\Sigma}\left(\hat{\beta}\right) &amp; = &amp; \left[\begin{array}{cccc}
-var\left(\hat{\beta}_{0}\right) &amp; cov\left(\hat{\beta}_{0},\hat{\beta}_{1}\right) &amp; \cdots &amp; cov\left(\hat{\beta}_{0},\hat{\beta}_{p}\right)\\
-cov\left(\hat{\beta}_{0},\hat{\beta}_{1}\right) &amp; var\left(\hat{\beta}_{1}\right) &amp; \cdots &amp; cov\left(\hat{\beta}_{1},\hat{\beta}_{p}\right)\\
+var(t(\hat{\beta})=\hat{\Sigma}(t(\hat{\beta}) &amp; = &amp; (t[\begin{array}{cccc}
+var(t(\hat{\beta}_{0}) &amp; cov(t(\hat{\beta}_{0},\hat{\beta}_{1}) &amp; \cdots &amp; cov(t(\hat{\beta}_{0},\hat{\beta}_{p})\\
+cov(t(\hat{\beta}_{0},\hat{\beta}_{1}) &amp; var(t(\hat{\beta}_{1}) &amp; \cdots &amp; cov(t(\hat{\beta}_{1},\hat{\beta}_{p})\\
 \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
-cov\left(\hat{\beta}_{0},\hat{\beta}_{p}\right) &amp; cov\left(\hat{\beta}_{1},\hat{\beta}_{p}\right) &amp; \cdots &amp; var\left(\hat{\beta}_{p}\right)
+cov(t(\hat{\beta}_{0},\hat{\beta}_{p}) &amp; cov(t(\hat{\beta}_{1},\hat{\beta}_{p}) &amp; \cdots &amp; var(t(\hat{\beta}_{p})
 \end{array}\right]
 \end{eqnarray*}\]</span></p>
 <p>Para ejemplificar los conceptos trabajados hasta este momento, se tomará la misma base de ejemplo y se inicia con el cargue de las librerías, la base de datos y la definición del diseño de muestreo:</p>

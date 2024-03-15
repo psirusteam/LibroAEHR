@@ -30,48 +30,48 @@ $$
 y_{i}  =  x_{i}\boldsymbol{\beta}+\varepsilon_{i}
 $$
 
-En donde, $x_{i}=\left[1\,x_{1i}\,\ldots\,x_{pi}\right]$ y $\boldsymbol{\beta}^{T}=\left[\beta_{0}\,\,\beta_{1}\,\,\ldots\,\,\beta_{p}\right]$.
+En donde, $x_{i}=(t[1\,x_{1i}\,\ldots\,x_{pi}\right]$ y $\boldsymbol{\beta}^{T}=(t[\beta_{0}\,\,\beta_{1}\,\,\ldots\,\,\beta_{p}\right]$.
 
 El subíndice $i$ hace referencia al elemento muestral o respondiente
 en el conjunto de datos. @Heeringa_West_Berglund_2017 presenta algunas consideraciones para los modelos de regresión, las cuales son descritas a continuación:
 
--   $E\left(\varepsilon_{i}\mid x_{i}\right)=0$, lo que significa que
+-   $E(t(\varepsilon_{i}\mid x_{i})=0$, lo que significa que
 el valor esperado de los residuos condicionado al grupo de covariables
  es igual a cero.
--   $Var\left(\varepsilon_{i}\mid x_{i}\right)=\sigma_{y,x}^{2}$ (homogenidad
+-   $Var(t(\varepsilon_{i}\mid x_{i})=\sigma_{y,x}^{2}$ (homogenidad
 de varianza) lo que significa que la varianza de los residuos condicionado
 al grupo de covariables es igual y constante.
--   $\varepsilon_{i}\mid x_{i}\sim N\left(0,\,\sigma_{y,x}^{2}\right)$
+-   $\varepsilon_{i}\mid x_{i}\sim N(t(0,\,\sigma_{y,x}^{2})$
 (normalidad en los errores) lo que significa que, los residuos condicionados
 al grupo de covariables siguen una distribución normal. Esta propiedad también se extiende a la variable respuesta $y_{i}$.
--   $cov\left(\varepsilon_{i},\,\varepsilon_{j}\mid x_{i},x_{j}\right)$
+-   $cov(t(\varepsilon_{i},\,\varepsilon_{j}\mid x_{i},x_{j})$
 (independencia en los residuales) los residuales en diferentes unidades observadas no están correlacionados con los valores dados por sus variables predictoras.
 
-Una vez definido el modelo de regresión lineal y sus supuestos, se puede deducir que la mejor estimación lineal insesgada se define como el valor esperado de la variable dependiente condicionado a las variables independientes $x$ como, $E\left(y\mid x\right)=\hat{\beta}_{0}+\hat{\beta_{1}}x_{1}+\hat{\beta}_{2}x_{2}+\cdots+\hat{\beta}_{p}x_{p}$.
+Una vez definido el modelo de regresión lineal y sus supuestos, se puede deducir que la mejor estimación lineal insesgada se define como el valor esperado de la variable dependiente condicionado a las variables independientes $x$ como, $E(t(y\mid x)=\hat{\beta}_{0}+\hat{\beta_{1}}x_{1}+\hat{\beta}_{2}x_{2}+\cdots+\hat{\beta}_{p}x_{p}$.
 
 
 $$
-\hat{y}  =  E\left(y\mid x\right)
- =  E\left(\boldsymbol{x}\boldsymbol{\beta}\right)+E\left(\varepsilon\right)
+\hat{y}  =  E(t(y\mid x)
+ =  E(t(\boldsymbol{x}\boldsymbol{\beta})+E(t(\varepsilon)
 =  \boldsymbol{x}\boldsymbol{\beta}+0
-  =  \beta_{0}+\beta_{1}x_{1}+\cdots+\beta_{p}x_{p}
+=  \beta_{0}+\beta_{1}x_{1}+\cdots+\beta_{p}x_{p}
 $$
 
 y adicionalmente,
 
 $$
-var\left(y_{i}\mid x_{i}\right)  =  \sigma_{y,x}^{2}
+var(t(y_{i}\mid x_{i})  =  \sigma_{y,x}^{2}
 $$
 
 Así mismo, se tiene que:
 
 $$
-cov\left(y_{i},y_{j}\mid x_{i},x_{j}\right)  = 0
+cov(t(y_{i},y_{j}\mid x_{i},x_{j})  = 0
 $$
 Luego, la variable respuesta tiene la siguiente distribución:
 
 $$
-y_{i}  \sim  N\left(x_{i}\boldsymbol{\beta},\sigma_{y,x}^{2}\right)
+y_{i}  \sim  N(t(x_{i}\boldsymbol{\beta},\sigma_{y,x}^{2})
 $$
 
 
@@ -90,23 +90,23 @@ En este contexto, al ajustar modelos  de regresión con este tipo de conjuntos d
 Con fines ilustrativos, se mostrará la estimación del parámetro $\beta_{1}$ y su varianza para una regresión lineal simple. La extensión a la estimación de los parámetros de un modelo de regresión múltiple, algebraicamente es compleja y se sale del contexto de este libro. A continuación, se presenta la estimación de la pendiente y su varianza en un modelo de regresión lineal simple:
 
 $$
-\hat{\beta_{1}}  =  \frac{{\sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}\left(y_{h\alpha i}-\hat{\bar{y}}_{\omega}\right)\left(x_{h\alpha i}-\hat{\bar{x}}_{\omega}\right)}}{{ \sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}\left(x_{h\alpha i}-\hat{\bar{x}}_{\omega}\right)^{2}}}
+\hat{\beta_{1}}=\frac{{\sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}(y_{h\alpha i}-\hat{\bar{y}}_{\omega})(x_{h\alpha i}-\hat{\bar{x}}_{\omega})}}{{ \sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}(x_{h\alpha i}-\hat{\bar{x}}_{\omega})^{2}}}
 $$
 
 Como se puede observar en la ecuación anterior, el estimador del parámetro es un cociente de totales, por ende, su varianza está dada por:
 
 $$
-var\left(\hat{\beta_{1}}\right)  =  \frac{var\left(\hat{t}_{xy}\right)+\hat{\beta}_{1}^{2}var\left(\hat{t}_{x^{2}}\right)-2\hat{\beta}_{1}cov\left(\hat{t}_{xy},\hat{t}_{x^{2}}\right)}{\left(\hat{t}_{x^{2}}\right)^{2}}
+var(t(\hat{\beta_{1}})  =  \frac{var(t(\hat{t}_{xy})+\hat{\beta}_{1}^{2}var(t(\hat{t}_{x^{2}})-2\hat{\beta}_{1}cov(t(\hat{t}_{xy},\hat{t}_{x^{2}})}{(t(\hat{t}_{x^{2}})^{2}}
 $$
 
 A modo de generalización, según @kish1974inference, la estimación de la varianza de los coeficientes en un modelo de regresión lineal múltiple, los métodos de aproximación requieren totales ponderados para los cuadrados y productos cruzados de todas las combinaciones $y$ y $x = {1 x_{1} … x_{p}}$. A continuación, se presenta la estimación de estas varianzas:
 
 \begin{eqnarray*}
-var\left(\hat{\beta}\right)=\hat{\Sigma}\left(\hat{\beta}\right) & = & \left[\begin{array}{cccc}
-var\left(\hat{\beta}_{0}\right) & cov\left(\hat{\beta}_{0},\hat{\beta}_{1}\right) & \cdots & cov\left(\hat{\beta}_{0},\hat{\beta}_{p}\right)\\
-cov\left(\hat{\beta}_{0},\hat{\beta}_{1}\right) & var\left(\hat{\beta}_{1}\right) & \cdots & cov\left(\hat{\beta}_{1},\hat{\beta}_{p}\right)\\
+var(t(\hat{\beta})=\hat{\Sigma}(t(\hat{\beta}) & = & (t[\begin{array}{cccc}
+var(t(\hat{\beta}_{0}) & cov(t(\hat{\beta}_{0},\hat{\beta}_{1}) & \cdots & cov(t(\hat{\beta}_{0},\hat{\beta}_{p})\\
+cov(t(\hat{\beta}_{0},\hat{\beta}_{1}) & var(t(\hat{\beta}_{1}) & \cdots & cov(t(\hat{\beta}_{1},\hat{\beta}_{p})\\
 \vdots & \vdots & \ddots & \vdots\\
-cov\left(\hat{\beta}_{0},\hat{\beta}_{p}\right) & cov\left(\hat{\beta}_{1},\hat{\beta}_{p}\right) & \cdots & var\left(\hat{\beta}_{p}\right)
+cov(t(\hat{\beta}_{0},\hat{\beta}_{p}) & cov(t(\hat{\beta}_{1},\hat{\beta}_{p}) & \cdots & var(t(\hat{\beta}_{p})
 \end{array}\right]
 \end{eqnarray*}
 
@@ -392,7 +392,7 @@ $$
 En donde $\widehat{SSE}_{\omega}$ es la suma de cuadrados del error estimada, dada por:
 
 $$
-\widehat{SSE}_{\omega}  =  \sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}\left(y_{h\alpha i}-x_{h\alpha i}\hat{\beta}\right)^{2}
+\widehat{SSE}_{\omega}  =  \sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}(y_{h\alpha i}-x_{h\alpha i}\hat{\beta})^{2}
 $$
 
 Para continuar con los modelos ajustados en la sección anterior, se procede a estimar los $R^{2}$ utilizando `R`. Inicialmente, se procede a estimar los parámetros del modelo utilizando la función `svyglm` de `survey` como se mostró anteriormente y también, se ajusta un modelo solo con el intercepto para obtener la estimación de la SST:
@@ -432,7 +432,7 @@ de los residuales deberá ayudar al investigador a concluir si el procedimiento 
 Para realizar el análisis de los residuales, en primera instancia, se definen los residuales de Pearson [@Heeringa_West_Berglund_2017] como sigue:
 
 $$
-r_{p_{i}}  =  \left(y_{i}-\mu_{i}\left(\hat{\beta}_{\omega}\right)\right)\sqrt{\frac{\omega_{i}}{V\left(\hat{\mu}_{i}\right)}}
+r_{p_{i}}  =  (t(y_{i}-\mu_{i}(t(\hat{\beta}_{\omega}))\sqrt{\frac{\omega_{i}}{V(t(\hat{\mu}_{i})}}
 $$
 
 Donde, $\mu_{i}$ es el valor esperado de $y_{i}$,  $w_{i}$ es la ponderación de la encuesta para el i-ésimo individuo del diseño muestral complejo, Por último, $V(\mu_{i})$ es la función de varianza del resultado. Sobre estos residuales se realizan los análisis de normalidad y varianza constante. 
@@ -522,9 +522,9 @@ en la estimación del modelo, por estar lejos del centro de masa de los
 datos. En general, distintos autores consideran que las observaciones son influyentes cuando esta cantidad es mayor que 2 o 3.
 2. Estadístico $D_fBeta_{(i)}$: este estadístico mide el cambio en la estimación
 del vector de coeficientes de regresión cuando la observación
-es eliminada. Se determina que la i-ésima observación es influyente para $B_j$ si $\mid D_{f}Betas_{\left(i\right)j}\mid\geq\frac{z}{\sqrt{n}}$ con $z = 2$. Como alternativa, se puede usar $t_{0.025,n-p}/\sqrt(n)$ donde $t_{0.025,n-p}$ es el percentil $97.5$
-3. Estadístico $D_{f}Fits_{\left(i\right)}$*: este estadístico mide el cambio en el ajuste del modelo cuando se elimina una observación particular. En esta instancia, la $i$-ésima observación se considera influyente en el ajuste del modelo si
-$\mid DfFits\left(i\right)\mid\geq z\sqrt{\frac{p}{n}}$ con $z = 2$.
+es eliminada. Se determina que la i-ésima observación es influyente para $B_j$ si $\mid D_{f}Betas_{(t(i)j}\mid\geq\frac{z}{\sqrt{n}}$ con $z = 2$. Como alternativa, se puede usar $t_{0.025,n-p}/\sqrt(n)$ donde $t_{0.025,n-p}$ es el percentil $97.5$
+3. Estadístico $D_{f}Fits_{(t(i)}$*: este estadístico mide el cambio en el ajuste del modelo cuando se elimina una observación particular. En esta instancia, la $i$-ésima observación se considera influyente en el ajuste del modelo si
+$\mid DfFits(t(i)\mid\geq z\sqrt{\frac{p}{n}}$ con $z = 2$.
 
 Para ejemplificar los conceptos definidos, se seguirá con los modelos ajustados en la sección anterior. Una vez ajustados estos modelos y verificados los supuestos, se procede a hacer el cálculo de la distancia de Cook usando la función `svyCooksD` del paquete `svydiags` como sigue:
 
@@ -540,7 +540,7 @@ ggplot(d_cook, aes(y = cook, x = id)) +
   theme_bw(20)
 ```
 
-Como se puede observar, ninguna de las distancias de Cook's es mayor a 3; por ende podemos afirmar que no existen observaciones influyentes. Ahora bien, si se desea corroborar que no hay observaciones influyentes utilizando el estadístico $D_{f}Betas_{\left(i\right)j}$, esto se puede realizar con la función `svydfbetas` como se muestra a continuación:
+Como se puede observar, ninguna de las distancias de Cook's es mayor a 3; por ende podemos afirmar que no existen observaciones influyentes. Ahora bien, si se desea corroborar que no hay observaciones influyentes utilizando el estadístico $D_{f}Betas_{(t(i)j}$, esto se puede realizar con la función `svydfbetas` como se muestra a continuación:
 
 
 ```r
@@ -564,7 +564,7 @@ d_dfbetas %>% slice(1:10)
 |  0.0030|  3e-04| -0.0031| -0.0082| -0.0054|
 | -0.0003|  4e-04|  0.0012| -0.0039| -0.0042|
 
-Una vez calculado los $D_{f}Betas_{\left(i\right)j}$ se procede a reacomodar la salida para verificar cuáles observaciones son influyentes. Para esto, de calcula el umbral (cutoff) para definir si es o no influyente la observación. Ese umbral es tomado de las salidas de la función `svydfbetas`. Por último, se genera una variable dicotómica que indique si la observación es o no influyente como se muestra a continuación: 
+Una vez calculado los $D_{f}Betas_{(t(i)j}$ se procede a reacomodar la salida para verificar cuáles observaciones son influyentes. Para esto, de calcula el umbral (cutoff) para definir si es o no influyente la observación. Ese umbral es tomado de las salidas de la función `svydfbetas`. Por último, se genera una variable dicotómica que indique si la observación es o no influyente como se muestra a continuación: 
 
 
 ```r
@@ -595,7 +595,7 @@ tex_label
 | 2311|Beta_4   |  0.2122|Si       |
 |  890|Beta_3   |  0.2029|Si       |
 
-Como se pudo observar en la salida anterior hay varias observaciones que resultan influyentes dado el criterio del $D_{f}Betas_{\left(i\right)j}$. A continuación, y de manera ilustrativa, se grafican los $D_{f}Betas_{\left(i\right)j}$ y el umbral con el fin de ver de manera gráfica aquellas observaciones influyentes, teniendo en cuenta que, aquellos puntos rojos en la gráfica representan observaciones influyentes.
+Como se pudo observar en la salida anterior hay varias observaciones que resultan influyentes dado el criterio del $D_{f}Betas_{(t(i)j}$. A continuación, y de manera ilustrativa, se grafican los $D_{f}Betas_{(t(i)j}$ y el umbral con el fin de ver de manera gráfica aquellas observaciones influyentes, teniendo en cuenta que, aquellos puntos rojos en la gráfica representan observaciones influyentes.
 
 
 ```r
@@ -613,7 +613,7 @@ ggplot(d_dfbetas, aes(y = abs(value), x = id)) +
 
 <img src="07-Regresión_files/figure-html/unnamed-chunk-14-1.svg" width="672" />
 
-Si el objetivo es detectar observaciones influyentes pero considerando ahora la estadística $D_{f}Fits_{\left(i\right)}$, se utiliza la función `svydffits` y se siguen los mismos pasos mostrados para el estadístico $D_{f}Betas_{\left(i\right)j}$.A continuación se muestra el código computacional apropiado para realizarlo:
+Si el objetivo es detectar observaciones influyentes pero considerando ahora la estadística $D_{f}Fits_{(t(i)}$, se utiliza la función `svydffits` y se siguen los mismos pasos mostrados para el estadístico $D_{f}Betas_{(t(i)j}$.A continuación se muestra el código computacional apropiado para realizarlo:
 
 
 ```r
@@ -630,7 +630,7 @@ ggplot(d_dffits, aes(y = abs(dffits), x = id)) +
   theme_cepal()
 ```
 
-Como se puede observar en el gráfico anterior, también hay observaciones influyentes utilizando $D_{f}Fits_{\left(i\right)}$, las cuales se muestran en rojo en el gráfico.
+Como se puede observar en el gráfico anterior, también hay observaciones influyentes utilizando $D_{f}Fits_{(t(i)}$, las cuales se muestran en rojo en el gráfico.
 
 
 ## Inferencia sobre los parámetros del Modelo
@@ -640,16 +640,16 @@ Una vez evaluado el correcto ajuste del modelo utilizando las metodologías vist
 Dadas las propiedades distribucionales de los estimadores de los coeficientes de regresión, un estadístico de prueba natural para evaluar la significación de dicho parámetro se basa en la distribución t-student y se describe a continuación:
 
 $$
-t = \frac{\hat{\beta}_{k}-\beta_{k}}{se\left(\hat{\beta}_{k}\right)}\sim t_{n-p}
+t = \frac{\hat{\beta}_{k}-\beta_{k}}{se(t(\hat{\beta}_{k})}\sim t_{n-p}
 $$
 
 Donde $p$ es el número de parámetros del modelo y $n$ el tamaño de la muestra de la encuesta. En este sentido, el estadístico de prueba anterior evalúa las hipótesis $H_{0}:\beta_{k}=0$ versus la alternativa $H_{1}:\beta_{k}\neq0$. Asimismo, se puede construir un intervalo de confianza al $(1-\alpha)\times100\%$ para $\beta_{k}$, el cual está dado por:
 
 $$
-\hat{\beta}_{k}\pm t_{1-\frac{\alpha}{2},\,df}\,se\left(\hat{\beta}_{k}\right)
+\hat{\beta}_{k}\pm t_{1-\frac{\alpha}{2},\,df}\,se(t(\hat{\beta}_{k})
 $$
 
-Donde, los grados de libertad ($df$) para el intervalo en una encuesta de hogares (muestras complejas) está dado por el número de conglomerados finales de la primera etapa menos el número de estratos de la etapa primaria $\left(df=\sum_{h}a_{h}-H\right)$.
+Donde, los grados de libertad ($df$) para el intervalo en una encuesta de hogares (muestras complejas) está dado por el número de conglomerados finales de la primera etapa menos el número de estratos de la etapa primaria $(t(df=\sum_{h}a_{h}-H)$.
 
 Para la aplicación de las temáticas vistas (juzgamiento de la prueba de hipótesis de significación y construcción de los intervalos de confianza para los parámetros) utilizaremos el modelo que se ha venido trabajando como ejemplo y aplicaremos las funciones `summary.svyglm` para las pruebas t y `confint.svyglm` para los intervalos de confianza como sigue:
 
@@ -715,8 +715,8 @@ $$
 La varianza de la estimación se calcula de la siguiente manera:
 
 $$
-var\left(\hat{E}\left(y_{i}\mid x_{obs,i}\right)\right) 
-=  x'_{obs,i}cov\left(\hat{\beta}\right)x{}_{obs,i}
+var(t(\hat{E}(t(y_{i}\mid x_{obs,i})) 
+=  x'_{obs,i}cov(t(\hat{\beta})x{}_{obs,i}
 $$
 
 A continuación, se presenta cómo se realiza la estimación del valor esperado utilizando `R`. Por ende, primero se estiman los parámetros del modelo:
@@ -772,7 +772,7 @@ Si el objetivo ahora es calcular el intervalo de confianza para la predicción s
 
 
 $$
-\boldsymbol{x}_{obs,i}\hat{\beta}\pm t_{\left(1-\frac{\alpha}{2},n-p\right)}\sqrt{var\left(\hat{E}\left(y_{i}\mid\boldsymbol{x}_{obs,i}\right)\right)}
+\boldsymbol{x}_{obs,i}\hat{\beta}\pm t_{(t(1-\frac{\alpha}{2},n-p)}\sqrt{var(t(\hat{E}(t(y_{i}\mid\boldsymbol{x}_{obs,i}))}
 $$
 
 Para realizar los cálculos en `R`, se utiliza la función `confint` y `predict` como sigue:
@@ -806,7 +806,7 @@ ggplot(pred %>% slice(1:100L),
 Por último, si el interés es hacer una predicción fuera del rango de valores que fue capturado en la muestra, se debe tener en cuenta que la expresión de la varianza cambia ligeramente. En ese caso, la varianza para la predicción se hace siguiendo la siguiente ecuación:
 
 $$
-var\left(\hat{E}\left(y_{i}\mid\boldsymbol{x}_{obs,i}\right)\right)=\boldsymbol{x}_{obs,i}^{t}cov\left(\boldsymbol{\beta}\right)\boldsymbol{x}_{obs,i} + \hat{\sigma}^2_{yx}
+var(t(\hat{E}(t(y_{i}\mid\boldsymbol{x}_{obs,i}))=\boldsymbol{x}_{obs,i}^{t}cov(t(\boldsymbol{\beta})\boldsymbol{x}_{obs,i} + \hat{\sigma}^2_{yx}
 $$
 
 
@@ -837,7 +837,7 @@ as.numeric(sqrt(x_noObs %*% cov_beta %*% t(x_noObs)))
 Por último, el intervalo de confianza sigue la siguiente ecuación:
 
 $$
-\boldsymbol{x}_{obs,i}\hat{\beta}\pm t_{\left(1-\frac{\alpha}{2},n-p\right)}\sqrt{var\left(\hat{E}\left(y_{i}\mid\boldsymbol{x}_{obs,i}\right)\right)+\hat{\sigma}_{yx}^{2}}
+\boldsymbol{x}_{obs,i}\hat{\beta}\pm t_{(t(1-\frac{\alpha}{2},n-p)}\sqrt{var(t(\hat{E}(t(y_{i}\mid\boldsymbol{x}_{obs,i}))+\hat{\sigma}_{yx}^{2}}
 $$
 
 En `R` la predicción se realiza usando la función `predict` sobre el objeto `fit_svy` de la siguiente manera. Esta salida provee la predicción puntual y su correspondiente error estándar, el cual es idéntico al calculado anteriormente.

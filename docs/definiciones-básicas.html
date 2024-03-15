@@ -23,7 +23,7 @@
 <meta name="author" content="Andrés Gutiérrez, Cristian Téllez, Stalyn Guerrero" />
 
 
-<meta name="date" content="2024-03-11" />
+<meta name="date" content="2024-03-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -320,40 +320,40 @@ y  =  \boldsymbol{x}\boldsymbol{\beta}+\varepsilon
 <p><span class="math display">\[
 y_{i}  =  x_{i}\boldsymbol{\beta}+\varepsilon_{i}
 \]</span></p>
-<p>En donde, <span class="math inline">\(x_{i}=\left[1\,x_{1i}\,\ldots\,x_{pi}\right]\)</span> y <span class="math inline">\(\boldsymbol{\beta}^{T}=\left[\beta_{0}\,\,\beta_{1}\,\,\ldots\,\,\beta_{p}\right]\)</span>.</p>
+<p>En donde, <span class="math inline">\(x_{i}=(t[1\,x_{1i}\,\ldots\,x_{pi}\right]\)</span> y <span class="math inline">\(\boldsymbol{\beta}^{T}=(t[\beta_{0}\,\,\beta_{1}\,\,\ldots\,\,\beta_{p}\right]\)</span>.</p>
 <p>El subíndice <span class="math inline">\(i\)</span> hace referencia al elemento muestral o respondiente
 en el conjunto de datos. <span class="citation">Heeringa, West, y Berglund (<a href="#ref-Heeringa_West_Berglund_2017">2017</a>)</span> presenta algunas consideraciones para los modelos de regresión, las cuales son descritas a continuación:</p>
 <ul>
-<li><span class="math inline">\(E\left(\varepsilon_{i}\mid x_{i}\right)=0\)</span>, lo que significa que
+<li><span class="math inline">\(E(t(\varepsilon_{i}\mid x_{i})=0\)</span>, lo que significa que
 el valor esperado de los residuos condicionado al grupo de covariables
 es igual a cero.</li>
-<li><span class="math inline">\(Var\left(\varepsilon_{i}\mid x_{i}\right)=\sigma_{y,x}^{2}\)</span> (homogenidad
+<li><span class="math inline">\(Var(t(\varepsilon_{i}\mid x_{i})=\sigma_{y,x}^{2}\)</span> (homogenidad
 de varianza) lo que significa que la varianza de los residuos condicionado
 al grupo de covariables es igual y constante.</li>
-<li><span class="math inline">\(\varepsilon_{i}\mid x_{i}\sim N\left(0,\,\sigma_{y,x}^{2}\right)\)</span>
+<li><span class="math inline">\(\varepsilon_{i}\mid x_{i}\sim N(t(0,\,\sigma_{y,x}^{2})\)</span>
 (normalidad en los errores) lo que significa que, los residuos condicionados
 al grupo de covariables siguen una distribución normal. Esta propiedad también se extiende a la variable respuesta <span class="math inline">\(y_{i}\)</span>.</li>
-<li><span class="math inline">\(cov\left(\varepsilon_{i},\,\varepsilon_{j}\mid x_{i},x_{j}\right)\)</span>
+<li><span class="math inline">\(cov(t(\varepsilon_{i},\,\varepsilon_{j}\mid x_{i},x_{j})\)</span>
 (independencia en los residuales) los residuales en diferentes unidades observadas no están correlacionados con los valores dados por sus variables predictoras.</li>
 </ul>
-<p>Una vez definido el modelo de regresión lineal y sus supuestos, se puede deducir que la mejor estimación lineal insesgada se define como el valor esperado de la variable dependiente condicionado a las variables independientes <span class="math inline">\(x\)</span> como, <span class="math inline">\(E\left(y\mid x\right)=\hat{\beta}_{0}+\hat{\beta_{1}}x_{1}+\hat{\beta}_{2}x_{2}+\cdots+\hat{\beta}_{p}x_{p}\)</span>.</p>
+<p>Una vez definido el modelo de regresión lineal y sus supuestos, se puede deducir que la mejor estimación lineal insesgada se define como el valor esperado de la variable dependiente condicionado a las variables independientes <span class="math inline">\(x\)</span> como, <span class="math inline">\(E(t(y\mid x)=\hat{\beta}_{0}+\hat{\beta_{1}}x_{1}+\hat{\beta}_{2}x_{2}+\cdots+\hat{\beta}_{p}x_{p}\)</span>.</p>
 <p><span class="math display">\[
-\hat{y}  =  E\left(y\mid x\right)
-=  E\left(\boldsymbol{x}\boldsymbol{\beta}\right)+E\left(\varepsilon\right)
+\hat{y}  =  E(t(y\mid x)
+=  E(t(\boldsymbol{x}\boldsymbol{\beta})+E(t(\varepsilon)
 =  \boldsymbol{x}\boldsymbol{\beta}+0
-  =  \beta_{0}+\beta_{1}x_{1}+\cdots+\beta_{p}x_{p}
+=  \beta_{0}+\beta_{1}x_{1}+\cdots+\beta_{p}x_{p}
 \]</span></p>
 <p>y adicionalmente,</p>
 <p><span class="math display">\[
-var\left(y_{i}\mid x_{i}\right)  =  \sigma_{y,x}^{2}
+var(t(y_{i}\mid x_{i})  =  \sigma_{y,x}^{2}
 \]</span></p>
 <p>Así mismo, se tiene que:</p>
 <p><span class="math display">\[
-cov\left(y_{i},y_{j}\mid x_{i},x_{j}\right)  = 0
+cov(t(y_{i},y_{j}\mid x_{i},x_{j})  = 0
 \]</span>
 Luego, la variable respuesta tiene la siguiente distribución:</p>
 <p><span class="math display">\[
-y_{i}  \sim  N\left(x_{i}\boldsymbol{\beta},\sigma_{y,x}^{2}\right)
+y_{i}  \sim  N(t(x_{i}\boldsymbol{\beta},\sigma_{y,x}^{2})
 \]</span></p>
 </div>
 <h3>References</h3>

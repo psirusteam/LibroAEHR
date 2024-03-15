@@ -1,7 +1,7 @@
 --- 
 title: "Análisis de encuestas de hogares con R"
 author: "Andrés Gutiérrez^[Experto Regional en Estadísticas Sociales - Comisión Económica para América Latina y el Caribe (CEPAL) -  andres.gutierrez@cepal.org], Cristian Téllez^[Profesor - Universidad Santo Tomás - cristiantellez@usta.edu.co], Stalyn Guerrero^[Consultor - Comisión Económica para América Latina y el Caribe (CEPAL), guerrerostalyn@gmail.com]"
-date: "2024-03-11"
+date: "2024-03-15"
 documentclass: book
 bibliography: [CEPAL.bib]
 biblio-style: apalike

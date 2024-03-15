@@ -23,7 +23,7 @@
 <meta name="author" content="Andrés Gutiérrez, Cristian Téllez, Stalyn Guerrero" />
 
 
-<meta name="date" content="2024-03-11" />
+<meta name="date" content="2024-03-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -330,7 +330,7 @@ R^{2} =  1-\frac{SSE}{SST}
 \]</span></p>
 <p>En donde <span class="math inline">\(\widehat{SSE}_{\omega}\)</span> es la suma de cuadrados del error estimada, dada por:</p>
 <p><span class="math display">\[
-\widehat{SSE}_{\omega}  =  \sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}\left(y_{h\alpha i}-x_{h\alpha i}\hat{\beta}\right)^{2}
+\widehat{SSE}_{\omega}  =  \sum_{h}^{H}\sum_{\alpha}^{a_{h}}\sum_{i=1}^{n_{h\alpha}}\omega_{h\alpha i}(y_{h\alpha i}-x_{h\alpha i}\hat{\beta})^{2}
 \]</span></p>
 <p>Para continuar con los modelos ajustados en la sección anterior, se procede a estimar los <span class="math inline">\(R^{2}\)</span> utilizando <code>R</code>. Inicialmente, se procede a estimar los parámetros del modelo utilizando la función <code>svyglm</code> de <code>survey</code> como se mostró anteriormente y también, se ajusta un modelo solo con el intercepto para obtener la estimación de la SST:</p>
 <div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="diagnóstico-del-modelo.html#cb313-1" tabindex="-1"></a>modNul <span class="ot">&lt;-</span> <span class="fu">svyglm</span>(Income <span class="sc">~</span> <span class="dv">1</span>, <span class="at">design =</span> diseno_qwgt)</span>
@@ -353,7 +353,7 @@ adecuado, una estimación de los errores. Por tanto, un estudio cuidadoso
 de los residuales deberá ayudar al investigador a concluir si el procedimiento de ajuste no ha violado los supuestos o si, por el contrario, uno o varios de los supuestos no se verifican y hay necesidad de revisar el procedimiento de ajuste.</p>
 <p>Para realizar el análisis de los residuales, en primera instancia, se definen los residuales de Pearson <span class="citation">(<a href="#ref-Heeringa_West_Berglund_2017">Heeringa, West, y Berglund 2017</a>)</span> como sigue:</p>
 <p><span class="math display">\[
-r_{p_{i}}  =  \left(y_{i}-\mu_{i}\left(\hat{\beta}_{\omega}\right)\right)\sqrt{\frac{\omega_{i}}{V\left(\hat{\mu}_{i}\right)}}
+r_{p_{i}}  =  (t(y_{i}-\mu_{i}(t(\hat{\beta}_{\omega}))\sqrt{\frac{\omega_{i}}{V(t(\hat{\mu}_{i})}}
 \]</span></p>
 <p>Donde, <span class="math inline">\(\mu_{i}\)</span> es el valor esperado de <span class="math inline">\(y_{i}\)</span>, <span class="math inline">\(w_{i}\)</span> es la ponderación de la encuesta para el i-ésimo individuo del diseño muestral complejo, Por último, <span class="math inline">\(V(\mu_{i})\)</span> es la función de varianza del resultado. Sobre estos residuales se realizan los análisis de normalidad y varianza constante.</p>
 <p>Si el supuesto de varianza constante no se cumple, los estimadores siguen siendo insesgados y consistentes, pero dejan de ser eficientes, es decir, dejan de ser los mejores en cuanto a que ya no tienen la menor varianza entre todos los estimadores insesgados. Una de las formas de analizar el supuesto de varianzas constantes en los errores es hacerlo de manera gráfica. Para ello, se grafica los residuos del modelo contra <span class="math inline">\(\hat{y}\)</span> o los residuos del modelo contra <span class="math inline">\(X_{i}\)</span>. Si al realizar estos gráficos se logra evidenciar cualquier patrón que no sea una nube de puntos constante, se puede concluir que la varianza de los errores no es constante.</p>
@@ -417,9 +417,9 @@ en la estimación del modelo, por estar lejos del centro de masa de los
 datos. En general, distintos autores consideran que las observaciones son influyentes cuando esta cantidad es mayor que 2 o 3.</li>
 <li>Estadístico <span class="math inline">\(D_fBeta_{(i)}\)</span>: este estadístico mide el cambio en la estimación
 del vector de coeficientes de regresión cuando la observación
-es eliminada. Se determina que la i-ésima observación es influyente para <span class="math inline">\(B_j\)</span> si <span class="math inline">\(\mid D_{f}Betas_{\left(i\right)j}\mid\geq\frac{z}{\sqrt{n}}\)</span> con <span class="math inline">\(z = 2\)</span>. Como alternativa, se puede usar <span class="math inline">\(t_{0.025,n-p}/\sqrt(n)\)</span> donde <span class="math inline">\(t_{0.025,n-p}\)</span> es el percentil <span class="math inline">\(97.5\)</span></li>
-<li>Estadístico <span class="math inline">\(D_{f}Fits_{\left(i\right)}\)</span>*: este estadístico mide el cambio en el ajuste del modelo cuando se elimina una observación particular. En esta instancia, la <span class="math inline">\(i\)</span>-ésima observación se considera influyente en el ajuste del modelo si
-<span class="math inline">\(\mid DfFits\left(i\right)\mid\geq z\sqrt{\frac{p}{n}}\)</span> con <span class="math inline">\(z = 2\)</span>.</li>
+es eliminada. Se determina que la i-ésima observación es influyente para <span class="math inline">\(B_j\)</span> si <span class="math inline">\(\mid D_{f}Betas_{(t(i)j}\mid\geq\frac{z}{\sqrt{n}}\)</span> con <span class="math inline">\(z = 2\)</span>. Como alternativa, se puede usar <span class="math inline">\(t_{0.025,n-p}/\sqrt(n)\)</span> donde <span class="math inline">\(t_{0.025,n-p}\)</span> es el percentil <span class="math inline">\(97.5\)</span></li>
+<li>Estadístico <span class="math inline">\(D_{f}Fits_{(t(i)}\)</span>*: este estadístico mide el cambio en el ajuste del modelo cuando se elimina una observación particular. En esta instancia, la <span class="math inline">\(i\)</span>-ésima observación se considera influyente en el ajuste del modelo si
+<span class="math inline">\(\mid DfFits(t(i)\mid\geq z\sqrt{\frac{p}{n}}\)</span> con <span class="math inline">\(z = 2\)</span>.</li>
 </ol>
 <p>Para ejemplificar los conceptos definidos, se seguirá con los modelos ajustados en la sección anterior. Una vez ajustados estos modelos y verificados los supuestos, se procede a hacer el cálculo de la distancia de Cook usando la función <code>svyCooksD</code> del paquete <code>svydiags</code> como sigue:</p>
 <div class="sourceCode" id="cb320"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb320-1"><a href="diagnóstico-del-modelo.html#cb320-1" tabindex="-1"></a><span class="fu">library</span>(svydiags)</span>
@@ -430,7 +430,7 @@ es eliminada. Se determina que la i-ésima observación es influyente para <span
 <span id="cb320-6"><a href="diagnóstico-del-modelo.html#cb320-6" tabindex="-1"></a><span class="fu">ggplot</span>(d_cook, <span class="fu">aes</span>(<span class="at">y =</span> cook, <span class="at">x =</span> id)) <span class="sc">+</span></span>
 <span id="cb320-7"><a href="diagnóstico-del-modelo.html#cb320-7" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
 <span id="cb320-8"><a href="diagnóstico-del-modelo.html#cb320-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="dv">20</span>)</span></code></pre></div>
-<p>Como se puede observar, ninguna de las distancias de Cook’s es mayor a 3; por ende podemos afirmar que no existen observaciones influyentes. Ahora bien, si se desea corroborar que no hay observaciones influyentes utilizando el estadístico <span class="math inline">\(D_{f}Betas_{\left(i\right)j}\)</span>, esto se puede realizar con la función <code>svydfbetas</code> como se muestra a continuación:</p>
+<p>Como se puede observar, ninguna de las distancias de Cook’s es mayor a 3; por ende podemos afirmar que no existen observaciones influyentes. Ahora bien, si se desea corroborar que no hay observaciones influyentes utilizando el estadístico <span class="math inline">\(D_{f}Betas_{(t(i)j}\)</span>, esto se puede realizar con la función <code>svydfbetas</code> como se muestra a continuación:</p>
 <div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="diagnóstico-del-modelo.html#cb321-1" tabindex="-1"></a>d_dfbetas <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">t</span>(<span class="fu">svydfbetas</span>(fit_svy)<span class="sc">$</span>Dfbetas))</span>
 <span id="cb321-2"><a href="diagnóstico-del-modelo.html#cb321-2" tabindex="-1"></a><span class="fu">colnames</span>(d_dfbetas) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;Beta_&quot;</span>, <span class="dv">0</span><span class="sc">:</span><span class="dv">4</span>)</span>
 <span id="cb321-3"><a href="diagnóstico-del-modelo.html#cb321-3" tabindex="-1"></a>d_dfbetas <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code></pre></div>
@@ -517,7 +517,7 @@ es eliminada. Se determina que la i-ésima observación es influyente para <span
 </tr>
 </tbody>
 </table>
-<p>Una vez calculado los <span class="math inline">\(D_{f}Betas_{\left(i\right)j}\)</span> se procede a reacomodar la salida para verificar cuáles observaciones son influyentes. Para esto, de calcula el umbral (cutoff) para definir si es o no influyente la observación. Ese umbral es tomado de las salidas de la función <code>svydfbetas</code>. Por último, se genera una variable dicotómica que indique si la observación es o no influyente como se muestra a continuación:</p>
+<p>Una vez calculado los <span class="math inline">\(D_{f}Betas_{(t(i)j}\)</span> se procede a reacomodar la salida para verificar cuáles observaciones son influyentes. Para esto, de calcula el umbral (cutoff) para definir si es o no influyente la observación. Ese umbral es tomado de las salidas de la función <code>svydfbetas</code>. Por último, se genera una variable dicotómica que indique si la observación es o no influyente como se muestra a continuación:</p>
 <div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="diagnóstico-del-modelo.html#cb322-1" tabindex="-1"></a>d_dfbetas<span class="sc">$</span>id <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(d_dfbetas)</span>
 <span id="cb322-2"><a href="diagnóstico-del-modelo.html#cb322-2" tabindex="-1"></a>d_dfbetas <span class="ot">&lt;-</span> reshape2<span class="sc">::</span><span class="fu">melt</span>(d_dfbetas, <span class="at">id.vars =</span> <span class="st">&quot;id&quot;</span>)</span>
 <span id="cb322-3"><a href="diagnóstico-del-modelo.html#cb322-3" tabindex="-1"></a>cutoff <span class="ot">&lt;-</span> <span class="fu">svydfbetas</span>(fit_svy)<span class="sc">$</span>cutoff</span>
@@ -600,7 +600,7 @@ es eliminada. Se determina que la i-ésima observación es influyente para <span
 </tr>
 </tbody>
 </table>
-<p>Como se pudo observar en la salida anterior hay varias observaciones que resultan influyentes dado el criterio del <span class="math inline">\(D_{f}Betas_{\left(i\right)j}\)</span>. A continuación, y de manera ilustrativa, se grafican los <span class="math inline">\(D_{f}Betas_{\left(i\right)j}\)</span> y el umbral con el fin de ver de manera gráfica aquellas observaciones influyentes, teniendo en cuenta que, aquellos puntos rojos en la gráfica representan observaciones influyentes.</p>
+<p>Como se pudo observar en la salida anterior hay varias observaciones que resultan influyentes dado el criterio del <span class="math inline">\(D_{f}Betas_{(t(i)j}\)</span>. A continuación, y de manera ilustrativa, se grafican los <span class="math inline">\(D_{f}Betas_{(t(i)j}\)</span> y el umbral con el fin de ver de manera gráfica aquellas observaciones influyentes, teniendo en cuenta que, aquellos puntos rojos en la gráfica representan observaciones influyentes.</p>
 <div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb323-1"><a href="diagnóstico-del-modelo.html#cb323-1" tabindex="-1"></a><span class="fu">ggplot</span>(d_dfbetas, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">abs</span>(value), <span class="at">x =</span> id)) <span class="sc">+</span></span>
 <span id="cb323-2"><a href="diagnóstico-del-modelo.html#cb323-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">col =</span> Criterio)) <span class="sc">+</span></span>
 <span id="cb323-3"><a href="diagnóstico-del-modelo.html#cb323-3" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> tex_label,</span>
@@ -612,7 +612,7 @@ es eliminada. Se determina que la i-ésima observación es influyente para <span
 <span id="cb323-9"><a href="diagnóstico-del-modelo.html#cb323-9" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;Si&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>, <span class="st">&quot;No&quot;</span> <span class="ot">=</span> <span class="st">&quot;black&quot;</span>)) <span class="sc">+</span></span>
 <span id="cb323-10"><a href="diagnóstico-del-modelo.html#cb323-10" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span></code></pre></div>
 <p><img src="07-Regresi%C3%B3n_files/figure-html/unnamed-chunk-14-1.svg" width="672" /></p>
-<p>Si el objetivo es detectar observaciones influyentes pero considerando ahora la estadística <span class="math inline">\(D_{f}Fits_{\left(i\right)}\)</span>, se utiliza la función <code>svydffits</code> y se siguen los mismos pasos mostrados para el estadístico <span class="math inline">\(D_{f}Betas_{\left(i\right)j}\)</span>.A continuación se muestra el código computacional apropiado para realizarlo:</p>
+<p>Si el objetivo es detectar observaciones influyentes pero considerando ahora la estadística <span class="math inline">\(D_{f}Fits_{(t(i)}\)</span>, se utiliza la función <code>svydffits</code> y se siguen los mismos pasos mostrados para el estadístico <span class="math inline">\(D_{f}Betas_{(t(i)j}\)</span>.A continuación se muestra el código computacional apropiado para realizarlo:</p>
 <div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="diagnóstico-del-modelo.html#cb324-1" tabindex="-1"></a>d_dffits <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">dffits =</span> <span class="fu">svydffits</span>(fit_svy)<span class="sc">$</span>Dffits,</span>
 <span id="cb324-2"><a href="diagnóstico-del-modelo.html#cb324-2" tabindex="-1"></a>                      <span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">svydffits</span>(fit_svy)<span class="sc">$</span>Dffits))</span>
 <span id="cb324-3"><a href="diagnóstico-del-modelo.html#cb324-3" tabindex="-1"></a></span>
@@ -624,7 +624,7 @@ es eliminada. Se determina que la i-ésima observación es influyente para <span
 <span id="cb324-9"><a href="diagnóstico-del-modelo.html#cb324-9" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> cutoff) <span class="sc">+</span></span>
 <span id="cb324-10"><a href="diagnóstico-del-modelo.html#cb324-10" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;Si&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>, <span class="st">&quot;No&quot;</span> <span class="ot">=</span> <span class="st">&quot;black&quot;</span>)) <span class="sc">+</span></span>
 <span id="cb324-11"><a href="diagnóstico-del-modelo.html#cb324-11" tabindex="-1"></a>  <span class="fu">theme_cepal</span>()</span></code></pre></div>
-<p>Como se puede observar en el gráfico anterior, también hay observaciones influyentes utilizando <span class="math inline">\(D_{f}Fits_{\left(i\right)}\)</span>, las cuales se muestran en rojo en el gráfico.</p>
+<p>Como se puede observar en el gráfico anterior, también hay observaciones influyentes utilizando <span class="math inline">\(D_{f}Fits_{(t(i)}\)</span>, las cuales se muestran en rojo en el gráfico.</p>
 </div>
 </div>
 <h3>References</h3>
