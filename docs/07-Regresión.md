@@ -30,7 +30,7 @@ $$
 y_{i}  =  x_{i}\boldsymbol{\beta}+\varepsilon_{i}
 $$
 
-En donde, $x_{i}=(t[1\,x_{1i}\,\ldots\,x_{pi}\right]$ y $\boldsymbol{\beta}^{T}=(t[\beta_{0}\,\,\beta_{1}\,\,\ldots\,\,\beta_{p}\right]$.
+En donde, $x_{i}=(x_{1i}\,\ldots\,x_{pi})$ y $\boldsymbol{\beta}=(\beta_{0},\beta_{1},\ldots,\beta_{p})$.
 
 El subíndice $i$ hace referencia al elemento muestral o respondiente
 en el conjunto de datos. @Heeringa_West_Berglund_2017 presenta algunas consideraciones para los modelos de regresión, las cuales son descritas a continuación:
